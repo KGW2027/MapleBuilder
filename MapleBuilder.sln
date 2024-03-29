@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleBuilder", "MapleBuilder\MapleBuilder.csproj", "{2ECDD3A4-3C05-483A-8C67-69B91F5DA9A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleAPI", "MapleAPI\MapleAPI.csproj", "{9DC88143-D462-481B-A909-826F61B21ECE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2ECDD3A4-3C05-483A-8C67-69B91F5DA9A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ECDD3A4-3C05-483A-8C67-69B91F5DA9A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ECDD3A4-3C05-483A-8C67-69B91F5DA9A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ECDD3A4-3C05-483A-8C67-69B91F5DA9A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC88143-D462-481B-A909-826F61B21ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC88143-D462-481B-A909-826F61B21ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC88143-D462-481B-A909-826F61B21ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC88143-D462-481B-A909-826F61B21ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
