@@ -47,7 +47,7 @@ public partial class RenderFrame : UserControl
     private async void WaitReadyWithDisplayHelp()
     {
         await Task.Delay(1000);
-        int stage = TitleBar.PreSettingStage + (Summarize.IsSearchSuccess ? 1 : 0) + (ResourceManager.BaseResourceReady ? 1 : 0);
+        int stage = TitleBar.PreSettingStage + (Summarize.IsSearchSuccess ? 1 : 0);
         if (stage != lastStage)
             DisplayHelps(stage);
         if (stage < 4) WaitReadyWithDisplayHelp();

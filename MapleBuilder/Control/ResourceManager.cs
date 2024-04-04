@@ -20,31 +20,22 @@ public class ResourceManager
     }
 
     private static string wzPath = "";
-    private static bool isSetApiKey;
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
-    public static bool BaseResourceReady { get; private set; }
-
-    private static void TryInit()
-    {
-        if (wzPath != "" && isSetApiKey)
-        {
-            WzLoader.Instance.SetDataPath(wzPath)
-                .AddExtract("Skill") // 10,498 Files (36.6MB)
-                .AddExtract(
-                    "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
-                .AddExtract("Item\\[Consume,Etc]") // 16,759 Files (56.3MB)
-                .Extract() // Total about 106MB
-                ;
-            BaseResourceReady = true;
-        }
-    }
     
     public static bool SetWzPath(string path)
     {
         string testFilePath = $@"{path}\Base\Base.wz";
         if (!File.Exists(testFilePath)) return false;
         wzPath = path;
-        TryInit();
+        
+        WzLoader.Instance.SetDataPath(wzPath)
+            .AddExtract("Skill") // 10,498 Files (36.6MB)
+            .AddExtract(
+                "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
+            .AddExtract("Item\\[Consume,Etc]") // 16,759 Files (56.3MB)
+            .Extract() // Total about 106MB
+            ;
+        
         return true;
     }
 
@@ -52,11 +43,7 @@ public class ResourceManager
     {
         bool apiKeySuccess = API.SetApiKey(apiKey);
         if (apiKeySuccess)
-        {
             Summarize.EnableNicknameInput();
-            isSetApiKey = true;
-            TryInit();
-        }
         return apiKeySuccess;
     }
 
