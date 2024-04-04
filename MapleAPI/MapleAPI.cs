@@ -2,6 +2,11 @@
 
 public class MapleAPI
 {
+    class InvalidApiKeyException : Exception
+    {
+        
+    }
+    
     // Singletons
     private static MapleAPI? instance;
     public static MapleAPI Instance
@@ -11,8 +16,12 @@ public class MapleAPI
             return instance ??= new MapleAPI();
         }
     }
+    public static string APIKey => Instance.apiKey ?? "none";
 
-    // Private
+    private static Dictionary<string, string> TestArgs = new()
+    {
+        {"character_name", "구스구프"}
+    };
     private string? apiKey;
     
     private MapleAPI()
@@ -28,12 +37,21 @@ public class MapleAPI
     public bool SetApiKey(string key)
     {
         apiKey = key;
-        return true;
+        APIResponse test = APIRequest.Request(APIRequestType.OCID, TestArgs);
+        if (test.IsError) apiKey = null;
+        return !test.IsError;
     }
 
-    public APIResponse Request()
+    public APIResponse Request(APIRequestType type, ArgBuilder args)
     {
-        return APIResponse.Request("");
+        if (apiKey == null) throw new InvalidApiKeyException();
+        return APIRequest.Request(type, args);
+    }
+    
+    public async Task<APIResponse> RequestAsync(APIRequestType type, ArgBuilder args)
+    {
+        if (apiKey == null) throw new InvalidApiKeyException();
+        return await APIRequest.RequestAsync(type, args);
     }
     
 

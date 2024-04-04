@@ -40,34 +40,36 @@ public class WzLoader
 
     public void Extract()
     {
-        StringExtractor sEx = new StringExtractor();
-        sEx.Extract();
-
-        foreach (string value in ExtractTargets)
+        new Thread(() =>
         {
-            string clazz = value.Split("\\")[0].ToLower();
-            string args = value.Split("\\").Length > 1 ? value.Split("\\")[1] : "";
-            switch (clazz.ToLower())
+            StringExtractor sEx = new StringExtractor();
+            sEx.Extract();
+
+            foreach (string value in ExtractTargets)
             {
-                case "skill":
-                    SkillExtractor skEx = new SkillExtractor();
-                    skEx.BindStringExtractor(sEx);
-                    skEx.Extract();
-                    break;
-                case "character":
-                    CharacterExtractor cEx = new CharacterExtractor();
-                    cEx.SetArgs(args);
-                    cEx.BindStringExtractor(sEx);
-                    cEx.Extract();
-                    break;
-                case "item":
-                    ItemExtractor iEx = new ItemExtractor();
-                    iEx.SetArgs(args);
-                    iEx.BindStringExtractor(sEx);
-                    iEx.Extract();
-                    break;
+                string clazz = value.Split("\\")[0].ToLower();
+                string args = value.Split("\\").Length > 1 ? value.Split("\\")[1] : "";
+                switch (clazz.ToLower())
+                {
+                    case "skill":
+                        SkillExtractor skEx = new SkillExtractor();
+                        skEx.BindStringExtractor(sEx);
+                        skEx.Extract();
+                        break;
+                    case "character":
+                        CharacterExtractor cEx = new CharacterExtractor();
+                        cEx.SetArgs(args);
+                        cEx.BindStringExtractor(sEx);
+                        cEx.Extract();
+                        break;
+                    case "item":
+                        ItemExtractor iEx = new ItemExtractor();
+                        iEx.SetArgs(args);
+                        iEx.BindStringExtractor(sEx);
+                        iEx.Extract();
+                        break;
+                }
             }
-        }
-        
+        }).Start();
     }
 }
