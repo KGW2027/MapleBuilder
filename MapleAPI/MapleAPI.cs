@@ -25,10 +25,15 @@ public class MapleAPI
     /// </summary>
     /// <param name="key">NEXON Open API에서 발급받은 키</param>
     /// <returns></returns>
-    public MapleAPI SetApiKey(string key)
+    public bool SetApiKey(string key)
     {
         apiKey = key;
-        return this;
+        return true;
+    }
+
+    public APIResponse Request()
+    {
+        return APIResponse.Request("");
     }
     
 

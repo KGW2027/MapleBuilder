@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleBuilder", "MapleBuilde
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapleAPI", "MapleAPI\MapleAPI.csproj", "{9DC88143-D462-481B-A909-826F61B21ECE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WzParser", "WzParser\WzParser.csproj", "{12CBC91B-1010-4986-B52D-FDC724D7D7E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{9DC88143-D462-481B-A909-826F61B21ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DC88143-D462-481B-A909-826F61B21ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DC88143-D462-481B-A909-826F61B21ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12CBC91B-1010-4986-B52D-FDC724D7D7E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12CBC91B-1010-4986-B52D-FDC724D7D7E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12CBC91B-1010-4986-B52D-FDC724D7D7E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12CBC91B-1010-4986-B52D-FDC724D7D7E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

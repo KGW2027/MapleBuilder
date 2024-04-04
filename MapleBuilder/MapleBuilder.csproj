@@ -5,6 +5,9 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <Version>1.0.0</Version>
+        <Authors>GooseGoop</Authors>
+        <InformationalVersion>alpha-dev-0.1</InformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="pipeline\" />
+        <Resource Include="Resources\Font\*.ttf"/>
     </ItemGroup>
-
+    
 </Project>

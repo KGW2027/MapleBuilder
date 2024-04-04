@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using MapleBuilder.Control;
 
 namespace MapleBuilder
 {
@@ -7,5 +8,11 @@ namespace MapleBuilder
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            ResourceManager initResourceManager = ResourceManager.Instance;
+        }
     }
 }
