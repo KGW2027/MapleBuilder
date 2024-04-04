@@ -3,9 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:MapleBuilder.View.SubFrames"
              mc:Ignorable="d"
              d:DesignHeight="688" d:DesignWidth="288" Background="#313131" BorderBrush="#707070" BorderThickness="1">
     <Grid>
+        <!-- Searching by Nickname -->
+        <Label Content="닉네임으로 불러오기" Margin="8, 12, 0, 0"/>
+        <TextBox Text="닉네임을입력" Width="111" Height="24" HorizontalAlignment="Left" Margin="12, 44, 0, 0"
+                 IsReadOnly="True" Focusable="False" Name="ctInputNickname"/>
+        <Button Content="검색" Width="56" Height="24" Margin="135, 44, 0, 0" Click="TrySearch"/>
+        <Button Content="불러오기" Width="73" Height="24" Margin="199, 44, 0, 0" Click="LoadData"/>
+        
+        <!-- Result of Search -->
+        <Border Width="256" Height="74" Margin="14, 76, 0, 0" 
+                VerticalAlignment="Top" HorizontalAlignment="Left" Background="#515151" BorderBrush="#999999" BorderThickness="1"/>
+        <Image Name="ctDisplayCharImage" Width="58" Height="90" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="16, 83, 0, 0"/>
+        <Label Name="ctDisplayServer" Content="엘리시움" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 83, 0, 0" Visibility="Collapsed"/>
+        <Label Name="ctDisplayLevel" Content="Lv. 276" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 99, 0, 0" Visibility="Collapsed"/>
+        <Label Name="ctDisplayClass" Content="아크메이지 (불,독)" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 115, 0, 0" Visibility="Collapsed"/>
     </Grid>
 </UserControl>

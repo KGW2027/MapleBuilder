@@ -38,13 +38,12 @@ public partial class TitleBar : UserControl
 
     private void ApplyApiKey(object sender, RoutedEventArgs e)
     {
-        bool result = ResourceManager.Instance.SetApiKey(ctInputAPI.Text);
+        bool result = ResourceManager.SetApiKey(ctInputAPI.Text);
         if (result)
         {
             ctInputAPI.IsReadOnly = true;
             ctInputAPI.Focusable = false;
             Thickness margin = ctInputAPI.Margin;
-            margin.Left += 58;
             ctInputAPI.Margin = margin;
             ctInputAPI.Width += 58;
             ctAPIApplyButton.Visibility = Visibility.Collapsed;
@@ -64,7 +63,7 @@ public partial class TitleBar : UserControl
         {
             string select = Directory.GetParent(Directory.GetParent(fDialog.FileName)!.FullName)!.FullName;
             Console.WriteLine($"{select}");
-            if (ResourceManager.Instance.SetWzPath(select))
+            if (ResourceManager.SetWzPath(select))
             {
                 ctWzPathButton.Visibility = Visibility.Collapsed;
             }

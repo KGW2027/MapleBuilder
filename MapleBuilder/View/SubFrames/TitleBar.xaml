@@ -7,12 +7,11 @@
              d:DesignHeight="32" d:DesignWidth="1280" Background="#515151" BorderBrush="#707070" MouseDown="OnMouseDown" BorderThickness="1">
     <Grid>
         <Label Name="ctProgramTitle" Content="Maple Builder v1.0" FontWeight="Medium" FontSize="20" Foreground="White" VerticalAlignment="Top"/>
-        <Button Style="{StaticResource DefaultButton}" Width="80" Height="24" Margin="600, 4, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"
+        <Button Width="80" Height="24" Margin="600, 4, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"
                 Name="ctWzPathButton" Content="Wz경로 설정" Click="SettingWzPath"/>
         <Label Content="API Key" FontWeight="Medium" FontSize="20" Foreground="White" Margin="711, 0, 0, 0" VerticalAlignment="Top"/>
-        <Button Style="{StaticResource DefaultButton}" Width="56" Height="24" Margin="1220, 4, 0, 0" Content="적용" VerticalAlignment="Top"
+        <Button Width="56" Height="24" Margin="1220, 4, 0, 0" Content="적용" VerticalAlignment="Top"
                 Name="ctAPIApplyButton" Click="ApplyApiKey"/>
-        <TextBox Name="ctInputAPI" Width="427" Height="24" Background="#222222" BorderBrush="White" FontWeight="Light" FontSize="16" VerticalAlignment="Top"
-                 Foreground="White" Margin="726, 4, 0, 0" Text="test_asdfihzxcjkvn4789ve678v96583h3"/>
+        <TextBox Name="ctInputAPI" Width="427" Height="24" Margin="789, 4, 0, 0" Text="test_23aba4ff11b0e6045a5f09a6783fd18c056336038c4050e8f2be0d673cf4f54f3f02512275930a9a5db8507a4dcaced2"/>
     </Grid>
 </UserControl>
