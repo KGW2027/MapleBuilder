@@ -82,13 +82,13 @@ public class APIResponse
             foreach (var pair in joDict)
             {
                 if (pair.Value == null) continue;
-                dict.Add(pair.Key, Regex.Unescape(pair.Value.ToJsonString()));
+                dict.Add(pair.Key, Regex.Unescape(pair.Value.ToJsonString()).Trim('\"'));
             }
         else if (target is JsonArray jaArray)
             for (int idx = 0; idx < jaArray.Count; idx++)
             {
                 if (jaArray[idx] == null) continue;
-                dict.Add($"{idx}", Regex.Unescape(jaArray[idx].ToJsonString()));
+                dict.Add($"{idx}", Regex.Unescape(jaArray[idx].ToJsonString().Trim('\"')));
             }
     }
 }
