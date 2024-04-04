@@ -69,7 +69,7 @@ public class APIResponse
                 }
                 else if (target is JsonArray ja && int.TryParse(p, out int index) && ja.Count > index)
                 {
-                    target = ja[index];
+                    target = ja[index]!;
                 }
                 else
                 {
@@ -88,7 +88,7 @@ public class APIResponse
             for (int idx = 0; idx < jaArray.Count; idx++)
             {
                 if (jaArray[idx] == null) continue;
-                dict.Add($"{idx}", Regex.Unescape(jaArray[idx].ToJsonString().Trim('\"')));
+                dict.Add($"{idx}", Regex.Unescape(jaArray[idx]!.ToJsonString().Trim('\"')));
             }
     }
 }

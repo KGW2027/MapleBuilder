@@ -34,6 +34,9 @@ public partial class TitleBar : UserControl
         string infoVersion = asmVersion.Length <= 0 ? "unknown" : ((AssemblyInformationalVersionAttribute) asmVersion[0]).InformationalVersion;
 
         ctProgramTitle.Content = $"Maple Builder {infoVersion}";
+        
+        if(File.Exists("./CharacterExtractorResult.json") && File.Exists("./ItemExtractorResult.json") && File.Exists("SkillExtractorResult.json"))
+            CompleteSetWzPath();
     }
 
     private void ApplyApiKey(object sender, RoutedEventArgs e)
@@ -62,11 +65,15 @@ public partial class TitleBar : UserControl
         if (fDialog.ShowDialog() == true)
         {
             string select = Directory.GetParent(Directory.GetParent(fDialog.FileName)!.FullName)!.FullName;
-            Console.WriteLine($"{select}");
             if (ResourceManager.SetWzPath(select))
             {
-                ctWzPathButton.Visibility = Visibility.Collapsed;
+                CompleteSetWzPath();
             }
         }
+    }
+
+    private void CompleteSetWzPath()
+    {
+        ctWzPathButton.Visibility = Visibility.Collapsed;
     }
 }

@@ -52,17 +52,20 @@ public class WzLoader
                 switch (clazz.ToLower())
                 {
                     case "skill":
+                        if (File.Exists("./SkillExtractorResult.json")) break;
                         SkillExtractor skEx = new SkillExtractor();
                         skEx.BindStringExtractor(sEx);
                         skEx.Extract();
                         break;
                     case "character":
+                        if (File.Exists("./CharacterExtractorResult.json")) break;
                         CharacterExtractor cEx = new CharacterExtractor();
                         cEx.SetArgs(args);
                         cEx.BindStringExtractor(sEx);
                         cEx.Extract();
                         break;
                     case "item":
+                        if (File.Exists("./ItemExtractorResult.json")) break;
                         ItemExtractor iEx = new ItemExtractor();
                         iEx.SetArgs(args);
                         iEx.BindStringExtractor(sEx);
@@ -70,6 +73,8 @@ public class WzLoader
                         break;
                 }
             }
+            
+            Console.WriteLine("Extract Complete");
         }).Start();
     }
 }

@@ -13,8 +13,6 @@ namespace MapleBuilder.Control;
 
 public class ResourceManager
 {
-    private static ResourceManager? instance;
-    
     private ResourceManager()
     {
     }

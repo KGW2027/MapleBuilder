@@ -8,7 +8,7 @@ namespace MapleBuilder.View.SubFrames;
 public partial class RenderFrame : UserControl
 {
     private int lastStage = -1;
-    private bool isReady = false;
+    public bool isReady;
     
     public RenderFrame()
     {

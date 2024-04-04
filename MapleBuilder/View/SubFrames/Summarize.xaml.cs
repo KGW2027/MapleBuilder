@@ -9,11 +9,11 @@ namespace MapleBuilder.View.SubFrames;
 
 public partial class Summarize : UserControl
 {
-    private static Summarize selfInstance;
+    private static Summarize? selfInstance;
 
     public static void EnableNicknameInput()
     {
-        selfInstance.ctInputNickname.Focusable  = true;
+        selfInstance!.ctInputNickname.Focusable = true;
         selfInstance.ctInputNickname.IsReadOnly = false;
     }
     
