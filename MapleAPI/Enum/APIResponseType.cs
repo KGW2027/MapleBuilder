@@ -1,0 +1,16 @@
+﻿namespace MapleAPI;
+
+public enum APIResponseType
+{
+    OK = 0,
+    SERVER_ERROR = 1,
+    NO_PERMISSION = 2,
+    INVALID_IDENTIFIER = 3,
+    BAD_PARAMETER = 4,
+    INVALID_APIKEY = 5,
+    BAD_GAME_OR_PATH = 6,
+    TOO_MANY_REQUEST = 7,
+    DATA_NOT_READY = 9,
+    SERVICE_MAINTAINING = 10,
+    LOCAL_NOT_RESPONSE_JSON = 99
+}
