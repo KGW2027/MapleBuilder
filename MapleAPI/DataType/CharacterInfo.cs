@@ -95,8 +95,9 @@ public class CharacterInfo
                 cInfo.Items.Add(item);
             }
         }
+        cInfo.Items.Add(MapleItem.Parse(equipInfo.JsonData!["title"]!.AsObject()));
         
-        Console.WriteLine($"Load {cInfo.Items.Count} items.");
+        
 
         return cInfo;
     }
