@@ -27,5 +27,14 @@
         
         <!-- 장비 목록 -->
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="547" Height="668" HorizontalAlignment="Left" Margin="421, 0, 0, 0"/>
+        <Button Content="새로 만들기" Margin="429, 8, 0, 0" Width="79" Height="24" HorizontalAlignment="Left" VerticalAlignment="Top" Click="CreateNewItem"/>
+        <Label Content="검색" FontSize="16" Margin="429, 42, 0, 0"/>
+        <TextBox x:Name="ctItemFilter" Width="186" Height="24" Margin="472, 44, 0, 0" TextChanged="OnSearchText"/>
+        
+        <ScrollViewer VerticalScrollBarVisibility="Visible" CanContentScroll="True" Height="585" Width="539" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="425, 75, 0, 0">
+            <StackPanel x:Name="ctItemListStack" Width="539" Background="#111111" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical"/>
+        </ScrollViewer>
+        <!-- <Border Margin="425, 75, 0, 0" BorderBrush="#707070" BorderThickness="1"/> -->
+        
     </Grid>
 </UserControl>
