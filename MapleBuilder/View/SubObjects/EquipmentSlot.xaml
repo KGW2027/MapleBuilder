@@ -6,7 +6,8 @@
              mc:Ignorable="d"
              d:DesignHeight="77" d:DesignWidth="77" Background="Transparent" MouseEnter="OnHover" MouseLeave="OnHoverEnd">
     <Grid>
-        <Border Width="77" Height="77" BorderBrush="Black" BorderThickness="1" CornerRadius="4" Background="Transparent"/>
         <Image x:Name="ctItemRenderer" Width="69" Height="69" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Border x:Name="ctBorder" Width="77" Height="77" BorderBrush="Black" BorderThickness="1" CornerRadius="4" Background="Transparent"/>
+        <Label x:Name="ctEditLabel" VerticalAlignment="Center" HorizontalAlignment="Center" Content="수정하기" Foreground="White" FontSize="12" Visibility="Collapsed"/>
     </Grid>
 </UserControl>

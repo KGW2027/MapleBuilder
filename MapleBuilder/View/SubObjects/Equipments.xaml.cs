@@ -16,7 +16,7 @@ public partial class Equipments : UserControl
 
         SlotMap = new Dictionary<MapleEquipType, List<UIElement>>
         {
-            {MapleEquipType.RING, new List<UIElement> {Ring4, Ring3, Ring2, Ring1}},
+            {MapleEquipType.RING, new List<UIElement> {Ring1, Ring2, Ring3, Ring4}},
             {MapleEquipType.POCKET, new List<UIElement> {Pocket}},
             {MapleEquipType.PENDANT, new List<UIElement> {Pendant1, Pendant2}},
             {MapleEquipType.WEAPON, new List<UIElement> {Weapon}},

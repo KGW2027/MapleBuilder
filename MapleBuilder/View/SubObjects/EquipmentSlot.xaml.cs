@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using MapleAPI.DataType;
 using MapleBuilder.Control;
 
@@ -10,6 +12,8 @@ public partial class EquipmentSlot : UserControl
 {
     private MapleItem? itemInfo;
     private WzItem? wzItemInfo;
+    private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
+    private static readonly Brush HOVER = new SolidColorBrush(Color.FromArgb(0xA0, 0x00, 0x00, 0x00));
     
     public EquipmentSlot()
     {
@@ -47,11 +51,13 @@ public partial class EquipmentSlot : UserControl
 
     private void OnHover(object sender, MouseEventArgs e)
     {
-        Console.WriteLine($"Hover in {Name}");
+        ctBorder.Background = HOVER;
+        ctEditLabel.Visibility = Visibility.Visible;
     }
 
     private void OnHoverEnd(object sender, MouseEventArgs e)
     {
-        Console.WriteLine($"Hover out {Name}");
+        ctBorder.Background = NON_HOVER;
+        ctEditLabel.Visibility = Visibility.Collapsed;
     }
 }
