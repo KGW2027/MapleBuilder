@@ -26,7 +26,7 @@ public class MapleItem
     }
     
 
-    private readonly JsonObject? data;
+    private readonly JsonObject data;
     public MapleEquipType EquipType { get; private set; }
     public string Name { get; private set; }
     public uint StarForce { get; private set; }
@@ -51,6 +51,11 @@ public class MapleItem
         Name = name;
         StarForce = 0;
         SpecialRingLevel = 0;
+        data = new JsonObject
+        {
+            {"title", name},
+            {"description", desc}
+        };
         AddOption = new MapleOption();
     }
 
