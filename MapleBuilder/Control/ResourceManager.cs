@@ -29,45 +29,50 @@ public static class ResourceManager
             .AddExtract("Skill") // 10,498 Files (36.6MB)
             .AddExtract(
                 "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Cape,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Ring,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
-            .AddExtract("Item\\[Consume,Etc]") // 16,759 Files (56.3MB)
+            .AddExtract("Item\\[Consume,Etc,Install]") // 16,759 Files (56.3MB)
             .Extract() // Total about 106MB
             ;
         
         return true;
     }
 
+    private static void LoadIcons(string path)
+    {
+        if(!File.Exists(path)) 
+            throw new FileNotFoundException(
+                $"Please Re-Unpack wzFileData! {path} is not found.");
+        
+        using StreamReader reader = File.OpenText(path);
+        string jsonContent = reader.ReadToEnd();
+        JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
+
+        foreach (var pair in json)
+        {
+            if (pair.Value is not JsonObject childObject) continue;
+
+            if (!childObject.TryGetPropertyValue("name", out var nameNode)
+                || !childObject.TryGetPropertyValue("info", out var infoNode)
+                || !(infoNode is JsonObject infoObject &&
+                     infoObject.TryGetPropertyValue("icon", out var iconRawNode))) continue;
+
+            string name = nameNode!.ToString();
+            if (itemIcons.ContainsKey(name)) continue;
+
+            string iconRawPath = iconRawNode!.ToString();
+            if (!iconRawPath.StartsWith("./")) continue; // this is outlink format
+            string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
+
+            itemIcons.Add(name, new WzItem(name, iconRawPath, desc));
+        }
+    }
+
     public static WzItem? GetItemIcon(string itemName)
     {
         if (itemIcons.Count == 0)
         {
-            const string iconsFile = "./CharacterExtractorResult.json";
-            if (!File.Exists(iconsFile))
-            {
-                throw new FileNotFoundException(
-                    "Please Re-Unpack wzFileData! CharacterExtractorResult.json is not found.");
-            }
-
-            using StreamReader reader = File.OpenText(iconsFile);
-            string jsonContent = reader.ReadToEnd();
-            JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
-
-            foreach (var pair in json)
-            {
-                if (pair.Value is not JsonObject childObject) continue;
-
-                if (!childObject.TryGetPropertyValue("name", out var nameNode)
-                    || !childObject.TryGetPropertyValue("info", out var infoNode)
-                    || !(infoNode is JsonObject infoObject && infoObject.TryGetPropertyValue("icon", out var iconRawNode))) continue;
-
-                string name = nameNode!.ToString();
-                if (itemIcons.ContainsKey(name)) continue;
-                
-                string iconRawPath = iconRawNode!.ToString();
-                if (!iconRawPath.StartsWith("./")) continue; // this is outlink format
-                string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
-                
-                itemIcons.Add(name, new WzItem(name, iconRawPath, desc));
-            }
+            LoadIcons("./CharacterExtractorResult.json");
+            LoadIcons("./ItemExtractorResult.json");
+            
         }
 
         return itemIcons!.GetValueOrDefault(itemName, null);

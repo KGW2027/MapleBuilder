@@ -79,6 +79,7 @@ public class MapleItem
         StarForce = 0;
         SpecialRingLevel = 0;
         MaxUpgrade = 0;
+        EquipType = MapleEquipType.TITLE;
         data = new JsonObject
         {
             {"title", name},

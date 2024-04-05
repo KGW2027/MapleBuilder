@@ -24,6 +24,10 @@ public partial class RenderOverview : UserControl
         selfInstance.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
         selfInstance.ctEquips.Clear();
         selfInstance.ctEquips.UpdateEquipments(cInfo);
+        foreach (var tem in cInfo.Items)
+        {
+            Console.WriteLine(tem.EquipType.ToString());
+        }
     }
 
     private static async void UpdateProfileImage(CharacterInfo cInfo)

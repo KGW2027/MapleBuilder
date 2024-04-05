@@ -153,6 +153,7 @@ public abstract class WzExtractor
                 string trim = arg.Trim('[', ']');
                 string newWzPath = $@"{wzPath.Substring(0, lastSepIdx)}\{trim}\{trim}.wz";
                 Wz_Structure wz = OpenWzFile(newWzPath);
+                Console.WriteLine($"{newWzPath} ({wz.WzNode.Nodes.Count})");
                 foreach (Wz_Node sNode in wz.WzNode.Nodes)
                     RecursiveFind(sNode, wz.WzNode.Text);
             }
