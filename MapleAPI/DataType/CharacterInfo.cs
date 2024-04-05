@@ -5,12 +5,29 @@ namespace MapleAPI.DataType;
 
 public class CharacterInfo
 {
+    #region PlayerData
     public MapleClass Class { get; private set; }
+    public string ClassString { get; private set; }
+    public uint Level { get; private set; }
+    public string UserName { get; private set; }
+    public string WorldName { get; private set; }
+    public string GuildName { get; private set; }
+    public byte[] PlayerImage { get; private set; }
+    #endregion
+    
+    #region SpecData
     public List<MapleItem> Items { get; private set; }
-
+    #endregion
+    
     private CharacterInfo()
     {
         Items = new List<MapleItem>();
+        Level = 0;
+        ClassString = "";
+        GuildName = "";
+        UserName = "";
+        WorldName = "";
+        PlayerImage = Array.Empty<byte>();
     }
 
     private static MapleClass GetMapleClass(string className)
@@ -76,7 +93,15 @@ public class CharacterInfo
         if (baseInfo.IsError) return null;
         
         baseInfo.TryGetValue("character_class", out var nameOfClass);
+        cInfo.ClassString = nameOfClass!;
         cInfo.Class = GetMapleClass(nameOfClass!);
+        cInfo.LoadPlayerImage(baseInfo.JsonData!["character_image"]!.ToString());
+        cInfo.Level = uint.TryParse(baseInfo.JsonData!["character_level"]!.ToString(), out uint levelValue)
+            ? levelValue
+            : 0;
+        if (baseInfo.TryGetValue("character_guild_name", out var nameOfGuild)) cInfo.GuildName = nameOfGuild!;
+        if (baseInfo.TryGetValue("character_name", out var nameOfPlayer)) cInfo.UserName = nameOfPlayer!;
+        if (baseInfo.TryGetValue("world_name", out var nameOfWorld)) cInfo.WorldName = nameOfWorld!;
 
         // 장착 장비 로드
         APIResponse equipInfo = APIRequest.Request(APIRequestType.ITEM, args);
@@ -97,8 +122,20 @@ public class CharacterInfo
         }
         cInfo.Items.Add(MapleItem.Parse(equipInfo.JsonData!["title"]!.AsObject()));
         
-        
-
         return cInfo;
+    }
+
+
+    private async void LoadPlayerImage(string url)
+    {
+        try
+        {
+            using HttpClient client = new HttpClient();
+            PlayerImage = await client.GetByteArrayAsync(url);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 }
