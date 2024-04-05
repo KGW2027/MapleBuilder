@@ -38,8 +38,10 @@ public class CharacterExtractor : WzExtractor
                     if (png.WzFile.Node.Text.Contains("_Canvas"))
                     {
                         string imageName = node.Text;
-                        if (!imageName.Equals("iconRaw")) break;
-
+                        if (!imageName.Equals("icon") && !imageName.Equals("iconRaw")) break;
+                        if (jsonObject.ContainsKey("icon")) break;
+                        imageName = "icon";
+                        
                         string fileName = node.Text;
                         if (int.TryParse(parent.ParentNode.Text.Substring(0, parent.ParentNode.Text.IndexOf('.')), out var id)
                             && sEx!.TryGetValue($"eqp_{id}", out var dict)
@@ -49,7 +51,15 @@ public class CharacterExtractor : WzExtractor
                         }
                         
                         string folder = path.Split(".wz")[0] + ".wz";
-                        jsonObject.Add(node.Text, ExportPng(png, folder, fileName).Replace("\\", "/"));
+                        jsonObject.Add(imageName, ExportPng(png, folder, fileName).Replace("\\", "/"));
+                    }
+                    else if((node.Text.Equals("icon") || node.Text.Equals("iconRaw")) && !jsonObject.ContainsKey("icon"))
+                    {
+                        foreach (Wz_Node childPng in node.Nodes)
+                        {
+                            if(childPng.Text.Equals("_outlink") && childPng.Value is string link)
+                                jsonObject.Add("icon", link);
+                        }
                     }
                     break;
                 }
@@ -72,6 +82,7 @@ public class CharacterExtractor : WzExtractor
 
     protected override void TryAddData(string path, Wz_Node node)
     {
+        // TODO : ItemId와 _outlink로 연결된 Icon's ItemId가 일치하지않을 수 있음. 이 때, Icon's ItemId에 해당 하는 Item이 없는 경우, sEx에서 이름을 가져오지 못해 이미지를 출력하지 못함.
         if (sEx == null) return;
         Dictionary<string, string>? value;
         int pointIdx = node.Text.IndexOf('.');
@@ -87,14 +98,55 @@ public class CharacterExtractor : WzExtractor
         if (!jo.ContainsKey(key)) jo.Add(key, innerObject);
         else
         {
-            int idx = 1;
-            while (jo.ContainsKey($"{key}_{idx:00}")) idx++;
-            jo.Add($"{key}_{idx:00}", innerObject);
+            MergeJsonObject(jo[key]!.AsObject(), innerObject);
+            // int idx = 1;
+            // while (jo.ContainsKey($"{key}_{idx:00}")) idx++;
+            // jo.Add($"{key}_{idx:00}", innerObject);
         }
     }
 
     protected override void PostExtract()
     {
+        // Remapping ItemImages
+        Dictionary<int, string> pngPathes = new Dictionary<int, string>();
+        Dictionary<string, int> remapTargets = new Dictionary<string, int>();
+        foreach (var pair in jo)
+        {
+            if (!pair.Value!.AsObject().TryGetPropertyValue("info", out var infoNode)
+                || !(infoNode is JsonObject infoObject &&
+                     infoObject.TryGetPropertyValue("icon", out var iconNode))) continue;
+
+            if (int.TryParse(pair.Value!.AsObject()["itemId"]!.ToString(), out var itemId))
+            {
+                if (iconNode!.ToString().StartsWith("./ImageOut"))
+                    pngPathes.Add(itemId, iconNode.ToString());
+                else
+                {
+                    string remapId = iconNode.ToString().Split(".img")[0];
+                    remapId = remapId[(remapId.LastIndexOf("/", StringComparison.CurrentCulture)+1)..];
+                    if (int.TryParse(remapId, out var remapId2))
+                    {
+                        if (pngPathes.TryGetValue(remapId2, out var newPath))
+                        {
+                            jo[pair.Key]!.AsObject()["info"]!.AsObject()["icon"] = newPath;
+                        } else remapTargets.Add(pair.Key, remapId2);
+                    }
+                }
+            }
+        }
+
+        int count = 0;
+        foreach (var pair in remapTargets)
+        {
+            if (pngPathes.TryGetValue(pair.Value, out var newPath))
+            {
+                jo[pair.Key]!.AsObject()["info"]!.AsObject()["icon"] = newPath;
+                count++;
+            }
+        }
+        Console.WriteLine($"Remapped {count} pathes, total {remapTargets.Count}");
+        
+        // Extract File
         string outputPath = "./CharacterExtractorResult.json";
         File.WriteAllText(outputPath, System.Text.RegularExpressions.Regex.Unescape(jo.ToString()));
     }

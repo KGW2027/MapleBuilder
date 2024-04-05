@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using MapleAPI;
 using MapleAPI.DataType;
@@ -30,7 +28,7 @@ public static class ResourceManager
         WzLoader.Instance.SetDataPath(wzPath)
             .AddExtract("Skill") // 10,498 Files (36.6MB)
             .AddExtract(
-                "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
+                "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Cape,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Ring,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
             .AddExtract("Item\\[Consume,Etc]") // 16,759 Files (56.3MB)
             .Extract() // Total about 106MB
             ;
@@ -59,13 +57,14 @@ public static class ResourceManager
 
                 if (!childObject.TryGetPropertyValue("name", out var nameNode)
                     || !childObject.TryGetPropertyValue("info", out var infoNode)
-                    || !(infoNode is JsonObject infoObject && infoObject.TryGetPropertyValue("iconRaw", out var iconRawNode))) continue;
+                    || !(infoNode is JsonObject infoObject && infoObject.TryGetPropertyValue("icon", out var iconRawNode))) continue;
 
                 string name = nameNode!.ToString();
                 if (itemIcons.ContainsKey(name)) continue;
                 
                 string iconRawPath = iconRawNode!.ToString();
-                string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode.ToString() : "";
+                if (!iconRawPath.StartsWith("./")) continue; // this is outlink format
+                string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
                 
                 itemIcons.Add(name, new WzItem(name, iconRawPath, desc));
             }

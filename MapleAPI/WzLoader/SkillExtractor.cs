@@ -62,31 +62,16 @@ public class SkillExtractor : WzExtractor
                             break;
 
                         string fileName = thisSkillName;
-                        // string fileName = node.Text;
-                        // Wz_Node parentNode = parent;
-                        // int skId = -1;
-                        // while (parentNode != null && !int.TryParse(parentNode.Text, out skId))
-                        //     parentNode = parentNode.ParentNode;
-                        //
-                        // if (skId != -1 && sEx!.TryGetValue($"skill_{skId}", out var dict) && dict!.ContainsKey("name"))
-                        // {
-                        //     fileName = dict["name"];
-                        // }
-                        // else
-                        // {
-                        //     Console.Write($"[{png.WzFile.Node.Text}] {path} :: Skid : {skId} and Dict has valid? {sEx!.TryGetValue($"skill_{skId}", out _)}");
-                        //     List<string> names = new List<string>();
-                        //     Wz_Node parentNode2 = parent;
-                        //     while (parentNode2 != null && !int.TryParse(parentNode2.Text, out var skId2) && sEx!.TryGetValue($"skill_{skId2}", out _))
-                        //     {
-                        //         names.Add(parentNode2.Text);
-                        //         parentNode2 = parentNode2.ParentNode;
-                        //     }
-                        //     Console.Write($"\tName History : {string.Join(" => ", names)}\n");
-                        // }
-                        
                         string folder = path.Split(".wz")[0] + ".wz";
                         jsonObject.Add(node.Text, ExportPng(png, folder, fileName).Replace("\\", "/"));
+                    }
+                    else if(node.Text.Equals("iconRaw"))
+                    {
+                        foreach (Wz_Node childPng in node.Nodes)
+                        {
+                            if(childPng.Text.Equals("_outlink") && childPng.Value is string link)
+                                jsonObject.Add(node.Text, link);
+                        }
                     }
                     break;
                 }

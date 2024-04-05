@@ -64,6 +64,15 @@ public class ItemExtractor : WzExtractor
                         string folder = path.Split(".wz")[0] + ".wz";
                         jsonObject.Add(node.Text, ExportPng(png, folder, fileName).Replace("\\", "/"));
                     }
+                    else if(node.Text.Equals("iconRaw"))
+                    {
+                        foreach (Wz_Node childPng in node.Nodes)
+                        {
+                            if(childPng.Text.Equals("_outlink") && childPng.Value is string link)
+                                jsonObject.Add(node.Text, link);
+                        }
+                    }
+
                     break;
                 }
                 case Wz_Uol:

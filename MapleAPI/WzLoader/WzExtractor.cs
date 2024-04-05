@@ -74,10 +74,8 @@ public abstract class WzExtractor
             {
                 if (baseObject[pairs.Key] is JsonObject jo && pairs.Value is JsonObject)
                     MergeJsonObject(jo, JsonNode.Parse(pairs.Value.AsObject().ToJsonString())!.AsObject());
-                // else if (baseObject[pairs.Key] is JsonArray ja && pairs.Value is JsonArray tja)
-                //     foreach (var value in tja)
-                //         ja.Add(JsonNode.Parse(value!.ToJsonString()));
-                else baseObject[pairs.Key] = JsonNode.Parse(pairs.Value!.ToJsonString());
+                else if(!baseObject[pairs.Key]!.ToString().StartsWith("./ImageOut/"))
+                    baseObject[pairs.Key] = JsonNode.Parse(pairs.Value!.ToJsonString());
             }
             else baseObject.Add(pairs.Key, JsonNode.Parse(pairs.Value!.ToJsonString()));
         }
@@ -107,7 +105,7 @@ public abstract class WzExtractor
                 RecursiveFind(sNode, self);
     }
     
-    private protected void RecursiveImageFind(string path, Wz_Node node)
+    private void RecursiveImageFind(string path, Wz_Node node)
     {
         if (IsTargetImage(node.Text))
             TryAddData($"{path}\\{node.Text}", node);
