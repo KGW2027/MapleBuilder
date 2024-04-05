@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using MapleAPI.DataType;
 using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubFrames;
@@ -10,6 +11,8 @@ namespace MapleBuilder.View.SubFrames;
 public partial class Summarize : UserControl
 {
     private static Summarize? selfInstance;
+
+    private string? lastOcid;
 
     public static void EnableNicknameInput()
     {
@@ -24,12 +27,13 @@ public partial class Summarize : UserControl
         InitializeComponent();
     }
 
-    public static bool IsSearchSuccess {get; private set;}
+    public static bool IsLoadComplete {get; private set;}
     
     private void TrySearch(object sender, RoutedEventArgs e)
     {
         if (ctInputNickname.IsReadOnly) return;
-        Dictionary<string, string> res = ResourceManager.RequestCharBasic(ctInputNickname.Text);
+        Dictionary<string, string> res = ResourceManager.RequestCharBasic(ctInputNickname.Text, out var ocid);
+        lastOcid = ocid;
         
         if (res.TryGetValue("error", out string? errMsg))
         {
@@ -37,7 +41,6 @@ public partial class Summarize : UserControl
             ctDisplayClass.Visibility = Visibility.Collapsed;
             ctDisplayLevel.Visibility = Visibility.Collapsed;
             ctDisplayServer.Content = errMsg;
-            IsSearchSuccess = false;
             return;
         }
         
@@ -48,7 +51,7 @@ public partial class Summarize : UserControl
         ctDisplayLevel.Content = $"Lv. {res["character_level"]}";
         ctDisplayClass.Visibility = Visibility.Visible;
         ctDisplayClass.Content = res["character_class"];
-        IsSearchSuccess = true;
+        IsLoadComplete = false;
     }
 
     private async void UpdateCharacterImage(string url)
@@ -64,7 +67,10 @@ public partial class Summarize : UserControl
 
     private void LoadData(object sender, RoutedEventArgs e)
     {
-        if (!IsSearchSuccess) return;
-        
+        if (lastOcid == null || IsLoadComplete) return;
+        if (!ResourceManager.GetCharacterInfo(lastOcid, out var charInfo)) return;
+        BuilderDataContainer.CharacterInfo = charInfo;
+        IsLoadComplete = true;
+
     }
 }

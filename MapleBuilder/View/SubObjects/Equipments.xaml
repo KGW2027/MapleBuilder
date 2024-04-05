@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipments"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects"
+             mc:Ignorable="d"
+             d:DesignHeight="482" d:DesignWidth="401" Background="Transparent">
+    <UserControl.Resources>
+        <Style TargetType="local:EquipmentSlot">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Width" Value="77"/>
+            <Setter Property="Height" Value="77"/>
+        </Style>    
+    </UserControl.Resources>
+    <Grid>
+        <local:EquipmentSlot x:Name="Ring4" Margin="0, 0, 0, 0"/>
+        <local:EquipmentSlot x:Name="Ring3" Margin="0, 81, 0, 0"/>
+        <local:EquipmentSlot x:Name="Ring2" Margin="0, 162, 0, 0"/>
+        <local:EquipmentSlot x:Name="Ring1" Margin="0, 243, 0, 0"/>
+        <local:EquipmentSlot x:Name="Pocket" Margin="0, 324, 0, 0"/>
+        
+        <local:EquipmentSlot x:Name="Pendant2" Margin="81, 81, 0, 0"/>
+        <local:EquipmentSlot x:Name="Pendant1" Margin="81, 162, 0, 0"/>
+        <local:EquipmentSlot x:Name="Weapon" Margin="81, 243, 0, 0"/>
+        <local:EquipmentSlot x:Name="Belt" Margin="81, 324, 0, 0"/>
+        
+        <local:EquipmentSlot x:Name="Cap" Margin="162, 0, 0, 0"/>
+        <local:EquipmentSlot x:Name="Face" Margin="162, 81, 0, 0"/>
+        <local:EquipmentSlot x:Name="Eye" Margin="162, 162, 0, 0"/>
+        <local:EquipmentSlot x:Name="Top" Margin="162, 243, 0, 0"/>
+        <local:EquipmentSlot x:Name="Bottom" Margin="162, 324, 0, 0"/>
+        <local:EquipmentSlot x:Name="Boot" Margin="162, 405, 0, 0"/>
+        
+        <local:EquipmentSlot x:Name="Earring" Margin="243, 162, 0, 0"/>
+        <local:EquipmentSlot x:Name="Shoulder" Margin="243, 243, 0, 0"/>
+        <local:EquipmentSlot x:Name="Gloves" Margin="243, 324, 0, 0"/>
+        <local:EquipmentSlot x:Name="Title" Margin="243, 405, 0, 0"/>
+        
+        <local:EquipmentSlot x:Name="Emblem" Margin="324, 0, 0, 0"/>
+        <local:EquipmentSlot x:Name="Badge" Margin="324, 81, 0, 0"/>
+        <local:EquipmentSlot x:Name="Medal" Margin="324, 162, 0, 0"/>
+        <local:EquipmentSlot x:Name="SubWeapon" Margin="324, 243, 0, 0"/>
+        <local:EquipmentSlot x:Name="Cape" Margin="324, 324, 0, 0"/>
+        <local:EquipmentSlot x:Name="Heart" Margin="324, 405, 0, 0"/>
+        
+    </Grid>
+</UserControl>

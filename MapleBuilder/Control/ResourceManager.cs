@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using MapleAPI;
+using MapleAPI.DataType;
 using MapleAPI.WzLoader;
 using MapleBuilder.View.SubFrames;
 
 namespace MapleBuilder.Control;
 
-public class ResourceManager
+public static class ResourceManager
 {
-    private ResourceManager()
-    {
-    }
-
     private static string wzPath = "";
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
+    private static Dictionary<string, WzItem> itemIcons = new();
     
+    #region Wz Related
     public static bool SetWzPath(string path)
     {
         string testFilePath = $@"{path}\Base\Base.wz";
@@ -37,6 +38,44 @@ public class ResourceManager
         return true;
     }
 
+    public static WzItem? GetItemIcon(string itemName)
+    {
+        if (itemIcons.Count == 0)
+        {
+            const string iconsFile = "./CharacterExtractorResult.json";
+            if (!File.Exists(iconsFile))
+            {
+                throw new FileNotFoundException(
+                    "Please Re-Unpack wzFileData! CharacterExtractorResult.json is not found.");
+            }
+
+            using StreamReader reader = File.OpenText(iconsFile);
+            string jsonContent = reader.ReadToEnd();
+            JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
+
+            foreach (var pair in json)
+            {
+                if (pair.Value is not JsonObject childObject) continue;
+
+                if (!childObject.TryGetPropertyValue("name", out var nameNode)
+                    || !childObject.TryGetPropertyValue("info", out var infoNode)
+                    || !(infoNode is JsonObject infoObject && infoObject.TryGetPropertyValue("iconRaw", out var iconRawNode))) continue;
+
+                string name = nameNode!.ToString();
+                if (itemIcons.ContainsKey(name)) continue;
+                
+                string iconRawPath = iconRawNode!.ToString();
+                string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode.ToString() : "";
+                
+                itemIcons.Add(name, new WzItem(name, iconRawPath, desc));
+            }
+        }
+
+        return itemIcons!.GetValueOrDefault(itemName, null);
+    }
+    #endregion
+
+    #region API Related
     public static bool SetApiKey(string apiKey)
     {
         bool apiKeySuccess = API.SetApiKey(apiKey);
@@ -79,14 +118,14 @@ public class ResourceManager
         dict.Add("error", errDisplay);
     }
 
-    public static Dictionary<string, string> RequestCharBasic(string nickname)
+    public static Dictionary<string, string> RequestCharBasic(string nickname, out string? ocid)
     {
         Dictionary<string, string> result = new();
 
         ArgBuilder args = new ArgBuilder()
             .AddArg("character_name", nickname);
         APIResponse res = API.Request(APIRequestType.OCID, args);
-        if (res.TryGetValue("ocid", out var ocid))
+        if (res.TryGetValue("ocid", out ocid))
         {
             args.ClearAndAdd("ocid", ocid!);
             res = API.Request(APIRequestType.BASIC, args);
@@ -97,5 +136,11 @@ public class ResourceManager
         return result;
     }
 
+    public static bool GetCharacterInfo(string ocid, out CharacterInfo? cInfo)
+    {
+        cInfo = CharacterInfo.FromOcid(ocid);
+        return cInfo != null;
+    }
+    #endregion
 
 }

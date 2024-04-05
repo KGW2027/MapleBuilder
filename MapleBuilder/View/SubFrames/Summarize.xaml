@@ -16,7 +16,7 @@
         <!-- Result of Search -->
         <Border Width="256" Height="74" Margin="14, 76, 0, 0" 
                 VerticalAlignment="Top" HorizontalAlignment="Left" Background="#515151" BorderBrush="#999999" BorderThickness="1"/>
-        <Image Name="ctDisplayCharImage" Width="58" Height="90" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="16, 83, 0, 0"/>
+        <Image Name="ctDisplayCharImage" Width="58" Height="90" Margin="14, 83, 0, 0"/>
         <Label Name="ctDisplayServer" Content="엘리시움" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 83, 0, 0" Visibility="Collapsed"/>
         <Label Name="ctDisplayLevel" Content="Lv. 276" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 99, 0, 0" Visibility="Collapsed"/>
         <Label Name="ctDisplayClass" Content="아크메이지 (불,독)" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 115, 0, 0" Visibility="Collapsed"/>

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubFrames"
              mc:Ignorable="d"
              d:DesignHeight="688" d:DesignWidth="992" Background="#222222" BorderBrush="#707070" BorderThickness="1">
     <Grid>
@@ -20,8 +21,10 @@
         <Label FontSize="40" FontWeight="SemiBold" Content="캐릭터 정보를 불러와야합니다." Foreground="#515151"
                Name="ctSeq3Title" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 0, 0, 60" Visibility="Collapsed"/>
         <Label FontSize="12" FontWeight="SemiBold" Content="좌측 상단의 '닉네임으로 불러오기' 아래에 검색할 닉네임을 입력하세요.&#10;입력 후 '검색'버튼을 누르면 아래에 프로필 미리보기가 나타납니다.&#10;결과 캐릭터와 원하는 캐릭터가 일치하면 '불러오기'를 누르세요."
-               Name="ctSeq3Desc" Foreground="#515151" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0, 40, 0, 0" Visibility="Collapsed"/>
+               Name="ctSeq3Desc" Foreground="#515151" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="-80, 40, 0, 0" Visibility="Collapsed"/>
         
+        <!-- Overview Display-->
+        <local:RenderOverview x:Name="ctFrameOverview" Margin="12, 12, 0, 0" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
         
     </Grid>
 </UserControl>
