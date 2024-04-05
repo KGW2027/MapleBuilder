@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using WzComparerR2.WzLib;
 
 namespace MapleAPI.WzLoader;
@@ -87,12 +88,12 @@ public abstract class WzExtractor
         str = str.Replace("\\ ", "\\")
             .Replace("\r", "")
             .Replace("\n", "")
+            .Replace("\\#", "#")
             .Replace("\\c", "")
-            .Replace("\"", "\\\"")
+            .Replace("\"", "\'")
             .Trim('\t', ' ', (char) 9, '\r', '\n')
             .TrimEnd('\\');
-        
-        return str;
+        return Regex.Replace(str, @"\\(?!n|r)", "");
     } 
     
     private void RecursiveFind(Wz_Node node, string parent)
