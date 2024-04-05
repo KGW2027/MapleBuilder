@@ -80,14 +80,24 @@ public class CharacterExtractor : WzExtractor
         TryAddData(path, image.Node);
     }
 
+    private Dictionary<string, string> GetDefaultDict(int id)
+    {
+        return new Dictionary<string, string>
+        {
+            {"name", id.ToString()}
+        };
+    }
+
     protected override void TryAddData(string path, Wz_Node node)
     {
-        // TODO : ItemId와 _outlink로 연결된 Icon's ItemId가 일치하지않을 수 있음. 이 때, Icon's ItemId에 해당 하는 Item이 없는 경우, sEx에서 이름을 가져오지 못해 이미지를 출력하지 못함.
+        // TODO : ItemId와 _outlink로 연결된 Icon's ItemId가 일치하지않을 수 있음. 이 때, Icon's ItemId에 해당 하는 Item이 없는 경우, 경로 링크가 안됨. -> 캐시템의 경우인듯?
         if (sEx == null) return;
         Dictionary<string, string>? value;
         int pointIdx = node.Text.IndexOf('.');
         if (!int.TryParse(node.Text.Substring(0, pointIdx), out var id)) return;
-        if (!sEx.TryGetValue($"eqp_{id}", out value)) return;
+        if (!sEx.TryGetValue($"eqp_{id}", out value))
+            if (!sEx.TryGetValue($"cash_{id}", out value)) 
+                value = GetDefaultDict(id);
 
         JsonObject innerObject = new JsonObject();
         foreach(var pair in value!) innerObject.Add(pair.Key, pair.Value);
