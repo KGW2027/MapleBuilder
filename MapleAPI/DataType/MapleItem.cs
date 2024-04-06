@@ -32,27 +32,26 @@ public class MapleItem
         ExceptionalOption = new MapleOption(data["item_exceptional_option"]!.AsObject());
         AddOption = new MapleOption(data["item_add_option"]!.AsObject());
         EtcOption = new MapleOption(data["item_etc_option"]!.AsObject());
-        Specials = new List<KeyValuePair<Enum.MaplePotentialOption.OptionType, int>>();
-        
+        Specials = new List<KeyValuePair<MaplePotentialOption.OptionType, int>>();
+
         CachedStarforce = new Dictionary<int, MapleOption>();
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
 
-        if (int.TryParse(data["item_base_option"]!.AsObject()["base_equipment_level"]!.ToString(), out int level))
+        Potential = new MapleItemPotential(ItemLevel, EquipType,
+            MaplePotentialGrade.GetPotentialGrade(data["potential_option_grade"]),
+            MaplePotentialGrade.GetPotentialGrade(data["additional_potential_option_grade"]));
+        
+        for (int idx = 1; idx <= 3; idx++)
         {
-            Potential = new MapleItemPotential(level, EquipType, 
-                MaplePotentialGrade.GetPotentialGrade(data["potential_option_grade"]),
-                MaplePotentialGrade.GetPotentialGrade(data["additional_potential_option_grade"]));
-
-            for (int idx = 1; idx <= 3; idx++)
-            {
-                string index = $"potential_option_{idx}";
-                if (data[index] != null)
-                    Potential.SetPotential(idx-1, MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
-                index = $"additional_{index}";
-                if (data[index] != null)
-                    Potential.SetAdditional(idx-1, MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
-            }
+            string index = $"potential_option_{idx}";
+            if (data[index] != null)
+                Potential.SetPotential(idx - 1, MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
+            index = $"additional_{index}";
+            if (data[index] != null)
+                Potential.SetAdditional(idx - 1,
+                    MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
         }
+
     }
 
     /// <summary>
@@ -364,7 +363,7 @@ public class MapleItem
 
         for (int idx = 1; idx <= sfv; idx++)
         {
-            option.AllStat += GetStatIncreaseByStarforce(idx);
+            option.AllStatFlatInc = GetStatIncreaseByStarforce(idx);
             int apmp = EquipType == MapleEquipType.EquipType.WEAPON
                 ? GetWeaponAttackIncreaseByStarforce(idx, option.AttackPower)
                 : GetArmorAttackIncreaseByStarforce(idx);

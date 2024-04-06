@@ -48,8 +48,10 @@ public class PlayerInfo
     public PlayerInfo(uint level, MaplePotentialOption.OptionType mainStat, 
         MaplePotentialOption.OptionType subStat, MaplePotentialOption.OptionType subStat2 = MaplePotentialOption.OptionType.OTHER)
     {
-        MainStat = new StatInfo(mainStat);
-        MainStat.BaseValue += (int) (level - 1) * (mainStat == MaplePotentialOption.OptionType.MAX_HP ? 50 : 5);
+        MainStat = new StatInfo(mainStat)
+        {
+            BaseValue = (int) (mainStat == MaplePotentialOption.OptionType.MAX_HP ? 90 * level + 545 : 5 * level + 18)
+        };
         SubStat = new StatInfo(subStat);
         SubStat2 = new StatInfo(subStat2);
 
@@ -147,10 +149,10 @@ public class PlayerInfo
     {
         return stat switch
         {
-            MaplePotentialOption.OptionType.STR => option.Str + option.AllStat,
-            MaplePotentialOption.OptionType.DEX => option.Dex + option.AllStat,
-            MaplePotentialOption.OptionType.INT => option.Int + option.AllStat,
-            MaplePotentialOption.OptionType.LUK => option.Luk + option.AllStat,
+            MaplePotentialOption.OptionType.STR => option.Str,
+            MaplePotentialOption.OptionType.DEX => option.Dex,
+            MaplePotentialOption.OptionType.INT => option.Int,
+            MaplePotentialOption.OptionType.LUK => option.Luk,
             MaplePotentialOption.OptionType.MAX_HP => option.MaxHp,
             _ => 0
         };
@@ -219,9 +221,9 @@ public class PlayerInfo
     ///</summary>
     private void ApplyMapleOption(MapleOption option)
     {
-        MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat) + option.AllStat;
-        SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat) + option.AllStat;
-        SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat) + option.AllStat;
+        MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat);
+        SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat);
+        SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat);
         AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? option.AttackPower : option.MagicPower;
         BossDamage += option.BossDamage;
         Damage += option.Damage;
@@ -245,6 +247,9 @@ public class PlayerInfo
         MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat) * sign;
         SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat) * sign;
         SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat) * sign;
+        MainStat.RateValue += itemOption.AllStatRate * sign;
+        SubStat.RateValue += itemOption.AllStatRate * sign;
+        SubStat2.RateValue += itemOption.AllStatRate * sign;
         
         // 잠재능력 적용
         if (item.Potential != null)
@@ -263,6 +268,7 @@ public class PlayerInfo
         else
             SetEffects.Sub(item);
         ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
+        Console.WriteLine($"세트효과 ({SetEffects.GetSetOptionString()})주스텟 상승량 : {SetEffects.GetSetOptions().Int}");
     }
     
     ///<summary>
@@ -336,18 +342,5 @@ public class PlayerInfo
     
     #endregion
     
-
-
-
-
-
-
-
-    
-
-
-    
-    
-    
-    
+    // TODO : 스텟 적용 테스트 - 기본수치 4422, 실제수치 4477, 차이 125 - 아르카나세트 올스텟 15
 }

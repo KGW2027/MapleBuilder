@@ -111,13 +111,13 @@ public class SetEffect
                         option.BossDamage += 10;
                         goto case 4;
                     case 4:
-                        option.AllStat += 5;
+                        option.AllStatFlatInc = 5;
                         goto case 3;
                     case 3:
                         option.BossDamage += 5;
                         goto case 2;
                     case 2:
-                        option.AllStat = 3;
+                        option.AllStatFlatInc = 3;
                         break;
                 }
 
@@ -128,18 +128,18 @@ public class SetEffect
                     case 5:
                         option.BossDamage += 6;
                         option.ApplyIgnoreArmor(10);
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         goto case 4;
                     case 4:
                         option.AttackPower += 8;
                         option.MagicPower += 8;
-                        option.AllStat += 8; // 주스텟만 이지만 임의로..
-                        option.Damage += 4; // 일몹뎀임
+                        option.AllStatFlatInc = 8; // 주스텟만 이지만 임의로..
+                        option.CommonDamage += 4;
                         goto case 3;
                     case 3:
                         option.MaxHpRate += 8;
                         option.MaxMpRate += 8;
-                        option.Damage += 2; // 일몹뎀임
+                        option.CommonDamage += 2;
                         goto case 2;
                     case 2:
                         break;
@@ -150,7 +150,7 @@ public class SetEffect
                 switch (Math.Min(level, 6))
                 {
                     case 6:
-                        option.AllStat += 25;
+                        option.AllStatFlatInc = 25;
                         option.MaxHpRate += 15;
                         option.MaxMpRate += 15;
                         option.AttackPower += 20;
@@ -160,10 +160,10 @@ public class SetEffect
                     case 5:
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 9;
+                        option.AllStatFlatInc = 9;
                         goto case 4;
                     case 4:
-                        option.AllStat += 6;
+                        option.AllStatFlatInc = 6;
                         option.BossDamage += 10;
                         break;
                 }
@@ -176,23 +176,23 @@ public class SetEffect
                         option.AttackPower += 10;
                         option.MagicPower += 10;
                         option.ApplyIgnoreArmor(10);
-                        option.Damage += 8; // 일몹뎀
+                        option.CommonDamage += 8;
                         goto case 5;
                     case 5:
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.ApplyIgnoreArmor(10);
-                        option.Damage += 6; // 일몹뎀
+                        option.CommonDamage += 6;
                         goto case 4;
                     case 4:
                         option.AttackPower += 9;
                         option.MagicPower += 9;
-                        option.AllStat += 9;
-                        option.Damage += 4; // 일몹뎀
+                        option.AllStatFlatInc = 9;
+                        option.CommonDamage += 4;
                         goto case 3;
                     case 3:
                         option.MaxHpRate += 9;
                         option.MaxMpRate += 9;
-                        option.Damage += 2; // 일몹뎀
+                        option.CommonDamage += 2;
                         break;
                 }
 
@@ -229,7 +229,7 @@ public class SetEffect
                         option.BossDamage += 30;
                         goto case 5;
                     case 5:
-                        option.AllStat += 20;
+                        option.AllStatFlatInc = 20;
                         goto case 4;
                     case 4:
                         option.AttackPower += 15;
@@ -257,8 +257,7 @@ public class SetEffect
                         option.MagicPower += 50;
                         goto case 2;
                     case 2:
-                        option.AttackPower += 20;
-                        option.MagicPower += 20;
+                        option.AllStatFlatInc = 20;
                         option.MaxHp += 1000;
                         option.MaxMp += 1000;
                         break;
@@ -290,7 +289,7 @@ public class SetEffect
                         option.ApplyIgnoreArmor(10);
                         goto case 3;
                     case 3:
-                        option.AllStat += 30;
+                        option.AllStatFlatInc = 30;
                         option.AttackPower += 20;
                         option.MagicPower += 20;
                         option.BossDamage += 10;
@@ -329,7 +328,7 @@ public class SetEffect
                     case 4:
                         option.AttackPower += 35;
                         option.MagicPower += 35;
-                        option.AllStat += 50;
+                        option.AllStatFlatInc = 50;
                         option.BossDamage += 10;
                         goto case 3;
                     case 3:
@@ -357,7 +356,7 @@ public class SetEffect
                         option.BossDamage += 10;
                         option.AttackPower += 40;
                         option.MagicPower += 40;
-                        option.AllStat += 50;
+                        option.AllStatFlatInc = 50;
                         option.MaxHp += 2500;
                         option.MaxMp += 2500;
                         goto case 6;
@@ -381,7 +380,7 @@ public class SetEffect
                         option.MaxMpRate += 15;
                         goto case 3;
                     case 3:
-                        option.AllStat += 50;
+                        option.AllStatFlatInc = 50;
                         option.AttackPower += 40;
                         option.MagicPower += 40;
                         option.BossDamage += 10;
@@ -412,23 +411,26 @@ public class SetEffect
                         option.BossDamage += 10;
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         goto case 7;
+                    case 8:
                     case 7:
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.ApplyIgnoreArmor(10);
                         goto case 5;
+                    case 6:
                     case 5:
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHpRate += 5;
                         option.MaxMpRate += 5;
                         option.AttackPower += 5;
                         option.MagicPower += 5;
                         goto case 3;
+                    case 4:
                     case 3:
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHpRate += 5;
                         option.MaxMpRate += 5;
                         option.AttackPower += 5;
@@ -444,20 +446,20 @@ public class SetEffect
                         option.ApplyIgnoreArmor(10);
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHp += 250;
                         goto case 3;
                     case 3:
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHp += 250;
                         goto case 2;
                     case 2:
                         option.BossDamage += 10;
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHp += 250;
                         break;
                 }
@@ -469,56 +471,56 @@ public class SetEffect
                     case 9:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.CriticalDamage += 5;
                         goto case 8;
                     case 8:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.BossDamage += 10;
                         goto case 7;
                     case 7:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.CriticalDamage += 5;
                         goto case 6;
                     case 6:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.ApplyIgnoreArmor(10);
                         goto case 5;
                     case 5:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.BossDamage += 10;
                         goto case 4;
                     case 4:
                         option.AttackPower += 15;
                         option.MagicPower += 15;
-                        option.AllStat += 15;
+                        option.AllStatFlatInc = 15;
                         option.MaxHp += 375;
                         option.CriticalDamage += 5;
                         goto case 3;
                     case 3:
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHp += 250;
                         option.ApplyIgnoreArmor(10);
                         goto case 2;
                     case 2:
                         option.AttackPower += 10;
                         option.MagicPower += 10;
-                        option.AllStat += 10;
+                        option.AllStatFlatInc = 10;
                         option.MaxHp += 250;
                         option.BossDamage += 10;
                         break;

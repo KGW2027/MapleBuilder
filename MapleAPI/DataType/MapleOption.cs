@@ -16,11 +16,22 @@ public class MapleOption
     public int BossDamage { get; set; }
     public int Damage { get; set; }
     public double IgnoreArmor { get; set; }
-    public int AllStat { get; set; }
+    public int AllStatRate { get; set; }
     public int MaxHpRate { get; set; }
     public int MaxMpRate { get; set; }
     public int CommonDamage { get; set; }
     public int CriticalDamage { get; set; }
+    
+    public int AllStatFlatInc
+    {
+        set
+        {
+            Str += value;
+            Dex += value;
+            Int += value;
+            Luk += value;
+        }
+    }
 
     private int GetValue(JsonObject data, string key)
     {
@@ -40,7 +51,7 @@ public class MapleOption
         BossDamage = 0;
         Damage = 0;
         IgnoreArmor = 0;
-        AllStat = 0;
+        AllStatRate = 0;
         MaxHpRate = 0;
         MaxMpRate = 0;
         CommonDamage = 0;
@@ -60,7 +71,7 @@ public class MapleOption
         BossDamage = GetValue(data, "boss_damage");
         Damage = GetValue(data, "damage");
         IgnoreArmor = GetValue(data, "ignore_monster_armor");
-        AllStat = GetValue(data, "all_stat");
+        AllStatRate = GetValue(data, "all_stat");
         MaxHpRate = GetValue(data, "max_hp_rate");
         MaxMpRate = GetValue(data, "max_mp_rate");
         CommonDamage = 0;
@@ -73,7 +84,7 @@ public class MapleOption
         IgnoreArmor = ignoreArmor;
         AttackPower = atkMagic;
         MagicPower = atkMagic;
-        AllStat = allStat;
+        AllStatRate = allStat;
         MaxHp = hpmp;
         MaxMp = hpmp;
     }
@@ -101,7 +112,7 @@ public class MapleOption
         lhs.BossDamage += rhs.BossDamage;
         lhs.Damage += rhs.Damage;
         lhs.ApplyIgnoreArmor(rhs.IgnoreArmor);
-        lhs.AllStat += rhs.AllStat;
+        lhs.AllStatRate += rhs.AllStatRate;
         lhs.CommonDamage += rhs.CommonDamage;
         lhs.CriticalDamage += rhs.CriticalDamage;
         
@@ -123,7 +134,7 @@ public class MapleOption
         lhs.BossDamage -= rhs.BossDamage;
         lhs.Damage -= rhs.Damage;
         lhs.ApplyIgnoreArmor(-rhs.IgnoreArmor);
-        lhs.AllStat -= rhs.AllStat;
+        lhs.AllStatRate -= rhs.AllStatRate;
         lhs.CommonDamage -= rhs.CommonDamage;
         lhs.CriticalDamage -= rhs.CriticalDamage;
         
@@ -132,7 +143,7 @@ public class MapleOption
 
     public override string ToString()
     {
-        return $"STR : {Str}, DEX : {Dex}, INT : {Int}, LUK : {Luk}, ALL STAT : {AllStat}\n"
+        return $"STR : {Str}, DEX : {Dex}, INT : {Int}, LUK : {Luk}, ALL STAT : {AllStatRate}\n"
                // + $"MaxHp : {MaxHp}, {MaxHpRate}%, MaxMp : {MaxMp}, {MaxMpRate}%\n"
                + $"Attack : {AttackPower}, Magic : {MagicPower}\n"
                // + $"Damage : {Damage}, BossDamage : {BossDamage}, CommonDamage : {CommonDamage}, CriticalDamage : {CriticalDamage}\n"
