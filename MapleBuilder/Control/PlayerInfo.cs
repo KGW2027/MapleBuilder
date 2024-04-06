@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
+using MapleBuilder.MapleData;
 using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.Control;
@@ -43,608 +44,7 @@ public class PlayerInfo
             FlatValue = 0;
         }
     }
-
-    public enum SetType
-    {
-        NECRO,          // 120제 네크로
-        MUSPELL,        // 130제 쟈이힌, 무스펠
-        ROYAL,          // 130제 반레온
-        PENSALIR,       // 140제 펜살리르
-        MAISTER,        // 140제 마이스터
-        CYGNUS,         // 140제 여제
-        ROOTABYSS,      // 150제 루타
-        ABSOLABSE,      // 160제 앱솔
-        ARCANESHADE,    // 200제 아케인셰이드
-        ETERNEL,        // 250제 에테르넬
-        MONSTERPARK,    // 칠요세트
-        BOSSACCESSORY,  // 보스 장신구
-        DAWN,           // 여명
-        BLACK,          // 칠흑
-        NONE
-    }
-
-    public class SetEffect
-    {
-        private Dictionary<SetType, int> Sets { get; }
-        private List<SetType> LuckySets { get; set; }
-        private readonly Dictionary<SetType, List<string>> setMap = new()
-        {
-            {SetType.NECRO, new List<string> {"네크로"}},
-            {SetType.MUSPELL, new List<string> { "쟈이힌", "무스펠" }},
-            {SetType.ROYAL, new List<string> { "로얄 반 레온" }},
-            {SetType.PENSALIR, new List<string> { "우트가르드", "펜살리르" }},
-            {SetType.MAISTER, new List<string> { "마이스터" }},
-            {SetType.CYGNUS, new List<string> { "라이온하트", "드래곤테일", "팔콘윙", "레이븐혼", "샤크투스" }},
-            {SetType.ROOTABYSS, new List<string> { "하이네스", "이글아이", "트릭스터", "파프니르" }},
-            {SetType.ABSOLABSE, new List<string> { "앱솔랩스" }},
-            {SetType.ARCANESHADE, new List<string> { "아케인셰이드" }},
-            {SetType.ETERNEL, new List<string> { "에테르넬" }},
-            {SetType.MONSTERPARK, new List<string> { "칠요의" }},
-            {SetType.BOSSACCESSORY, new List<string> { "응축된 힘", "아쿠아틱", "블랙빈 마", "파풀", "지옥", "데아",
-                "실버블라", "고귀한 이", "가디언 엔젤 링", "혼테일", "카오스 혼테일", "매커", "도미", "골든 클", 
-                "분노한 자쿰의 벨트", "로얄 블", "핑크빛", "영생의 돌", "크리스탈 웬"}},
-            {SetType.DAWN, new List<string> { "트와일라이", "에스텔", "여명의 가", "데이브"}},
-            {SetType.BLACK, new List<string> { "루즈 컨", "마력이", "블랙 하", "몽환의 벨", "고통", "창세", "커맨더 포", "거대한 공", 
-                "저주받은 적", "저주받은 녹", "저주받은 청", "저주받은 황", "미트라의 분노"}}
-        };
-
-        protected internal SetEffect()
-        {
-            Sets = new Dictionary<SetType, int>();
-            LuckySets = new List<SetType>();
-        }
-
-        private SetType GetSetType(MapleItem item)
-        {
-            foreach (var pair in setMap.Where(pair => pair.Value.Any(prefix => item.Name.StartsWith(prefix))))
-                return pair.Key;
-            return SetType.NONE;
-        }
-
-        private List<SetType> GetLuckySets(MapleItem item)
-        {
-            if (item.Name.StartsWith("제네시스"))
-                return new List<SetType>
-                {
-                    SetType.NECRO, SetType.MUSPELL, SetType.ROYAL, SetType.PENSALIR, SetType.MAISTER, SetType.CYGNUS,
-                    SetType.ROOTABYSS, SetType.ABSOLABSE, SetType.ARCANESHADE, SetType.ETERNEL
-                };
-            if (item.Name.Equals("카오스 반반 투구") || item.Name.Equals("카오스 벨룸의 헬름") || item.Name.Equals("카오스 피에르 모자")
-                || item.Name.Equals("카오스 퀸의 티아라"))
-                return new List<SetType>
-                {
-                    SetType.NECRO, SetType.MUSPELL, SetType.ROYAL, SetType.PENSALIR, SetType.CYGNUS,
-                    SetType.ROOTABYSS, SetType.ABSOLABSE, SetType.ARCANESHADE, SetType.ETERNEL
-                };
-            if (item.Name.StartsWith("스칼렛 링"))
-                return new List<SetType>
-                {
-                    SetType.BOSSACCESSORY, SetType.DAWN, SetType.BLACK
-                };
-            return new List<SetType>();
-        }
-        
-        private MapleOption GetSetOption(SetType setType, int level)
-        {
-            MapleOption option = new MapleOption();
-            if (LuckySets.Contains(setType) && level >= 3) level++;
-            switch (setType)
-            {
-                case SetType.NECRO:
-                    switch (Math.Min(level, 5))
-                    {
-                        case 5:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.BossDamage += 10;
-                            goto case 4;
-                        case 4:
-                            option.AllStat += 5;
-                            goto case 3;
-                        case 3:
-                            option.BossDamage += 5;
-                            goto case 2;
-                        case 2:
-                            option.AllStat = 3;
-                            break;
-                    }
-                    break;
-                case SetType.MUSPELL:
-                    switch (Math.Min(level, 5))
-                    {
-                        case 5:
-                            option.BossDamage += 6;
-                            option.ApplyIgnoreArmor(10);
-                            option.AllStat += 10;
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 8;
-                            option.MagicPower += 8;
-                            option.AllStat += 8; // 주스텟만 이지만 임의로..
-                            option.Damage += 4; // 일몹뎀임
-                            goto case 3;
-                        case 3:
-                            option.MaxHpRate += 8;
-                            option.MaxMpRate += 8;
-                            option.Damage += 2; // 일몹뎀임
-                            goto case 2;
-                        case 2:
-                            break;
-                    }
-                    break;
-                case SetType.ROYAL:
-                    switch (Math.Min(level, 6))
-                    {
-                        case 6:
-                            option.AllStat += 25;
-                            option.MaxHpRate += 15;
-                            option.MaxMpRate += 15;
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            option.BossDamage += 10;
-                            goto case 5;
-                        case 5:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 9;
-                            goto case 4;
-                        case 4:
-                            option.AllStat += 6;
-                            option.BossDamage += 10;
-                            break;
-                    }
-                    break;
-                case SetType.PENSALIR:
-                    switch (Math.Min(level, 6))
-                    {
-                        case 6:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.ApplyIgnoreArmor(10);
-                            option.Damage += 8; // 일몹뎀
-                            goto case 5;
-                        case 5:
-                            option.AllStat += 15;
-                            option.ApplyIgnoreArmor(10);
-                            option.Damage += 6; // 일몹뎀
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 9;
-                            option.MagicPower += 9;
-                            option.AllStat += 9;
-                            option.Damage += 4; // 일몹뎀
-                            goto case 3;
-                        case 3:
-                            option.MaxHpRate += 9;
-                            option.MaxMpRate += 9;
-                            option.Damage += 2; // 일몹뎀
-                            break;
-                    }
-                    break;
-                case SetType.MAISTER:
-                    switch (Math.Min(level, 4))
-                    {
-                        case 4:
-                            option.BossDamage += 20;
-                            goto case 3;
-                        case 3:
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            goto case 2;
-                        case 2:
-                            option.MaxHpRate += 10;
-                            option.MaxMpRate += 10;
-                            break;
-                    }
-                    break;
-                case SetType.CYGNUS:
-                    switch (Math.Min(level, 7))
-                    {
-                        case 7:
-                            option.MaxHpRate = 15;
-                            option.MaxMpRate = 15;
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            goto case 6;
-                        case 6:
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            option.BossDamage += 30;
-                            goto case 5;
-                        case 5:
-                            option.AllStat += 20;
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            goto case 3;
-                        case 3:
-                            option.MaxHpRate = 15;
-                            option.MaxMpRate = 15;
-                            goto case 2;
-                        case 2:
-                            break;
-                    }
-                    break;
-                case SetType.ROOTABYSS:
-                    switch (Math.Min(level, 4))
-                    {
-                        case 4:
-                            option.BossDamage += 30;
-                            goto case 3;
-                        case 3:
-                            option.MaxHpRate = 10;
-                            option.MaxMpRate = 10;
-                            option.AttackPower += 50;
-                            option.MagicPower += 50;
-                            goto case 2;
-                        case 2:
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            option.MaxHp += 1000;
-                            option.MaxMp += 1000;
-                            break;
-                    }
-                    break;
-                case SetType.ABSOLABSE:
-                    switch (Math.Min(level, 7))
-                    {
-                        case 7:
-                            option.ApplyIgnoreArmor(10);
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            goto case 6;
-                        case 6:
-                            option.MaxHpRate += 20;
-                            option.MaxMpRate += 20;
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            goto case 5;
-                        case 5:
-                            option.BossDamage += 10;
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 25;
-                            option.MagicPower += 25;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 3;
-                        case 3:
-                            option.AllStat += 30;
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            option.BossDamage += 10;
-                            goto case 2;
-                        case 2:
-                            option.MaxHp += 1500;
-                            option.MaxMp += 1500;
-                            option.AttackPower += 20;
-                            option.MagicPower += 20;
-                            option.BossDamage += 10;
-                            break;
-                    }
-                    break;
-                case SetType.ARCANESHADE:
-                    switch (Math.Min(level, 7))
-                    {
-                        case 7:
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 6;
-                        case 6:
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            option.MaxHpRate += 30;
-                            option.MaxMpRate += 30;
-                            goto case 5;
-                        case 5:
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.MaxHp += 2000;
-                            option.MaxMp += 2000;
-                            option.BossDamage += 10;
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 35;
-                            option.MagicPower += 35;
-                            option.AllStat += 50;
-                            option.BossDamage += 10;
-                            goto case 3;
-                        case 3:
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 2;
-                        case 2:
-                            option.AttackPower += 30;
-                            option.MagicPower += 30;
-                            option.BossDamage += 10;
-                            break;
-                    }
-                    break;
-                case SetType.ETERNEL:
-                    switch (Math.Min(level, 8))
-                    {
-                        case 8:
-                            option.BossDamage += 10;
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            goto case 7;
-                        case 7:
-                            option.BossDamage += 10;
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.AllStat += 50;
-                            option.MaxHp += 2500;
-                            option.MaxMp += 2500;
-                            goto case 6;
-                        case 6:
-                            option.BossDamage += 30;
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.MaxHpRate += 15;
-                            option.MaxMpRate += 15;
-                            goto case 5;
-                        case 5:
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.ApplyIgnoreArmor(20);
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 45;
-                            option.MagicPower += 45;
-                            option.BossDamage += 10;
-                            option.MaxHpRate += 15;
-                            option.MaxMpRate += 15;
-                            goto case 3;
-                        case 3:
-                            option.AllStat += 50;
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.BossDamage += 10;
-                            goto case 2;
-                        case 2:
-                            option.MaxHp += 2500;
-                            option.MaxMp += 2500;
-                            option.AttackPower += 40;
-                            option.MagicPower += 40;
-                            option.BossDamage += 10;
-                            break;
-                    }
-                    break;
-                case SetType.MONSTERPARK:
-                    switch (Math.Min(level, 2))
-                    {
-                        case 2:
-                            option.ApplyIgnoreArmor(10);
-                            break;
-                    }
-                    break;
-                case SetType.BOSSACCESSORY:
-                    switch (Math.Min(level, 9))
-                    {
-                        case 9:
-                            option.BossDamage += 10;
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 15;
-                            goto case 7;
-                        case 7:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 5;
-                        case 5:
-                            option.AllStat += 10;
-                            option.MaxHpRate += 5;
-                            option.MaxMpRate += 5;
-                            option.AttackPower += 5;
-                            option.MagicPower += 5;
-                            goto case 3;
-                        case 3:
-                            option.AllStat += 10;
-                            option.MaxHpRate += 5;
-                            option.MaxMpRate += 5;
-                            option.AttackPower += 5;
-                            option.MagicPower += 5;
-                            break;
-                    }
-                    break;
-                case SetType.DAWN:
-                    switch (Math.Min(level, 4))
-                    {
-                        case 4:
-                            option.ApplyIgnoreArmor(10);
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.MaxHp += 250;
-                            goto case 3;
-                        case 3:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.MaxHp += 250;
-                            goto case 2;
-                        case 2:
-                            option.BossDamage += 10;
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.MaxHp += 250;
-                            break;
-                    }
-                    break;
-                case SetType.BLACK:
-                    switch (Math.Min(level, 9))
-                    {
-                        case 9:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.CriticalDamage += 5;
-                            goto case 8;
-                        case 8:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.BossDamage += 10;
-                            goto case 7;
-                        case 7:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.CriticalDamage += 5;
-                            goto case 6;
-                        case 6:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 5;
-                        case 5:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.BossDamage += 10;
-                            goto case 4;
-                        case 4:
-                            option.AttackPower += 15;
-                            option.MagicPower += 15;
-                            option.AllStat += 15;
-                            option.MaxHp += 375;
-                            option.CriticalDamage += 5;
-                            goto case 3;
-                        case 3:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.MaxHp += 250;
-                            option.ApplyIgnoreArmor(10);
-                            goto case 2;
-                        case 2:
-                            option.AttackPower += 10;
-                            option.MagicPower += 10;
-                            option.AllStat += 10;
-                            option.MaxHp += 250;
-                            option.BossDamage += 10;
-                            break;
-                    }
-
-                    break;
-                case SetType.NONE:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(setType), setType, null);
-            }
-
-            return option;
-        }
-
-        public MapleOption GetSetOptions()
-        {
-            MapleOption result = new MapleOption();
-            foreach (var pair in Sets)
-            {
-                result += GetSetOption(pair.Key, pair.Value);
-            }
-            return result;
-        }
-
-        public string GetSetOptionString()
-        {
-            return Sets.Aggregate("", (current, pair) => current + $"{pair.Key} {pair.Value + (LuckySets.Contains(pair.Key) && pair.Value >= 3 ? 1 : 0)} ");
-        }
-
-        public void Add(MapleItem item)
-        {
-            SetType type = GetSetType(item);
-            if( type == SetType.NONE )
-            {
-                var luckySets = GetLuckySets(item);
-                if (luckySets.Count == 0 || LuckySets.Count > 0) return;
-                LuckySets = luckySets;
-                return;
-            }
-            
-            Sets.TryAdd(type, 0);
-            Sets[type] += 1;
-        }
-
-        public void Sub(MapleItem item)
-        {
-            SetType type = GetSetType(item);
-            if (type == SetType.NONE)
-            {
-                var luckySets = GetLuckySets(item);
-                if(luckySets.Count > 0) LuckySets.Clear();
-                return;
-            }
-
-            if (!Sets.ContainsKey(type)) return;
-            Sets[type] -= 1;
-            if (Sets[type] <= 0) Sets.Remove(type);
-        }
-
-        public static string GetSetTypeString(SetType setType)
-        {
-            return setType switch
-            {
-                SetType.NECRO => "네크로",
-                SetType.MUSPELL => "무스펠",
-                SetType.ROYAL => "반레온",
-                SetType.PENSALIR => "펜살",
-                SetType.MAISTER => "마이스터",
-                SetType.CYGNUS => "여제",
-                SetType.ROOTABYSS => "루타",
-                SetType.ABSOLABSE => "앱솔",
-                SetType.ARCANESHADE => "아케인",
-                SetType.ETERNEL => "에테",
-                SetType.MONSTERPARK => "칠요",
-                SetType.BOSSACCESSORY => "보장",
-                SetType.DAWN => "여명",
-                SetType.BLACK => "칠흑",
-                SetType.NONE => "",
-                _ => throw new ArgumentOutOfRangeException(nameof(setType), setType, null)
-            };
-        }
-    }
     
-    public StatInfo MainStat { get; private set; }
-    public StatInfo SubStat { get; private set; }
-    public StatInfo SubStat2 { get; private set; }
-    public MaplePotentialOption.OptionType AttackType { get; private set; }
-    public MaplePotentialOption.OptionType AttackRateType { get; private set; }
-    public int AttackValue { get; private set; }
-    public int AttackRate { get; private set; }
-    public int Damage { get; private set; }
-    public int BossDamage { get; private set; }
-    public int CommonDamage { get; private set; }
-    public int DebuffDamage { get; private set; }
-    public int ItemDropIncrease { get; private set; }
-    public int MesoDropIncrease { get; private set; }
-    public int CooldownDecreaseValue { get; private set; }
-    public int CooldownDecreaseRate { get; private set; }
-    public int CooldownIgnoreRate { get; private set; }
-    public int BuffDurationIncrease { get; private set; }
-    public int SummonDurationIncrease { get; private set; }
-    public int Immune { get; private set; }
-    public int LevelStat { get; private set; }
-    public double FinalDamage { get; private set; }
-    public double IgnoreArmor { get; private set; }
-    public double CriticalChance { get; private set; }
-    public double CriticalDamage { get; private set; }
-    public double IgnoreImmune { get; private set; }
-    public SetEffect SetEffects { get; private set; }
-
     public PlayerInfo(uint level, MaplePotentialOption.OptionType mainStat, 
         MaplePotentialOption.OptionType subStat, MaplePotentialOption.OptionType subStat2 = MaplePotentialOption.OptionType.OTHER)
     {
@@ -682,8 +82,53 @@ public class PlayerInfo
 
         LevelStat = (int) Math.Floor(level / 9.0);
         SetEffects = new SetEffect();
+        LastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
     }
 
+    
+    public StatInfo MainStat { get; private set; }
+    public StatInfo SubStat { get; private set; }
+    public StatInfo SubStat2 { get; private set; }
+    public MaplePotentialOption.OptionType AttackType { get; private set; }
+    public MaplePotentialOption.OptionType AttackRateType { get; private set; }
+    public int AttackValue { get; private set; }
+    public int AttackRate { get; private set; }
+    public int Damage { get; private set; }
+    public int BossDamage { get; private set; }
+    public int CommonDamage { get; private set; }
+    public int DebuffDamage { get; private set; }
+    public int ItemDropIncrease { get; private set; }
+    public int MesoDropIncrease { get; private set; }
+    public int CooldownDecreaseValue { get; private set; }
+    public int CooldownDecreaseRate { get; private set; }
+    public int CooldownIgnoreRate { get; private set; }
+    public int BuffDurationIncrease { get; private set; }
+    public int SummonDurationIncrease { get; private set; }
+    public int Immune { get; private set; }
+    public int LevelStat { get; private set; }
+    public double FinalDamage { get; private set; }
+    public double IgnoreArmor { get; private set; }
+    public double CriticalChance { get; private set; }
+    public double CriticalDamage { get; private set; }
+    public double IgnoreImmune { get; private set; }
+    
+    public SetEffect SetEffects { get; private set; }
+    public Dictionary<MapleSymbol.SymbolType, int> LastSymbols;
+    
+    ///<summary>
+    ///    방어력 무시의 곱연산을 계산합니다.
+    ///</summary>
+    private double CalcIgnoreArmor(double baseValue, double additional, bool isAdd)
+    {
+        double cvtBase = (100 - baseValue) / 100.0;
+        double cvtAdd = (100 - additional) / 100.0;
+        return isAdd ? (1 - cvtBase * cvtAdd) * 100 : (1 - cvtBase / cvtAdd) * 100;
+    }
+    
+    #region 장비 아이템 효과 적용
+    ///<summary>
+    ///    장비 아이템의 기본 스텟, 작, 추옵, 익셉셔널 정보를 가져옵니다.
+    ///</summary>
     private MapleOption GetOption(MapleItem item)
     {
         MapleOption option = new MapleOption();
@@ -691,29 +136,29 @@ public class PlayerInfo
         if (item.AddOption != null) option += item.AddOption;
         if (item.EtcOption != null) option += item.EtcOption;
         if (item.ExceptionalOption != null) option += item.ExceptionalOption;
+        if (item.StarforceOption != null) option += item.StarforceOption;
         return option;
     }
-
+    
+    ///<summary>
+    ///    장비 정보에서 원하는 스텟에 해당하는 값을 추출합니다.
+    ///</summary>
     private int GetStatFromOption(MapleOption option, MaplePotentialOption.OptionType stat)
     {
         return stat switch
         {
-            MaplePotentialOption.OptionType.STR => option.Str,
-            MaplePotentialOption.OptionType.DEX => option.Dex,
-            MaplePotentialOption.OptionType.INT => option.Int,
-            MaplePotentialOption.OptionType.LUK => option.Luk,
+            MaplePotentialOption.OptionType.STR => option.Str + option.AllStat,
+            MaplePotentialOption.OptionType.DEX => option.Dex + option.AllStat,
+            MaplePotentialOption.OptionType.INT => option.Int + option.AllStat,
+            MaplePotentialOption.OptionType.LUK => option.Luk + option.AllStat,
             MaplePotentialOption.OptionType.MAX_HP => option.MaxHp,
             _ => 0
         };
     }
-
-    private double CalcIgnoreArmor(double baseValue, double additional, bool isAdd)
-    {
-        double cvtBase = (100 - baseValue) / 100.0;
-        double cvtAdd = (100 - additional) / 100.0;
-        return isAdd ? (1 - cvtBase * cvtAdd) * 100 : (1 - cvtBase / cvtAdd) * 100;
-    }
-
+    
+    ///<summary>
+    ///    잠재능력, 에디셔널 잠재능력을 현재 스텟에 적용합니다.
+    ///</summary>
     private void ApplyPotential(KeyValuePair<MaplePotentialOption.OptionType, int>[] potential, bool isAdd = true)
     {
         int sign = isAdd ? 1 : -1;
@@ -766,11 +211,12 @@ public class PlayerInfo
                     CooldownDecreaseValue += value;
                     break;
             }
-            
         }
-        
     }
-
+    
+    ///<summary>
+    ///    MapleOption 객체의 정보를 현재 스텟에 적용하는 것으로, 세트 아이템 효과 적용에 사용합니다.
+    ///</summary>
     private void ApplyMapleOption(MapleOption option)
     {
         MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat) + option.AllStat;
@@ -787,53 +233,119 @@ public class PlayerInfo
             MainStat.RateValue += option.MaxHpRate;
     }
     
+    ///<summary>
+    ///    아이템 착용과 해제를 현재 스텟에 시뮬레이션합니다.
+    ///</summary>
+    private void ApplyAddSub(MapleItem item, bool isAdd)
+    {
+        int sign = isAdd ? 1 : -1;
+        
+        // 아이템 기본 효과 적용
+        MapleOption itemOption = GetOption(item);
+        MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat) * sign;
+        SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat) * sign;
+        SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat) * sign;
+        
+        // 잠재능력 적용
+        if (item.Potential != null)
+        {
+            ApplyPotential(item.Potential.Potentials, isAdd);
+            ApplyPotential(item.Potential.Additionals, isAdd);
+        }
+        
+        // 칭호 효과 적용
+        ApplyPotential(item.Specials.ToArray(), isAdd);
+        
+        // 세트 효과 적용
+        MapleOption setEffectPrev = SetEffects.GetSetOptions();
+        if(isAdd)
+            SetEffects.Add(item);
+        else
+            SetEffects.Sub(item);
+        ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
+    }
+    
+    ///<summary>
+    ///    아이템을 장착합니다.
+    ///</summary>
     public void AddItem(MapleItem item)
     {
-        // 아이템 기본 효과 적용
-        MapleOption itemOption = GetOption(item);
-        MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat);
-        SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat);
-        SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat);
-        
-        // 잠재능력 적용
-        if (item.Potential != null)
-        {
-            ApplyPotential(item.Potential.Potentials);
-            ApplyPotential(item.Potential.Additionals);
-        }
-        
-        // 칭호 효과 적용
-        ApplyPotential(item.Specials.ToArray());
-        
-        // 세트 효과 적용
-        MapleOption setEffectPrev = SetEffects.GetSetOptions();
-        SetEffects.Add(item);
-        ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
+        ApplyAddSub(item, true);
     }
-
+    
+    ///<summary>
+    ///    아이템을 해제합니다.
+    ///</summary>
     public void SubtractItem(MapleItem item)
     {
-        // 아이템 기본 효과 적용
-        MapleOption itemOption = GetOption(item);
-        MainStat.BaseValue -= GetStatFromOption(itemOption, MainStat.Stat);
-        SubStat.BaseValue -= GetStatFromOption(itemOption, SubStat.Stat);
-        SubStat2.BaseValue -= GetStatFromOption(itemOption, SubStat2.Stat);
-        
-        // 잠재능력 적용
-        if (item.Potential != null)
-        {
-            ApplyPotential(item.Potential.Potentials, false);
-            ApplyPotential(item.Potential.Additionals, false);
-        }
-        
-        // 칭호 효과 적용
-        ApplyPotential(item.Specials.ToArray(), false);
-        
-        // 세트 효과 적용
-        MapleOption setEffectPrev = SetEffects.GetSetOptions();
-        SetEffects.Sub(item);
-        ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
+        ApplyAddSub(item, false);
     }
+    #endregion
+    
+    #region 심볼 효과 적용
+
+    private int GetSymbolStats(Dictionary<MapleSymbol.SymbolType, int> symbolData)
+    {
+        int stat = 0;
+        int baseValue = BuilderDataContainer.CharacterInfo!.Class switch
+            {
+              MapleClass.ClassType.XENON => 48,
+              MapleClass.ClassType.DEMON_AVENGER => 2100,
+              _ => 100
+            };
+        foreach (var pair in symbolData)
+        {
+            switch (pair.Key)
+            {
+                case MapleSymbol.SymbolType.YEORO:
+                case MapleSymbol.SymbolType.CHUCHU:
+                case MapleSymbol.SymbolType.LACHELEIN:
+                case MapleSymbol.SymbolType.ARCANA:
+                case MapleSymbol.SymbolType.MORAS:
+                case MapleSymbol.SymbolType.ESFERA:
+                    stat += baseValue * (pair.Value + 2);
+                    break;
+                case MapleSymbol.SymbolType.CERNIUM:
+                case MapleSymbol.SymbolType.ARCS:
+                case MapleSymbol.SymbolType.ODIUM:
+                case MapleSymbol.SymbolType.DOWONKYUNG:
+                case MapleSymbol.SymbolType.ARTERIA:
+                case MapleSymbol.SymbolType.CARCION:
+                    stat += baseValue * (2 * pair.Value + 3);
+                    break;
+                case MapleSymbol.SymbolType.UNKNOWN:
+                default:
+                    break;
+            }
+        }
+        return stat;
+    }
+    
+    public void ApplySymbolData(Dictionary<MapleSymbol.SymbolType, int> symbolData)
+    {
+        int delta = GetSymbolStats(symbolData) - GetSymbolStats(LastSymbols);
+        MainStat.FlatValue += delta;
+        if (BuilderDataContainer.CharacterInfo!.Class == MapleClass.ClassType.XENON)
+        {
+            SubStat.FlatValue += delta;
+            SubStat2.FlatValue += delta;
+        }
+
+        LastSymbols = symbolData;
+    }
+    
+    #endregion
+    
+
+
+
+
+
+
+
+    
+
+
     
     
     

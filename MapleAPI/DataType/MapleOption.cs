@@ -133,9 +133,10 @@ public class MapleOption
     public override string ToString()
     {
         return $"STR : {Str}, DEX : {Dex}, INT : {Int}, LUK : {Luk}, ALL STAT : {AllStat}\n"
-               + $"MaxHp : {MaxHp}, {MaxHpRate}%, MaxMp : {MaxMp}, {MaxMpRate}%\n"
+               // + $"MaxHp : {MaxHp}, {MaxHpRate}%, MaxMp : {MaxMp}, {MaxMpRate}%\n"
                + $"Attack : {AttackPower}, Magic : {MagicPower}\n"
-               + $"Damage : {Damage}, BossDamage : {BossDamage}, CommonDamage : {CommonDamage}, CriticalDamage : {CriticalDamage}\n"
-               + $"IgnoreAmor : {IgnoreArmor:F2}%";
+               // + $"Damage : {Damage}, BossDamage : {BossDamage}, CommonDamage : {CommonDamage}, CriticalDamage : {CriticalDamage}\n"
+               // + $"IgnoreAmor : {IgnoreArmor:F2}%"
+               ;
     }
 }

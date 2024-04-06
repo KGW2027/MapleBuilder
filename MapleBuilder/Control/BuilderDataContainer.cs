@@ -29,6 +29,10 @@ public class BuilderDataContainer
     
     public static ObservableCollection<MapleItem> RegisterItems = new();
 
+    /// <summary>
+    /// 새로운 캐릭터를 불러올 때 실행됩니다.
+    /// 아이템을 캐시하고, 플레이어 정보를 새로 생성한 후 로드합니다.
+    /// </summary>
     private static void UpdateCharacterInfo()
     {
         if (charInfo == null) return;
@@ -40,9 +44,15 @@ public class BuilderDataContainer
         
         MaplePotentialOption.OptionType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
+        PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         RenderOverview.Update(charInfo);
     }
 
+    /// <summary>
+    /// 프로그램 초기에만 실행됩니다. 슬롯에 아이템 교체 이벤트를 등록합니다.
+    /// </summary>
+    /// <param name="prevItem"></param>
+    /// <param name="newItem"></param>
     public static void InitEquipmentSlots(List<UIElement> slots)
     {
         Equipments.Clear();
@@ -54,6 +64,12 @@ public class BuilderDataContainer
             }
     }
 
+    /// <summary>
+    /// 슬롯 아이템이 교체 되었을 때 실행됩니다.
+    /// 세트효과와 요약이 새로고침됩니다.
+    /// </summary>
+    /// <param name="prevItem"></param>
+    /// <param name="newItem"></param>
     private static void OnSlotItemChanged(MapleItem? prevItem, MapleItem? newItem)
     {
         if (prevItem != null)

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using MapleAPI.DataType;
 using MapleBuilder.Control;
+using MapleBuilder.MapleData;
 using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;
@@ -43,8 +43,8 @@ public partial class RenderOverview : UserControl
 
             for (int index = 0; index < split.Length; index += 2)
             {
-                if (!Enum.TryParse(split[index], out PlayerInfo.SetType setType)) continue;
-                string setName = PlayerInfo.SetEffect.GetSetTypeString(setType);
+                if (!Enum.TryParse(split[index], out SetEffect.SetType setType)) continue;
+                string setName = SetEffect.GetSetTypeString(setType);
 
                 selfInstance.ctSetPanel.Children.Add(new SetEffectDisplay
                 {
