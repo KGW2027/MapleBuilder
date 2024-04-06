@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -37,23 +38,23 @@ public partial class Summarize : UserControl
         selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             selfInstance.ctMainStatType.Content =
-                $"주스탯 [{BuilderDataContainer.PlayerStatus!.MainStat.StatType.ToString()}]";
+                $"주스탯 [{BuilderDataContainer.PlayerStatus!.MainStat.Stat.ToString()}]";
             selfInstance.ctMainStatFlat.Content = BuilderDataContainer.PlayerStatus!.MainStat.BaseValue;
             selfInstance.ctMainStatRate.Content = BuilderDataContainer.PlayerStatus.MainStat.RateValue;
             selfInstance.ctMainStatNonRateFlat.Content = BuilderDataContainer.PlayerStatus.MainStat.FlatValue;
             
             selfInstance.ctSubStatType.Content =
-                $"부스탯 [{BuilderDataContainer.PlayerStatus.SubStat.StatType.ToString()}]";
+                $"부스탯 [{BuilderDataContainer.PlayerStatus.SubStat.Stat.ToString()}]";
             selfInstance.ctSubStatFlat.Content = BuilderDataContainer.PlayerStatus.SubStat.BaseValue;
             selfInstance.ctSubStatRate.Content = BuilderDataContainer.PlayerStatus.SubStat.RateValue;
             selfInstance.ctSubStatNonRateFlat.Content = BuilderDataContainer.PlayerStatus.SubStat.FlatValue;
 
             selfInstance.ctSubStat2Grid.Visibility =
-                BuilderDataContainer.PlayerStatus.SubStat2.StatType == MaplePotentialOptionType.OTHER
+                BuilderDataContainer.PlayerStatus.SubStat2.Stat == MaplePotentialOption.OptionType.OTHER
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             selfInstance.ctSubStat2Type.Content =
-                $"부스탯 [{BuilderDataContainer.PlayerStatus.SubStat2.StatType.ToString()}]";
+                $"부스탯 [{BuilderDataContainer.PlayerStatus.SubStat2.Stat.ToString()}]";
             selfInstance.ctSubStat2Flat.Content = BuilderDataContainer.PlayerStatus.SubStat2.BaseValue;
             selfInstance.ctSubStat2Rate.Content = BuilderDataContainer.PlayerStatus.SubStat2.RateValue;
             selfInstance.ctSubStat2NonRateFlat.Content = BuilderDataContainer.PlayerStatus.SubStat2.FlatValue;

@@ -6,6 +6,7 @@ using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.View.SubFrames;
 using MapleBuilder.View.SubObjects;
+using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.Control;
 
@@ -37,7 +38,7 @@ public class BuilderDataContainer
             RegisterItems.Add(newItem);
         }
         
-        MaplePotentialOptionType[] statTypes = CharacterInfo.GetClassStatType(charInfo.Class);
+        MaplePotentialOption.OptionType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         RenderOverview.Update(charInfo);
     }

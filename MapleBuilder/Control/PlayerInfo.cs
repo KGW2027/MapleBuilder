@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
+using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.Control;
 
@@ -10,32 +11,32 @@ public class PlayerInfo
 {
     public class StatInfo
     {
-        public MaplePotentialOptionType StatType { get; }
-        public MaplePotentialOptionType StatRateType { get; }
-        public MaplePotentialOptionType StatLevelType { get; }
+        public MaplePotentialOption.OptionType Stat { get; }
+        public MaplePotentialOption.OptionType StatRate { get; }
+        public MaplePotentialOption.OptionType StatLevel { get; }
         public int BaseValue { get; protected internal set; } // 기본 수치
         public int RateValue { get; protected internal set; } // % 수치
         public int FlatValue { get; protected internal set; } // % 미적용 수치
 
-        protected internal StatInfo(MaplePotentialOptionType statType)
+        protected internal StatInfo(MaplePotentialOption.OptionType stat)
         {
-            StatType = statType;
-            StatRateType = statType switch
+            Stat = stat;
+            StatRate = stat switch
             {
-                MaplePotentialOptionType.STR => MaplePotentialOptionType.STR_RATE,
-                MaplePotentialOptionType.DEX => MaplePotentialOptionType.DEX_RATE,
-                MaplePotentialOptionType.INT => MaplePotentialOptionType.INT_RATE,
-                MaplePotentialOptionType.LUK => MaplePotentialOptionType.LUK_RATE,
-                MaplePotentialOptionType.MAX_HP => MaplePotentialOptionType.MAX_HP_RATE,
-                _ => MaplePotentialOptionType.OTHER
+                MaplePotentialOption.OptionType.STR => MaplePotentialOption.OptionType.STR_RATE,
+                MaplePotentialOption.OptionType.DEX => MaplePotentialOption.OptionType.DEX_RATE,
+                MaplePotentialOption.OptionType.INT => MaplePotentialOption.OptionType.INT_RATE,
+                MaplePotentialOption.OptionType.LUK => MaplePotentialOption.OptionType.LUK_RATE,
+                MaplePotentialOption.OptionType.MAX_HP => MaplePotentialOption.OptionType.MAX_HP_RATE,
+                _ => MaplePotentialOption.OptionType.OTHER
             };
-            StatLevelType = statType switch
+            StatLevel = stat switch
             {
-                MaplePotentialOptionType.STR => MaplePotentialOptionType.LEVEL_STR,
-                MaplePotentialOptionType.DEX => MaplePotentialOptionType.LEVEL_DEX,
-                MaplePotentialOptionType.INT => MaplePotentialOptionType.LEVEL_INT,
-                MaplePotentialOptionType.LUK => MaplePotentialOptionType.LEVEL_LUK,
-                _ => MaplePotentialOptionType.OTHER
+                MaplePotentialOption.OptionType.STR => MaplePotentialOption.OptionType.LEVEL_STR,
+                MaplePotentialOption.OptionType.DEX => MaplePotentialOption.OptionType.LEVEL_DEX,
+                MaplePotentialOption.OptionType.INT => MaplePotentialOption.OptionType.LEVEL_INT,
+                MaplePotentialOption.OptionType.LUK => MaplePotentialOption.OptionType.LEVEL_LUK,
+                _ => MaplePotentialOption.OptionType.OTHER
             };
             BaseValue = 4;
             RateValue = 0;
@@ -620,8 +621,8 @@ public class PlayerInfo
     public StatInfo MainStat { get; private set; }
     public StatInfo SubStat { get; private set; }
     public StatInfo SubStat2 { get; private set; }
-    public MaplePotentialOptionType AttackType { get; private set; }
-    public MaplePotentialOptionType AttackRateType { get; private set; }
+    public MaplePotentialOption.OptionType AttackType { get; private set; }
+    public MaplePotentialOption.OptionType AttackRateType { get; private set; }
     public int AttackValue { get; private set; }
     public int AttackRate { get; private set; }
     public int Damage { get; private set; }
@@ -644,19 +645,20 @@ public class PlayerInfo
     public double IgnoreImmune { get; private set; }
     public SetEffect SetEffects { get; private set; }
 
-    public PlayerInfo(uint level, MaplePotentialOptionType mainStat, MaplePotentialOptionType subStat, MaplePotentialOptionType subStat2 = MaplePotentialOptionType.OTHER)
+    public PlayerInfo(uint level, MaplePotentialOption.OptionType mainStat, 
+        MaplePotentialOption.OptionType subStat, MaplePotentialOption.OptionType subStat2 = MaplePotentialOption.OptionType.OTHER)
     {
         MainStat = new StatInfo(mainStat);
-        MainStat.BaseValue += (int) (level - 1) * (mainStat == MaplePotentialOptionType.MAX_HP ? 50 : 5);
+        MainStat.BaseValue += (int) (level - 1) * (mainStat == MaplePotentialOption.OptionType.MAX_HP ? 50 : 5);
         SubStat = new StatInfo(subStat);
         SubStat2 = new StatInfo(subStat2);
 
-        AttackType = MainStat.StatType == MaplePotentialOptionType.INT
-            ? MaplePotentialOptionType.MAGIC
-            : MaplePotentialOptionType.ATTACK;
-        AttackRateType = MainStat.StatType == MaplePotentialOptionType.INT
-            ? MaplePotentialOptionType.MAGIC_RATE
-            : MaplePotentialOptionType.ATTACK_RATE;
+        AttackType = MainStat.Stat == MaplePotentialOption.OptionType.INT
+            ? MaplePotentialOption.OptionType.MAGIC
+            : MaplePotentialOption.OptionType.ATTACK;
+        AttackRateType = MainStat.Stat == MaplePotentialOption.OptionType.INT
+            ? MaplePotentialOption.OptionType.MAGIC_RATE
+            : MaplePotentialOption.OptionType.ATTACK_RATE;
         AttackValue = 0;
         AttackRate = 0;
 
@@ -692,15 +694,15 @@ public class PlayerInfo
         return option;
     }
 
-    private int GetStatFromOption(MapleOption option, MaplePotentialOptionType statType)
+    private int GetStatFromOption(MapleOption option, MaplePotentialOption.OptionType stat)
     {
-        return statType switch
+        return stat switch
         {
-            MaplePotentialOptionType.STR => option.Str,
-            MaplePotentialOptionType.DEX => option.Dex,
-            MaplePotentialOptionType.INT => option.Int,
-            MaplePotentialOptionType.LUK => option.Luk,
-            MaplePotentialOptionType.MAX_HP => option.MaxHp,
+            MaplePotentialOption.OptionType.STR => option.Str,
+            MaplePotentialOption.OptionType.DEX => option.Dex,
+            MaplePotentialOption.OptionType.INT => option.Int,
+            MaplePotentialOption.OptionType.LUK => option.Luk,
+            MaplePotentialOption.OptionType.MAX_HP => option.MaxHp,
             _ => 0
         };
     }
@@ -712,55 +714,55 @@ public class PlayerInfo
         return isAdd ? (1 - cvtBase * cvtAdd) * 100 : (1 - cvtBase / cvtAdd) * 100;
     }
 
-    private void ApplyPotential(KeyValuePair<MaplePotentialOptionType, int>[] potential, bool isAdd = true)
+    private void ApplyPotential(KeyValuePair<MaplePotentialOption.OptionType, int>[] potential, bool isAdd = true)
     {
         int sign = isAdd ? 1 : -1;
 
         foreach (var pair in potential)
         {
             int value = pair.Value * sign;
-            if      (pair.Key == MainStat.StatType)      MainStat.BaseValue += value;
-            else if (pair.Key == MainStat.StatRateType)  MainStat.RateValue += value;
-            else if (pair.Key == MainStat.StatLevelType) MainStat.BaseValue += LevelStat * value;
-            else if (pair.Key == SubStat.StatType)       SubStat.BaseValue += value;
-            else if (pair.Key == SubStat.StatRateType)   SubStat.RateValue += value;
-            else if (pair.Key == SubStat.StatLevelType)  SubStat.BaseValue += LevelStat * value;
-            else if (pair.Key == SubStat2.StatType)      SubStat2.BaseValue += value;
-            else if (pair.Key == SubStat2.StatRateType)  SubStat2.RateValue += value;
-            else if (pair.Key == SubStat2.StatLevelType) SubStat2.BaseValue += LevelStat * value;
+            if      (pair.Key == MainStat.Stat)      MainStat.BaseValue += value;
+            else if (pair.Key == MainStat.StatRate)  MainStat.RateValue += value;
+            else if (pair.Key == MainStat.StatLevel) MainStat.BaseValue += LevelStat * value;
+            else if (pair.Key == SubStat.Stat)       SubStat.BaseValue += value;
+            else if (pair.Key == SubStat.StatRate)   SubStat.RateValue += value;
+            else if (pair.Key == SubStat.StatLevel)  SubStat.BaseValue += LevelStat * value;
+            else if (pair.Key == SubStat2.Stat)      SubStat2.BaseValue += value;
+            else if (pair.Key == SubStat2.StatRate)  SubStat2.RateValue += value;
+            else if (pair.Key == SubStat2.StatLevel) SubStat2.BaseValue += LevelStat * value;
             else if (pair.Key == AttackType)             AttackValue += value;
             else if (pair.Key == AttackRateType)         AttackRate += value;
             else switch (pair.Key)
             {
-                case MaplePotentialOptionType.ALL_STAT:
+                case MaplePotentialOption.OptionType.ALL_STAT:
                     MainStat.BaseValue += value;
                     SubStat.BaseValue += value;
                     SubStat2.BaseValue += value;
                     break;
-                case MaplePotentialOptionType.ALL_STAT_RATE:
+                case MaplePotentialOption.OptionType.ALL_STAT_RATE:
                     MainStat.RateValue += value;
                     SubStat.RateValue += value;
                     SubStat2.RateValue += value;
                     break;
-                case MaplePotentialOptionType.DAMAGE:
+                case MaplePotentialOption.OptionType.DAMAGE:
                     Damage += value;
                     break;
-                case MaplePotentialOptionType.BOSS_DAMAGE:
+                case MaplePotentialOption.OptionType.BOSS_DAMAGE:
                     BossDamage += value;
                     break;
-                case MaplePotentialOptionType.CRITICAL_DAMAGE:
+                case MaplePotentialOption.OptionType.CRITICAL_DAMAGE:
                     CriticalDamage += value;
                     break;
-                case MaplePotentialOptionType.IGNORE_ARMOR:
+                case MaplePotentialOption.OptionType.IGNORE_ARMOR:
                     IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, value, isAdd);
                     break;
-                case MaplePotentialOptionType.ITEM_DROP:
+                case MaplePotentialOption.OptionType.ITEM_DROP:
                     ItemDropIncrease += value;
                     break;
-                case MaplePotentialOptionType.MESO_DROP:
+                case MaplePotentialOption.OptionType.MESO_DROP:
                     MesoDropIncrease += value;
                     break;
-                case MaplePotentialOptionType.COOLDOWN_DECREASE:
+                case MaplePotentialOption.OptionType.COOLDOWN_DECREASE:
                     CooldownDecreaseValue += value;
                     break;
             }
@@ -771,17 +773,17 @@ public class PlayerInfo
 
     private void ApplyMapleOption(MapleOption option)
     {
-        MainStat.BaseValue += GetStatFromOption(option, MainStat.StatType) + option.AllStat;
-        SubStat.BaseValue += GetStatFromOption(option, SubStat.StatType) + option.AllStat;
-        SubStat2.BaseValue += GetStatFromOption(option, SubStat2.StatType) + option.AllStat;
-        AttackValue += AttackType == MaplePotentialOptionType.ATTACK ? option.AttackPower : option.MagicPower;
+        MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat) + option.AllStat;
+        SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat) + option.AllStat;
+        SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat) + option.AllStat;
+        AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? option.AttackPower : option.MagicPower;
         BossDamage += option.BossDamage;
         Damage += option.Damage;
         CommonDamage += option.CommonDamage;
         CriticalDamage += option.CriticalDamage;
         IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, option.IgnoreArmor, option.IgnoreArmor >= 0);
         
-        if (MainStat.StatType == MaplePotentialOptionType.MAX_HP)
+        if (MainStat.Stat == MaplePotentialOption.OptionType.MAX_HP)
             MainStat.RateValue += option.MaxHpRate;
     }
     
@@ -789,9 +791,9 @@ public class PlayerInfo
     {
         // 아이템 기본 효과 적용
         MapleOption itemOption = GetOption(item);
-        MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.StatType);
-        SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.StatType);
-        SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.StatType);
+        MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat);
+        SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat);
+        SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat);
         
         // 잠재능력 적용
         if (item.Potential != null)
@@ -813,9 +815,9 @@ public class PlayerInfo
     {
         // 아이템 기본 효과 적용
         MapleOption itemOption = GetOption(item);
-        MainStat.BaseValue -= GetStatFromOption(itemOption, MainStat.StatType);
-        SubStat.BaseValue -= GetStatFromOption(itemOption, SubStat.StatType);
-        SubStat2.BaseValue -= GetStatFromOption(itemOption, SubStat2.StatType);
+        MainStat.BaseValue -= GetStatFromOption(itemOption, MainStat.Stat);
+        SubStat.BaseValue -= GetStatFromOption(itemOption, SubStat.Stat);
+        SubStat2.BaseValue -= GetStatFromOption(itemOption, SubStat2.Stat);
         
         // 잠재능력 적용
         if (item.Potential != null)

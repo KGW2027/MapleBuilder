@@ -10,35 +10,35 @@ namespace MapleBuilder.View.SubObjects;
 
 public partial class Equipments : UserControl
 {
-    private Dictionary<MapleEquipType, List<UIElement>> SlotMap;
+    private Dictionary<MapleEquipType.EquipType, List<UIElement>> SlotMap;
     
     public Equipments()
     {
         InitializeComponent();
 
-        SlotMap = new Dictionary<MapleEquipType, List<UIElement>>
+        SlotMap = new Dictionary<MapleEquipType.EquipType, List<UIElement>>
         {
-            {MapleEquipType.RING, new List<UIElement> {Ring1, Ring2, Ring3, Ring4}},
-            {MapleEquipType.POCKET, new List<UIElement> {Pocket}},
-            {MapleEquipType.PENDANT, new List<UIElement> {Pendant1, Pendant2}},
-            {MapleEquipType.WEAPON, new List<UIElement> {Weapon}},
-            {MapleEquipType.BELT, new List<UIElement> {Belt}},
-            {MapleEquipType.HELMET, new List<UIElement> {Cap}},
-            {MapleEquipType.FACE, new List<UIElement> {Face}},
-            {MapleEquipType.EYE, new List<UIElement> {Eye}},
-            {MapleEquipType.TOP, new List<UIElement> {Top}},
-            {MapleEquipType.BOTTOM, new List<UIElement> {Bottom}},
-            {MapleEquipType.BOOT, new List<UIElement> {Boot}},
-            {MapleEquipType.EARRING, new List<UIElement> {Earring}},
-            {MapleEquipType.SHOULDER, new List<UIElement> {Shoulder}},
-            {MapleEquipType.GLOVE, new List<UIElement> {Gloves}},
-            {MapleEquipType.TITLE, new List<UIElement> {Title}},
-            {MapleEquipType.EMBLEM, new List<UIElement> {Emblem}},
-            {MapleEquipType.BADGE, new List<UIElement> {Badge}},
-            {MapleEquipType.MEDAL, new List<UIElement> {Medal}},
-            {MapleEquipType.SUB_WEAPON, new List<UIElement> {SubWeapon}},
-            {MapleEquipType.CAPE, new List<UIElement> {Cape}},
-            {MapleEquipType.HEART, new List<UIElement> {Heart}},
+            {MapleEquipType.EquipType.RING, new List<UIElement> {Ring1, Ring2, Ring3, Ring4}},
+            {MapleEquipType.EquipType.POCKET, new List<UIElement> {Pocket}},
+            {MapleEquipType.EquipType.PENDANT, new List<UIElement> {Pendant1, Pendant2}},
+            {MapleEquipType.EquipType.WEAPON, new List<UIElement> {Weapon}},
+            {MapleEquipType.EquipType.BELT, new List<UIElement> {Belt}},
+            {MapleEquipType.EquipType.HELMET, new List<UIElement> {Cap}},
+            {MapleEquipType.EquipType.FACE, new List<UIElement> {Face}},
+            {MapleEquipType.EquipType.EYE, new List<UIElement> {Eye}},
+            {MapleEquipType.EquipType.TOP, new List<UIElement> {Top}},
+            {MapleEquipType.EquipType.BOTTOM, new List<UIElement> {Bottom}},
+            {MapleEquipType.EquipType.BOOT, new List<UIElement> {Boot}},
+            {MapleEquipType.EquipType.EARRING, new List<UIElement> {Earring}},
+            {MapleEquipType.EquipType.SHOULDER, new List<UIElement> {Shoulder}},
+            {MapleEquipType.EquipType.GLOVE, new List<UIElement> {Gloves}},
+            {MapleEquipType.EquipType.TITLE, new List<UIElement> {Title}},
+            {MapleEquipType.EquipType.EMBLEM, new List<UIElement> {Emblem}},
+            {MapleEquipType.EquipType.BADGE, new List<UIElement> {Badge}},
+            {MapleEquipType.EquipType.MEDAL, new List<UIElement> {Medal}},
+            {MapleEquipType.EquipType.SUB_WEAPON, new List<UIElement> {SubWeapon}},
+            {MapleEquipType.EquipType.CAPE, new List<UIElement> {Cape}},
+            {MapleEquipType.EquipType.HEART, new List<UIElement> {Heart}},
         };
         
         BuilderDataContainer.InitEquipmentSlots(new List<UIElement>
@@ -48,7 +48,7 @@ public partial class Equipments : UserControl
         });
     }
 
-    private void PushEquipment(MapleEquipType equipType, MapleItem item)
+    private void PushEquipment(MapleEquipType.EquipType equipType, MapleItem item)
     {
         foreach (UIElement itemSlot in SlotMap[equipType])
             if (((EquipmentSlot) itemSlot).SetItemIfNull(item))
