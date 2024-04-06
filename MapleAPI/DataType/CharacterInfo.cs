@@ -65,7 +65,7 @@ public class CharacterInfo
             "카인" => MapleClass.KAIN,
             "나이트로드" => MapleClass.NIGHTLOAD,
             "섀도어" => MapleClass.SHADOWER,
-            "듀얼블레이드" => MapleClass.DUALBLADE,
+            "듀얼블레이더" => MapleClass.DUALBLADE,
             "나이트워커" => MapleClass.NIGHTWALKER,
             "제논" => MapleClass.XENON,
             "팬텀" => MapleClass.PHANTOM,

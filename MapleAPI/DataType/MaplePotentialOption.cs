@@ -67,6 +67,20 @@ public class MaplePotentialOption
         else if (value.StartsWith("몬스터 방어율"))      optionType = MaplePotentialOptionType.IGNORE_ARMOR;
         else if (value.StartsWith("아이템"))            optionType = MaplePotentialOptionType.ITEM_DROP;
         else if (value.StartsWith("메소"))              optionType = MaplePotentialOptionType.MESO_DROP;
+        else if (value.StartsWith("캐릭터 기준"))
+        {
+            int colonIndex = value.IndexOf(':');
+            string statName = value.Substring(colonIndex - 4, 3);
+            optionType = statName switch
+            {
+                "STR" => MaplePotentialOptionType.LEVEL_STR,
+                "DEX" => MaplePotentialOptionType.LEVEL_DEX,
+                "INT" => MaplePotentialOptionType.LEVEL_INT,
+                "LUK" => MaplePotentialOptionType.LEVEL_LUK,
+                _ => MaplePotentialOptionType.OTHER
+            };
+            optionValue = int.Parse(value.Substring(value.IndexOf('+') + 1, 1));
+        }
         else if (value.StartsWith("모든 스킬의 재사용"))
         {
             optionType = MaplePotentialOptionType.COOLDOWN_DECREASE;
