@@ -30,6 +30,16 @@ public class BuilderDataContainer
     public static ObservableCollection<MapleItem> RegisterItems = new();
 
     /// <summary>
+    ///    내부 데이터가 업데이트되었을 때, 디스플레이들에게 이를 알리는 역할을 합니다.
+    /// </summary>
+    public static void RefreshAll()
+    {
+        RenderFrame.UpdateCharacterTop();
+        StatSymbol.Update();
+        Summarize.DispatchSummary();
+    }
+    
+    /// <summary>
     /// 새로운 캐릭터를 불러올 때 실행됩니다.
     /// 아이템을 캐시하고, 플레이어 정보를 새로 생성한 후 로드합니다.
     /// </summary>
@@ -46,6 +56,7 @@ public class BuilderDataContainer
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         RenderOverview.Update(charInfo);
+        RefreshAll();
     }
 
     /// <summary>

@@ -34,7 +34,34 @@ public partial class Summarize : UserControl
     }
 
     public static void DispatchSummary()
-    {
+    {   
+        Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
+        int arcane = 0, authentic = 0;
+        foreach (var pair in symbols)
+        {
+            switch (pair.Key)
+            {
+                case MapleSymbol.SymbolType.YEORO:
+                case MapleSymbol.SymbolType.CHUCHU:
+                case MapleSymbol.SymbolType.LACHELEIN:
+                case MapleSymbol.SymbolType.ARCANA:
+                case MapleSymbol.SymbolType.MORAS:
+                case MapleSymbol.SymbolType.ESFERA:
+                    arcane += (pair.Value + 2) * 10;
+                    break;
+                case MapleSymbol.SymbolType.CERNIUM:
+                case MapleSymbol.SymbolType.ARCS:
+                case MapleSymbol.SymbolType.ODIUM:
+                case MapleSymbol.SymbolType.DOWONKYUNG:
+                case MapleSymbol.SymbolType.ARTERIA:
+                case MapleSymbol.SymbolType.CARCION:
+                    authentic += pair.Value * 10;
+                    break;
+                case MapleSymbol.SymbolType.UNKNOWN:
+                default:
+                    break;
+            }
+        }
         selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             selfInstance.ctMainStatType.Content =
@@ -42,6 +69,9 @@ public partial class Summarize : UserControl
             selfInstance.ctMainStatFlat.Content = BuilderDataContainer.PlayerStatus!.MainStat.BaseValue;
             selfInstance.ctMainStatRate.Content = BuilderDataContainer.PlayerStatus.MainStat.RateValue;
             selfInstance.ctMainStatNonRateFlat.Content = BuilderDataContainer.PlayerStatus.MainStat.FlatValue;
+
+            selfInstance.ctSymbolArcane.Content = $"{arcane:N0}";
+            selfInstance.ctSymbolAuthentic.Content = $"{authentic:N0}";
             
             selfInstance.ctSubStatType.Content =
                 $"부스탯 [{BuilderDataContainer.PlayerStatus.SubStat.Stat.ToString()}]";

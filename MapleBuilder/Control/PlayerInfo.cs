@@ -340,6 +340,7 @@ public class PlayerInfo
         }
 
         LastSymbols = symbolData;
+        BuilderDataContainer.RefreshAll();
     }
     
     #endregion

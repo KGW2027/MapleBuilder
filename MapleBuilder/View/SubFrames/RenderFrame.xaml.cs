@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using MapleAPI.Enum;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -16,7 +19,12 @@ public partial class RenderFrame : UserControl
 
         ScreenElements = new Dictionary<RenderScreenType, List<UIElement>>
         {
-            {RenderScreenType.OVERVIEW_EQUIPMENT, new List<UIElement> {ctFrameOverview}}
+            {RenderScreenType.OVERVIEW_EQUIPMENT, new List<UIElement> {ctCharacterTop, ctFrameOverview}},
+            {RenderScreenType.STAT_SYMBOL, new List<UIElement> {ctCharacterTop, ctStatSymbol}},
+            {RenderScreenType.SPECIAL_EQUIPS, new List<UIElement> {ctCharacterTop}},
+            {RenderScreenType.CASH_EQUIPS, new List<UIElement> {ctCharacterTop}},
+            {RenderScreenType.UNION, new List<UIElement> {}},
+            {RenderScreenType.ETC, new List<UIElement> {}},
         };
         
         WaitReadyWithDisplayHelp();
@@ -46,8 +54,8 @@ public partial class RenderFrame : UserControl
         }
     }
 
+    #region 화면 전환
     private Dictionary<RenderScreenType, List<UIElement>> ScreenElements;
-
     private void CollapseScreen()
     {
         if (!ScreenElements.TryGetValue(renderType, out var list)) return;
@@ -59,6 +67,7 @@ public partial class RenderFrame : UserControl
         if (!ScreenElements.TryGetValue(renderType, out var list)) return;
         Dispatcher.Invoke(() => { list.ForEach(element => element.Visibility = Visibility.Visible); });
     }
+    #endregion
 
     #region 사전설정 이전 로딩
     private int lastStage = -1;
@@ -100,4 +109,46 @@ public partial class RenderFrame : UserControl
         else RenderType = RenderScreenType.OVERVIEW_EQUIPMENT;
     }
     #endregion
+
+    public static void UpdateCharacterTop()
+    {
+        selfInstance?.Dispatcher.BeginInvoke(() =>
+        {
+            var charTop = selfInstance.ctCharacterTop;
+            charTop.UpdateProfileImage();
+            charTop.ctCharacterName.Content = BuilderDataContainer.CharacterInfo!.UserName;
+            charTop.ctCharacterGuild.Content = $"길드 {BuilderDataContainer.CharacterInfo.GuildName}";
+            charTop.ctCharacterLevelAndClass.Content = $"Lv. {BuilderDataContainer.CharacterInfo.Level} {BuilderDataContainer.CharacterInfo.ClassString}";
+
+            Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
+            int arcane = 0, authentic = 0;
+            foreach (var pair in symbols)
+            {
+                switch (pair.Key)
+                {
+                    case MapleSymbol.SymbolType.YEORO:
+                    case MapleSymbol.SymbolType.CHUCHU:
+                    case MapleSymbol.SymbolType.LACHELEIN:
+                    case MapleSymbol.SymbolType.ARCANA:
+                    case MapleSymbol.SymbolType.MORAS:
+                    case MapleSymbol.SymbolType.ESFERA:
+                        arcane += (pair.Value + 2) * 10;
+                        break;
+                    case MapleSymbol.SymbolType.CERNIUM:
+                    case MapleSymbol.SymbolType.ARCS:
+                    case MapleSymbol.SymbolType.ODIUM:
+                    case MapleSymbol.SymbolType.DOWONKYUNG:
+                    case MapleSymbol.SymbolType.ARTERIA:
+                    case MapleSymbol.SymbolType.CARCION:
+                        authentic += pair.Value * 10;
+                        break;
+                    case MapleSymbol.SymbolType.UNKNOWN:
+                    default:
+                        break;
+                }
+            }
+            charTop.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
+        });
+    }
+    
 }

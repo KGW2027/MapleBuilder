@@ -20,15 +20,8 @@ public partial class RenderOverview : UserControl
     
     public static void Update(CharacterInfo cInfo)
     {
-        selfInstance?.Dispatcher.BeginInvoke(() =>
+        selfInstance?.Dispatcher.Invoke(() =>
         {
-            UpdateProfileImage(cInfo);
-            selfInstance.ctCharacterName.Content = cInfo.UserName;
-            selfInstance.ctCharacterGuild.Content = $"길드 {cInfo.GuildName}";
-            selfInstance.ctCharacterLevelAndClass.Content = $"Lv. {cInfo.Level} {cInfo.ClassString}";
-
-            int arcane = 1350, authentic = 660;
-            selfInstance.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
             selfInstance.ctEquips.Clear();
             selfInstance.ctEquips.UpdateEquipments(cInfo);
         });
@@ -52,22 +45,6 @@ public partial class RenderOverview : UserControl
                     SetCount = split[index + 1]
                 });
             }
-        });
-    }
-
-    private static async void UpdateProfileImage(CharacterInfo cInfo)
-    {
-        while (cInfo.PlayerImage.Length == 0) await Task.Delay(100);
-        
-        BitmapImage bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        bitmapImage.StreamSource = new MemoryStream(cInfo.PlayerImage);
-        bitmapImage.EndInit();
-        
-        await selfInstance!.Dispatcher.BeginInvoke(() =>
-        {
-            selfInstance.ctCharacterImage.Source = bitmapImage;
         });
     }
 
@@ -139,23 +116,23 @@ public partial class RenderOverview : UserControl
     }
     #endregion
 
-    private void OnChangeScreenToEquip(object sender, RoutedEventArgs e)
-    {
-        RenderFrame.RenderType = RenderFrame.RenderScreenType.OVERVIEW_EQUIPMENT;
-    }
-
-    private void OnChangeScreenToStatSymbol(object sender, RoutedEventArgs e)
-    {
-        RenderFrame.RenderType = RenderFrame.RenderScreenType.STAT_SYMBOL;
-    }
-
-    private void OnChangeScreenToSpecialEquip(object sender, RoutedEventArgs e)
-    {
-        RenderFrame.RenderType = RenderFrame.RenderScreenType.SPECIAL_EQUIPS;
-    }
-
-    private void OnChangeScreenToCashEquip(object sender, RoutedEventArgs e)
-    {
-        RenderFrame.RenderType = RenderFrame.RenderScreenType.CASH_EQUIPS;
-    }
+    // private void OnChangeScreenToEquip(object sender, RoutedEventArgs e)
+    // {
+    //     RenderFrame.RenderType = RenderFrame.RenderScreenType.OVERVIEW_EQUIPMENT;
+    // }
+    //
+    // private void OnChangeScreenToStatSymbol(object sender, RoutedEventArgs e)
+    // {
+    //     RenderFrame.RenderType = RenderFrame.RenderScreenType.STAT_SYMBOL;
+    // }
+    //
+    // private void OnChangeScreenToSpecialEquip(object sender, RoutedEventArgs e)
+    // {
+    //     RenderFrame.RenderType = RenderFrame.RenderScreenType.SPECIAL_EQUIPS;
+    // }
+    //
+    // private void OnChangeScreenToCashEquip(object sender, RoutedEventArgs e)
+    // {
+    //     RenderFrame.RenderType = RenderFrame.RenderScreenType.CASH_EQUIPS;
+    // }
 }

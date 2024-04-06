@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json.Nodes;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using MapleAPI;
@@ -19,7 +18,8 @@ public static class ResourceManager
     private static string wzPath = "";
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
     private static Dictionary<string, WzItem> itemIcons = new();
-    private static bool itemIconLoaded, itemIconLoading;
+    private static bool itemIconLoading;
+    public static bool itemIconLoaded;
     
     #region Wz Related
     public static bool SetWzPath(string path)
