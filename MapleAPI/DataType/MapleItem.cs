@@ -155,12 +155,12 @@ public class MapleItem
         if (starforce <= 5) return 2;
         if (starforce <= 15) return 3;
         if (starforce >= 23) return 0;
-        if (ItemLevel >= 250) return 17;
-        if (ItemLevel >= 200) return 15;
-        if (ItemLevel >= 160) return 13;
-        if (ItemLevel >= 150) return 11;
-        if (ItemLevel >= 140) return 9;
-        if (ItemLevel >= 130) return 7;
+        if (ItemLevel >= 248) return 17;
+        if (ItemLevel >= 198) return 15;
+        if (ItemLevel >= 158) return 13;
+        if (ItemLevel >= 148) return 11;
+        if (ItemLevel >= 138) return 9;
+        if (ItemLevel >= 128) return 7;
         return 0;
     }
 
@@ -267,6 +267,24 @@ public class MapleItem
     private int GetArmorAttackIncreaseByStarforce(int starforce)
     {
         if (starforce <= 15) return 0;
+
+        if (ItemLevel >= 248)
+        {
+            return starforce switch
+            {
+                16 => 14,
+                17 => 15,
+                18 => 16,
+                19 => 17,
+                20 => 18,
+                21 => 19,
+                22 => 21,
+                23 => 23,
+                24 => 25,
+                25 => 27,
+                _ => 0
+            };
+        }
         
         if (ItemLevel >= 198)
         {
