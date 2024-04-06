@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using System.Threading;
 using System.Windows;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View
 {
@@ -14,6 +16,10 @@ namespace MapleBuilder.View
             
             InitializeComponent();
             SetWindowTitle();
+            new Thread(() =>
+            {
+                ResourceManager.GetItemIcon("카오스 벨룸의 헬름"); // Pre load Iconlist
+            }).Start();
         }
 
         /// <summary>

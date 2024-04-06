@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using MapleAPI;
 using MapleAPI.DataType;
 using MapleAPI.WzLoader;
+using MapleBuilder.View;
 using MapleBuilder.View.SubFrames;
 
 namespace MapleBuilder.Control;
@@ -17,6 +19,7 @@ public static class ResourceManager
     private static string wzPath = "";
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
     private static Dictionary<string, WzItem> itemIcons = new();
+    private static bool itemIconLoaded, itemIconLoading;
     
     #region Wz Related
     public static bool SetWzPath(string path)
@@ -46,8 +49,10 @@ public static class ResourceManager
         string jsonContent = reader.ReadToEnd();
         JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
 
+        // int id = 0;
         foreach (var pair in json)
         {
+            // Console.WriteLine($"{++id}/{json.Count}");
             if (pair.Value is not JsonObject childObject) continue;
 
             if (!childObject.TryGetPropertyValue("name", out var nameNode)
@@ -62,21 +67,29 @@ public static class ResourceManager
             if (!iconRawPath.StartsWith("./")) continue; // this is outlink format
             string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
 
-            itemIcons.Add(name, new WzItem(name, iconRawPath, desc));
+            MainWindow.Window!.Dispatcher.Invoke(
+                () => { itemIcons.Add(name, new WzItem(name, iconRawPath, desc)); });
         }
     }
 
     public static WzItem? GetItemIcon(string itemName)
     {
-        if (itemIcons.Count == 0)
+        if (!itemIconLoaded && !itemIconLoading)
         {
+            itemIconLoading = true;
             LoadIcons("./CharacterExtractorResult.json");
             LoadIcons("./ItemExtractorResult.json");
-            
+            itemIconLoaded = true;
+        }
+
+        // Lazy-loop wait Icon Loaded
+        while (!itemIconLoaded)
+        {
         }
 
         return itemIcons!.GetValueOrDefault(itemName, null);
     }
+
     #endregion
 
     #region API Related
@@ -140,10 +153,9 @@ public static class ResourceManager
         return result;
     }
 
-    public static bool GetCharacterInfo(string ocid, out CharacterInfo? cInfo)
+    public static void GetCharacterInfo(string ocid)
     {
-        cInfo = CharacterInfo.FromOcid(ocid);
-        return cInfo != null;
+        BuilderDataContainer.CharacterInfo = CharacterInfo.FromOcid(ocid).Result;
     }
     #endregion
 
