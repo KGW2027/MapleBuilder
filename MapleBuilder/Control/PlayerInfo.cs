@@ -78,7 +78,7 @@ public class PlayerInfo
         Immune = 0;
         FinalDamage = 0;
         IgnoreArmor = 0;
-        CriticalChance = 0;
+        CriticalChance = 5;
         CriticalDamage = 0;
         IgnoreImmune = 0;
 
@@ -250,6 +250,9 @@ public class PlayerInfo
         MainStat.RateValue += itemOption.AllStatRate * sign;
         SubStat.RateValue += itemOption.AllStatRate * sign;
         SubStat2.RateValue += itemOption.AllStatRate * sign;
+
+        BossDamage += itemOption.BossDamage;
+        IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, itemOption.IgnoreArmor, isAdd);
         
         // 잠재능력 적용
         if (item.Potential != null)
@@ -268,7 +271,6 @@ public class PlayerInfo
         else
             SetEffects.Sub(item);
         ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
-        Console.WriteLine($"세트효과 ({SetEffects.GetSetOptionString()})주스텟 상승량 : {SetEffects.GetSetOptions().Int}");
     }
     
     ///<summary>

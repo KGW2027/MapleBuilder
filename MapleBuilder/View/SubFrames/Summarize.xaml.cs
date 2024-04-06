@@ -75,7 +75,7 @@ public partial class Summarize : UserControl
             selfInstance.ctCooldownDecrease.Content = $"{BuilderDataContainer.PlayerStatus.CooldownDecreaseValue}초, {BuilderDataContainer.PlayerStatus.CooldownDecreaseRate}%";
             selfInstance.ctCooldownIgnore.Content = $"{BuilderDataContainer.PlayerStatus.CooldownIgnoreRate:F2}%";
             selfInstance.ctTolerance.Content = $"{BuilderDataContainer.PlayerStatus.Immune}%";
-            selfInstance.ctIgnoreArmor.Content = $"{BuilderDataContainer.PlayerStatus.IgnoreImmune:F2}%";
+            selfInstance.ctIgnoreImmune.Content = $"{BuilderDataContainer.PlayerStatus.IgnoreImmune:F2}%";
         });
     }
     
