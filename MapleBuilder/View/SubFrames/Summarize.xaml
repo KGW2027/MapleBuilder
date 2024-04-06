@@ -20,5 +20,98 @@
         <Label Name="ctDisplayServer" Content="엘리시움" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 83, 0, 0" Visibility="Collapsed"/>
         <Label Name="ctDisplayLevel" Content="Lv. 276" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 99, 0, 0" Visibility="Collapsed"/>
         <Label Name="ctDisplayClass" Content="아크메이지 (불,독)" Foreground="#CCCCCC" FontWeight="Light" FontSize="12" Margin="71, 115, 0, 0" Visibility="Collapsed"/>
+        
+        <!-- Control -->
+        <Border Width="260" Height="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12, 162, 0, 0" BorderBrush="White" BorderThickness="1"/>
+        <Button Content="장비" Width="80" Height="24" Margin="16, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Content="유니온" Width="80" Height="24" Margin="102, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Content="코강" Width="80" Height="24" Margin="188, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
+        <!-- Summary -->
+        <ScrollViewer Width="260" Height="440" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12, 202, 0, 0" Background="#515151" BorderBrush="#707070" BorderThickness="1" VerticalScrollBarVisibility="Disabled">
+            <Grid> <!-- Left Alignment : Title (Left 4) Desc (Right 168+17(Scroll)) (Left 67) | Right Alignment : Title (Left 125) Desc (Right 48+17(Scroll)) (Left 189) -->
+                <Label Content="전투력" FontSize="12" FontWeight="Light" Margin="4, 0, 0, 0"/>
+                <Label x:Name="ctDisplayPower" Content="9억 9999만 9999" Foreground="#17AF12" FontSize="28" FontWeight="SemiBold" Margin="0,16,21,0" HorizontalAlignment="Right"/>
+                
+                <!-- Main Stat -->
+                <Label x:Name="ctMainStatType" Content="주스텟 [XXX]" FontSize="12" FontWeight="Light" Margin="4,56,0,0"/>
+                <Label Content="기본 수치" FontSize="10" FontWeight="Thin" Margin="0,72,185,0"  HorizontalAlignment="Right"/>
+                <Label x:Name="ctMainStatFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 72, 0, 0"/> <!-- Type + 16 -->
+                <Label Content="% 수치" FontSize="10" FontWeight="Thin" Margin="0,84,185,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctMainStatRate" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 84, 0, 0"/> <!-- Flat + 12 -->
+                <Label Content="% 미적용 수치" FontSize="10" FontWeight="Thin" Margin="0,96,185,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctMainStatNonRateFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 96, 0, 0"/> <!-- Rate + 12 -->
+                
+                <!-- Symbol Info -->
+                <Label Content="심볼" FontSize="12" FontWeight="Light" Margin="125,56,0,0"/>
+                <Label Content="아케인 포스" FontSize="10" FontWeight="Thin" Margin="0,72,65,0"  HorizontalAlignment="Right"/>
+                <Label x:Name="ctSymbolArcane" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="189, 72, 0, 0"/>
+                <Label Content="어센틱 포스" FontSize="10" FontWeight="Thin" Margin="0,84,65,0"  HorizontalAlignment="Right"/>
+                <Label x:Name="ctSymbolAuthentic" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="189, 84, 0, 0"/>
+                
+                <!-- Sub Stat 1 -->
+                <Label x:Name="ctSubStatType" Content="부스텟 [XXX]" FontSize="12" FontWeight="Light" Margin="4,114,0,0"/>
+                <Label Content="기본 수치" FontSize="10" FontWeight="Thin" Margin="0,130,185,0"  HorizontalAlignment="Right"/>
+                <Label x:Name="ctSubStatFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 130, 0, 0"/> <!-- Type + 16 -->
+                <Label Content="% 수치" FontSize="10" FontWeight="Thin" Margin="0,142,185,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctSubStatRate" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 142, 0, 0"/> <!-- Flat + 12 -->
+                <Label Content="% 미적용 수치" FontSize="10" FontWeight="Thin" Margin="0,154,185,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctSubStatNonRateFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 154, 0, 0"/> <!-- Rate + 12 -->
+                
+                <!-- Sub Stat 2 -->
+                <Grid x:Name="ctSubStat2Grid" Margin="125, 114, 0, 0" Visibility="Visible">
+                    <Label x:Name="ctSubStat2Type" Content="부스텟 [XXX]" FontSize="12" FontWeight="Light"/>
+                    <Label Content="기본 수치" FontSize="10" FontWeight="Thin" Margin="0,16,65,0"  HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat2Flat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 16, 0, 0"/> <!-- Type + 16 -->
+                    <Label Content="% 수치" FontSize="10" FontWeight="Thin" Margin="0,28, 65,0" HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat2Rate" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 28, 0, 0"/> <!-- Flat + 12 -->
+                    <Label Content="% 미적용 수치" FontSize="10" FontWeight="Thin" Margin="0,40, 65,0" HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat2NonRateFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 40, 0, 0"/> <!-- Rate + 12 -->
+                </Grid>
+                
+                <!-- Boss Stat -->
+                <Label Content="보스 관련" FontSize="12" FontWeight="Light" Margin="4, 172, 0, 0"/>
+                <Label Content="보스 몬스터 데미지" FontSize="10" FontWeight="Thin" Margin="0, 186, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctBossDmg" Content="999%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 186,0, 0"/>
+                <Label Content="방어율 무시" FontSize="10" FontWeight="Thin" Margin="0, 198, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctIgnoreArmor" Content="99.99%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 198,0, 0"/>
+                
+                <!-- Grinding Stat -->
+                <Label Content="사냥 관련" FontSize="12" FontWeight="Light" Margin="4, 216, 0, 0"/>
+                <Label Content="일반 몬스터 데미지" FontSize="10" FontWeight="Thin" Margin="0, 232, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctCommonDmg" Content="999%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 232,0, 0"/>
+                <Label Content="아이템 드랍율" FontSize="10" FontWeight="Thin" Margin="0, 244, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDropItem" Content="300%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 244,0, 0"/>
+                <Label Content="메소 획득률" FontSize="10" FontWeight="Thin" Margin="0, 256, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDropMeso" Content="300%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 256,0, 0"/>
+                
+                <!-- Etc Stat -->
+                <Label Content="일반" FontSize="12" FontWeight="Light" Margin="4, 274, 0, 0"/>
+                <Label Content="데미지" FontSize="10" FontWeight="Thin" Margin="0, 290, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDmg" Content="999%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 290,0, 0"/>
+                <Label Content="크리티컬 확률" FontSize="10" FontWeight="Thin" Margin="0, 302, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctCritChance" Content="100%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 302,0, 0"/>
+                <Label Content="크리티컬 데미지" FontSize="10" FontWeight="Thin" Margin="0, 314, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctCritDmg" Content="142.14%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 314,0, 0"/>
+                <Label Content="버프 지속시간" FontSize="10" FontWeight="Thin" Margin="0, 326, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDurBuff" Content="218%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 326, 0, 0"/>
+                <Label Content="소환수 지속시간" FontSize="10" FontWeight="Thin" Margin="0, 338, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDurSummon" Content="44%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 338,0, 0"/>
+                <Label Content="상태이상 추가 데미지" FontSize="10" FontWeight="Thin" Margin="0, 350, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctDebuffDmg" Content="14%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 350, 0, 0"/>
+                <Label Content="재사용 대기시간 감소" FontSize="10" FontWeight="Thin" Margin="0, 362, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctCooldownDecrease" Content="2초, 6%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 362, 0, 0"/>
+                <Label Content="재사용 대기시간 미적용" FontSize="10" FontWeight="Thin" Margin="0, 374, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctCooldownIgnore" Content="21.75" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 374, 0, 0"/>
+                <Label Content="상태이상 내성" FontSize="10" FontWeight="Thin" Margin="0, 386, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctTolerance" Content="86" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 386, 0, 0"/>
+                <Label Content="속성 내성 무시" FontSize="10" FontWeight="Thin" Margin="0, 398, 151,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctIgnoreImmune" Content="5.00%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 398, 0, 0"/>
+                
+                <!-- Special -->
+                <Label Content="보정 스텟(테스트)" FontSize="12" FontWeight="Light" Margin="4, 416, 0, 0"/>
+                <Label x:Name="ctCorrectionStat" Content="999,999,999" FontSize="12" FontWeight="Regular" Foreground="#17AF12" Margin="91, 416, 0, 0"/>
+                </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

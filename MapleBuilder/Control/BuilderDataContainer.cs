@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using MapleAPI.DataType;
+using MapleAPI.Enum;
 using MapleBuilder.View.SubFrames;
+using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.Control;
 
@@ -17,9 +21,12 @@ public class BuilderDataContainer
         }
     }
 
+    public static PlayerInfo? PlayerStatus { get; private set; }
+
     private static HashSet<string> RegisteredItemHashes = new();
+    private static List<EquipmentSlot> Equipments = new();
+    
     public static ObservableCollection<MapleItem> RegisterItems = new();
-    // public static List<MapleItem> RegisterItems = new();
 
     private static void UpdateCharacterInfo()
     {
@@ -31,5 +38,32 @@ public class BuilderDataContainer
         }
         
         RenderOverview.Update(charInfo);
+    }
+
+    public static void InitEquipmentSlots(List<UIElement> slots)
+    {
+        Equipments.Clear();
+        foreach(var element in slots)
+            if (element is EquipmentSlot slot)
+            {
+                slot.itemChanged += OnSlotItemChanged;
+                Equipments.Add(slot);
+            }
+    }
+
+    private static void OnSlotItemChanged(MapleItem? prevItem, MapleItem? newItem)
+    {
+        if (PlayerStatus == null)
+        {
+            MaplePotentialOptionType[] statTypes = CharacterInfo.GetClassStatType(charInfo.Class);
+            PlayerStatus = new PlayerInfo(statTypes[0], statTypes[1], statTypes[2]);
+        }
+        
+        if (prevItem != null)
+            PlayerStatus.SubtractItem(prevItem);
+        if (newItem != null)
+            PlayerStatus.AddItem(newItem);
+        
+        Summarize.DispatchSummary();
     }
 }

@@ -10,8 +10,11 @@ namespace MapleBuilder.View.SubObjects;
 
 public partial class EquipmentSlot : UserControl
 {
+    public delegate void OnItemChanged(MapleItem? prevItem, MapleItem? newItem);
+    
     private MapleItem? itemInfo;
     private WzItem? wzItemInfo;
+    public OnItemChanged? itemChanged;
     private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
     private static readonly Brush HOVER = new SolidColorBrush(Color.FromArgb(0xA0, 0x00, 0x00, 0x00));
     
@@ -34,13 +37,29 @@ public partial class EquipmentSlot : UserControl
         }
         ctItemRenderer.Source = wzItemInfo.IconRaw;
     }
-
+    
     public bool SetItemIfNull(MapleItem item)
     {
         if (itemInfo != null) return false;
         itemInfo = item;
         Update();
+        itemChanged?.Invoke(null, item);
         return true;
+    }
+
+    public bool GetItem(out MapleItem? item)
+    {
+        item = null;
+        if (itemInfo == null || wzItemInfo == null) return false;
+        item = itemInfo;
+        return true;
+    }
+
+    public void SetItem(MapleItem? newItem)
+    {
+        MapleItem? prevItem = itemInfo;
+        itemInfo = newItem;
+        itemChanged?.Invoke(prevItem, newItem);
     }
 
     public void Clear()

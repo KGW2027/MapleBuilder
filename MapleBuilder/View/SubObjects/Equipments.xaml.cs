@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -38,6 +40,12 @@ public partial class Equipments : UserControl
             {MapleEquipType.CAPE, new List<UIElement> {Cape}},
             {MapleEquipType.HEART, new List<UIElement> {Heart}},
         };
+        
+        BuilderDataContainer.InitEquipmentSlots(new List<UIElement>
+        {
+            Ring1, Ring2, Ring3, Ring4, Pocket, Pendant1, Pendant2, Weapon, Belt, Cap, Face, Eye, Top, Bottom,
+            Boot, Earring, Shoulder, Gloves, Title, Emblem, Badge, Medal, SubWeapon, Cape, Heart
+        });
     }
 
     private void PushEquipment(MapleEquipType equipType, MapleItem item)
