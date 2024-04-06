@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -35,7 +36,11 @@ public partial class EquipmentSlot : UserControl
             Console.WriteLine($"Not found {itemInfo.Name}");
             return;
         }
-        ctItemRenderer.Source = wzItemInfo.IconRaw;
+        
+        Dispatcher.BeginInvoke(() =>
+        {
+            ctItemRenderer.Source = wzItemInfo.IconRaw;
+        });
     }
     
     public bool SetItemIfNull(MapleItem item)

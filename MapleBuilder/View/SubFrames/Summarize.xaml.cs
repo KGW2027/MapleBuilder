@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -8,6 +9,8 @@ using MapleAPI.Enum;
 using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubFrames;
+
+#pragma warning disable CS4014
 
 public partial class Summarize : UserControl
 {
@@ -23,7 +26,7 @@ public partial class Summarize : UserControl
 
     public static void DispatchSummary()
     {
-        selfInstance!.Dispatcher.Invoke(() =>
+        selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             selfInstance.ctMainStatType.Content =
                 $"주스탯 [{BuilderDataContainer.PlayerStatus!.MainStat.StatType.ToString()}]";
@@ -79,7 +82,7 @@ public partial class Summarize : UserControl
     private void TrySearch(object sender, RoutedEventArgs e)
     {
         if (ctInputNickname.IsReadOnly) return;
-        Dictionary<string, string> res = ResourceManager.RequestCharBasic(ctInputNickname.Text, out var ocid);
+        Dictionary<string, string> res = ResourceManager.RequestCharBasic(ctInputNickname.Text.Trim(), out var ocid);
         lastOcid = ocid;
         
         if (res.TryGetValue("error", out string? errMsg))
@@ -105,7 +108,7 @@ public partial class Summarize : UserControl
     {
         BitmapImage? image = await ResourceManager.LoadPngFromWebUrl(url);
         if (image == null) return;
-        Dispatcher.Invoke(() =>
+        Dispatcher.BeginInvoke(() =>
         {
             ctDisplayCharImage.Source = image;
         });
@@ -115,9 +118,10 @@ public partial class Summarize : UserControl
     private void LoadData(object sender, RoutedEventArgs e)
     {
         if (lastOcid == null || IsLoadComplete) return;
-        if (!ResourceManager.GetCharacterInfo(lastOcid, out var charInfo)) return;
-        BuilderDataContainer.CharacterInfo = charInfo;
-        IsLoadComplete = true;
-
+        new Thread(() =>
+        {
+            ResourceManager.GetCharacterInfo(lastOcid);
+            IsLoadComplete = true;
+        }).Start();
     }
 }

@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using MapleAPI.DataType;
 using MapleBuilder.Control;
+using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -20,17 +20,39 @@ public partial class RenderOverview : UserControl
     
     public static void Update(CharacterInfo cInfo)
     {
-        if (selfInstance == null) return;
+        selfInstance?.Dispatcher.BeginInvoke(() =>
+        {
+            UpdateProfileImage(cInfo);
+            selfInstance.ctCharacterName.Content = cInfo.UserName;
+            selfInstance.ctCharacterGuild.Content = $"길드 {cInfo.GuildName}";
+            selfInstance.ctCharacterLevelAndClass.Content = $"Lv. {cInfo.Level} {cInfo.ClassString}";
 
-        UpdateProfileImage(cInfo);
-        selfInstance.ctCharacterName.Content = cInfo.UserName;
-        selfInstance.ctCharacterGuild.Content = $"길드 {cInfo.GuildName}";
-        selfInstance.ctCharacterLevelAndClass.Content = $"Lv. {cInfo.Level} {cInfo.ClassString}";
+            int arcane = 1350, authentic = 660;
+            selfInstance.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
+            selfInstance.ctEquips.Clear();
+            selfInstance.ctEquips.UpdateEquipments(cInfo);
+        });
+    }
 
-        int arcane = 1350, authentic = 660;
-        selfInstance.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
-        selfInstance.ctEquips.Clear();
-        selfInstance.ctEquips.UpdateEquipments(cInfo);
+    public static void UpdateSetDisplay(string setDisplay)
+    {
+        selfInstance?.Dispatcher.BeginInvoke(() =>
+        {
+            selfInstance.ctSetPanel.Children.Clear();
+            string[] split = setDisplay.Split(" ");
+
+            for (int index = 0; index < split.Length; index += 2)
+            {
+                if (!Enum.TryParse(split[index], out PlayerInfo.SetType setType)) continue;
+                string setName = PlayerInfo.SetEffect.GetSetTypeString(setType);
+
+                selfInstance.ctSetPanel.Children.Add(new SetEffectDisplay
+                {
+                    SetName = setName,
+                    SetCount = split[index + 1]
+                });
+            }
+        });
     }
 
     private static async void UpdateProfileImage(CharacterInfo cInfo)
@@ -43,7 +65,7 @@ public partial class RenderOverview : UserControl
         bitmapImage.StreamSource = new MemoryStream(cInfo.PlayerImage);
         bitmapImage.EndInit();
         
-        selfInstance!.Dispatcher.Invoke(() =>
+        await selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             selfInstance.ctCharacterImage.Source = bitmapImage;
         });
@@ -60,34 +82,36 @@ public partial class RenderOverview : UserControl
             hashToItem.Add(item.Hash, item);
         }
 
-        List<UIElement> removes = new();
-        foreach (var element in ctItemListStack.Children)
+        selfInstance!.Dispatcher.BeginInvoke(() =>
         {
-            string eHash = ((Button) element).Tag.ToString()!;
-            if (hashToBool.ContainsKey(eHash)) hashToBool[eHash] = true;
-            else removes.Add((UIElement) element);
-        }
-        
-        removes.ForEach(obj => ctItemListStack.Children.Remove(obj));
-
-        foreach (var pair in hashToItem)
-        {
-            if (hashToBool[pair.Key]) continue;
-
-            Button newButton = new Button
+            List<UIElement> removes = new();
+            foreach (var element in ctItemListStack.Children)
             {
-                Tag = pair.Key,
-                Style = BUTTON_STYLE,
-                Content = pair.Value.DisplayName,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                Width = 537,
-                Height = 32,
-                Padding = new Thickness(12, 0, 0, 0)
-            };
-            newButton.Click += EditItem;
-            ctItemListStack.Children.Add(newButton);
-        }
+                string eHash = ((Button) element).Tag.ToString()!;
+                if (hashToBool.ContainsKey(eHash)) hashToBool[eHash] = true;
+                else removes.Add((UIElement) element);
+            }
 
+            removes.ForEach(obj => ctItemListStack.Children.Remove(obj));
+
+            foreach (var pair in hashToItem)
+            {
+                if (hashToBool[pair.Key]) continue;
+
+                Button newButton = new Button
+                {
+                    Tag = pair.Key,
+                    Style = BUTTON_STYLE,
+                    Content = pair.Value.DisplayName,
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    Width = 537,
+                    Height = 32,
+                    Padding = new Thickness(12, 0, 0, 0)
+                };
+                newButton.Click += EditItem;
+                ctItemListStack.Children.Add(newButton);
+            }
+        });
     }
 
 
@@ -95,7 +119,6 @@ public partial class RenderOverview : UserControl
     {
         selfInstance = this;
         BuilderDataContainer.RegisterItems.CollectionChanged += OnRegisterItemsChanged;
-        
         InitializeComponent();
     }
 

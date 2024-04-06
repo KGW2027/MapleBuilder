@@ -1,23 +1,26 @@
 ﻿using System.Text.Json.Nodes;
+using MapleAPI.Enum;
 
 namespace MapleAPI.DataType;
 
 public class MapleOption
 {
-    public int Str { get; private set; }
-    public int Dex { get; private set; }
-    public int Int { get; private set; }
-    public int Luk { get; private set; }
-    public int MaxHp { get; private set; }
-    public int MaxMp { get; private set; }
-    public int AttackPower { get; private set; }
-    public int MagicPower { get; private set; }
-    public int BossDamage { get; private set; }
-    public int Damage { get; private set; }
-    public double IgnoreArmor { get; private set; }
-    public int AllStat { get; private set; }
-    public int MaxHpRate { get; private set; }
-    public int MaxMpRate { get; private set; }
+    public int Str { get; set; }
+    public int Dex { get; set; }
+    public int Int { get; set; }
+    public int Luk { get; set; }
+    public int MaxHp { get; set; }
+    public int MaxMp { get; set; }
+    public int AttackPower { get; set; }
+    public int MagicPower { get; set; }
+    public int BossDamage { get; set; }
+    public int Damage { get; set; }
+    public double IgnoreArmor { get; set; }
+    public int AllStat { get; set; }
+    public int MaxHpRate { get; set; }
+    public int MaxMpRate { get; set; }
+    public int CommonDamage { get; set; }
+    public int CriticalDamage { get; set; }
 
     private int GetValue(JsonObject data, string key)
     {
@@ -40,6 +43,8 @@ public class MapleOption
         AllStat = 0;
         MaxHpRate = 0;
         MaxMpRate = 0;
+        CommonDamage = 0;
+        CriticalDamage = 0;
     }
     
     public MapleOption(JsonObject data)
@@ -58,6 +63,8 @@ public class MapleOption
         AllStat = GetValue(data, "all_stat");
         MaxHpRate = GetValue(data, "max_hp_rate");
         MaxMpRate = GetValue(data, "max_mp_rate");
+        CommonDamage = 0;
+        CriticalDamage = 0;
     }
 
     public void SetTitleOption(int bossDamage = 0, int ignoreArmor = 0, int atkMagic = 0, int allStat = 0, int hpmp = 0)
@@ -69,6 +76,14 @@ public class MapleOption
         AllStat = allStat;
         MaxHp = hpmp;
         MaxMp = hpmp;
+    }
+
+    public void ApplyIgnoreArmor(double newValue)
+    {
+        bool isAdd = newValue > 0;
+        double cvtBase = (100 - IgnoreArmor) / 100.0;
+        double cvtAdd = (100 - Math.Abs(newValue)) / 100.0;
+        IgnoreArmor = isAdd ? (1 - cvtBase * cvtAdd) * 100 : (1 - cvtBase / cvtAdd) * 100;
     }
 
     public static MapleOption operator +(MapleOption lhs, MapleOption rhs)
@@ -85,11 +100,42 @@ public class MapleOption
         lhs.MagicPower += rhs.MagicPower;
         lhs.BossDamage += rhs.BossDamage;
         lhs.Damage += rhs.Damage;
-        lhs.IgnoreArmor = (1 - ((100 - lhs.IgnoreArmor) / 100.0) * ((100 - rhs.IgnoreArmor) / 100.0) ) * 100;
+        lhs.ApplyIgnoreArmor(rhs.IgnoreArmor);
         lhs.AllStat += rhs.AllStat;
+        lhs.CommonDamage += rhs.CommonDamage;
+        lhs.CriticalDamage += rhs.CriticalDamage;
         
         return lhs;
     }
     
-    
+    public static MapleOption operator -(MapleOption lhs, MapleOption rhs)
+    {
+        lhs.Str -= rhs.Str;
+        lhs.Dex -= rhs.Dex;
+        lhs.Int -= rhs.Int;
+        lhs.Luk -= rhs.Luk;
+        lhs.MaxHp -= rhs.MaxHp;
+        lhs.MaxMp -= rhs.MaxMp;
+        lhs.MaxHpRate -= rhs.MaxHpRate;
+        lhs.MaxMpRate -= rhs.MaxMpRate;
+        lhs.AttackPower -= rhs.AttackPower;
+        lhs.MagicPower -= rhs.MagicPower;
+        lhs.BossDamage -= rhs.BossDamage;
+        lhs.Damage -= rhs.Damage;
+        lhs.ApplyIgnoreArmor(-rhs.IgnoreArmor);
+        lhs.AllStat -= rhs.AllStat;
+        lhs.CommonDamage -= rhs.CommonDamage;
+        lhs.CriticalDamage -= rhs.CriticalDamage;
+        
+        return lhs;
+    }
+
+    public override string ToString()
+    {
+        return $"STR : {Str}, DEX : {Dex}, INT : {Int}, LUK : {Luk}, ALL STAT : {AllStat}\n"
+               + $"MaxHp : {MaxHp}, {MaxHpRate}%, MaxMp : {MaxMp}, {MaxMpRate}%\n"
+               + $"Attack : {AttackPower}, Magic : {MagicPower}\n"
+               + $"Damage : {Damage}, BossDamage : {BossDamage}, CommonDamage : {CommonDamage}, CriticalDamage : {CriticalDamage}\n"
+               + $"IgnoreAmor : {IgnoreArmor:F2}%";
+    }
 }

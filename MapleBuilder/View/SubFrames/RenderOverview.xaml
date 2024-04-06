@@ -10,10 +10,10 @@
         <!-- 캐릭터 오버뷰 -->
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="417" Height="668" HorizontalAlignment="Left"/>
         <Image Name="ctCharacterImage" Width="120" Height="120" Margin="8, 30, 0, 0"/>
-        <Label Name="ctCharacterName" Content="닉네임" Margin="126, 22, 0, 0" FontSize="20"/>
-        <Label Name="ctCharacterLevelAndClass" Content="Lv. 300 직업명" FontWeight="Light" FontSize="12" Margin="126, 58, 0, 0"/>
-        <Label Name="ctCharacterGuild" Content="길드 길드명" FontWeight="Light" FontSize="12" Margin="126, 80, 0, 0"/>
-        <Label Name="ctCharacterSymbol" Content="아케인 1,350&#10;어센틱 660" FontWeight="Light" FontSize="12" Margin="126, 102, 0, 0"/>
+        <Label Name="ctCharacterName" Content="불러오는 중 입니다.." Margin="126, 22, 0, 0" FontSize="20"/>
+        <Label Name="ctCharacterLevelAndClass" Content="" FontWeight="Light" FontSize="12" Margin="126, 58, 0, 0"/>
+        <Label Name="ctCharacterGuild" Content="" FontWeight="Light" FontSize="12" Margin="126, 80, 0, 0"/>
+        <Label Name="ctCharacterSymbol" Content="" FontWeight="Light" FontSize="12" Margin="126, 102, 0, 0"/>
         
         <Button Content="장비 설정" Width="134" Height="24" Margin="267, 31, 0, 0"/>
         <Button Content="스텟 / 심볼" Width="134" Height="24" Margin="267, 59, 0, 0"/>
@@ -21,7 +21,10 @@
         <Button Content="캐시 장비" Width="134" Height="24" Margin="267, 115, 0, 0"/>
         
         <!-- 장비 오버뷰 -->
-        <StackPanel x:Name="ctSetPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Width="417" Height="28" Margin="0, 151, 0, 0"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" CanContentScroll="True"
+                      HorizontalAlignment="Left" VerticalAlignment="Top" Width="417" Height="28" Margin="0, 151, 0, 0">
+            <StackPanel x:Name="ctSetPanel" Orientation="Horizontal"/>
+        </ScrollViewer>
         <subObjects:Equipments x:Name="ctEquips" Margin="8, 178, 0, 0" Width="401" Height="482" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         
         

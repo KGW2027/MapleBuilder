@@ -37,6 +37,8 @@ public class BuilderDataContainer
             RegisterItems.Add(newItem);
         }
         
+        MaplePotentialOptionType[] statTypes = CharacterInfo.GetClassStatType(charInfo.Class);
+        PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         RenderOverview.Update(charInfo);
     }
 
@@ -53,17 +55,12 @@ public class BuilderDataContainer
 
     private static void OnSlotItemChanged(MapleItem? prevItem, MapleItem? newItem)
     {
-        if (PlayerStatus == null)
-        {
-            MaplePotentialOptionType[] statTypes = CharacterInfo.GetClassStatType(charInfo.Class);
-            PlayerStatus = new PlayerInfo(statTypes[0], statTypes[1], statTypes[2]);
-        }
-        
         if (prevItem != null)
-            PlayerStatus.SubtractItem(prevItem);
+            PlayerStatus!.SubtractItem(prevItem);
         if (newItem != null)
-            PlayerStatus.AddItem(newItem);
+            PlayerStatus!.AddItem(newItem);
         
+        RenderOverview.UpdateSetDisplay(PlayerStatus!.SetEffects.GetSetOptionString());
         Summarize.DispatchSummary();
     }
 }

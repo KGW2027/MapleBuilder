@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -25,20 +24,20 @@ public partial class RenderFrame : UserControl
         ctSeq3Title.Visibility = Visibility.Collapsed;
         ctSeq3Desc.Visibility = Visibility.Collapsed;
 
-        if (stage == 1)
+        switch (stage)
         {
-            ctSeq1Title.Visibility = Visibility.Visible;
-            ctSeq1Desc.Visibility = Visibility.Visible;
-        }
-        else if (stage == 2)
-        {
-            ctSeq2Title.Visibility = Visibility.Visible;
-            ctSeq2Desc.Visibility = Visibility.Visible;
-        }
-        else if (stage == 3)
-        {
-            ctSeq3Title.Visibility = Visibility.Visible;
-            ctSeq3Desc.Visibility = Visibility.Visible;
+            case 1:
+                ctSeq1Title.Visibility = Visibility.Visible;
+                ctSeq1Desc.Visibility = Visibility.Visible;
+                break;
+            case 2:
+                ctSeq2Title.Visibility = Visibility.Visible;
+                ctSeq2Desc.Visibility = Visibility.Visible;
+                break;
+            case 3:
+                ctSeq3Title.Visibility = Visibility.Visible;
+                ctSeq3Desc.Visibility = Visibility.Visible;
+                break;
         }
 
         lastStage = stage;

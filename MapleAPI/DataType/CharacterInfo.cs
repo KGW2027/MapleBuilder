@@ -160,12 +160,12 @@ public class CharacterInfo
         }
     }
     
-    public static CharacterInfo? FromOcid(string ocid)
+    public static async Task<CharacterInfo?> FromOcid(string ocid)
     {
         ArgBuilder args = new ArgBuilder().AddArg("ocid", ocid);
         
         CharacterInfo cInfo = new CharacterInfo();
-        APIResponse baseInfo = APIRequest.Request(APIRequestType.BASIC, args);
+        APIResponse baseInfo = await APIRequest.RequestAsync(APIRequestType.BASIC, args);
         if (baseInfo.IsError) return null;
         
         baseInfo.TryGetValue("character_class", out var nameOfClass);
@@ -180,7 +180,7 @@ public class CharacterInfo
         if (baseInfo.TryGetValue("world_name", out var nameOfWorld)) cInfo.WorldName = nameOfWorld!;
 
         // 장착 장비 로드
-        APIResponse equipInfo = APIRequest.Request(APIRequestType.ITEM, args);
+        APIResponse equipInfo = await APIRequest.RequestAsync(APIRequestType.ITEM, args);
         if (equipInfo.IsError) return null;
         
         cInfo.Items = new List<MapleItem>();
