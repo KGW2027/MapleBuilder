@@ -12,6 +12,7 @@ public class PlayerInfo
     {
         public MaplePotentialOptionType StatType { get; }
         public MaplePotentialOptionType StatRateType { get; }
+        public MaplePotentialOptionType StatLevelType { get; }
         public int BaseValue { get; protected internal set; } // 기본 수치
         public int RateValue { get; protected internal set; } // % 수치
         public int FlatValue { get; protected internal set; } // % 미적용 수치
@@ -26,6 +27,14 @@ public class PlayerInfo
                 MaplePotentialOptionType.INT => MaplePotentialOptionType.INT_RATE,
                 MaplePotentialOptionType.LUK => MaplePotentialOptionType.LUK_RATE,
                 MaplePotentialOptionType.MAX_HP => MaplePotentialOptionType.MAX_HP_RATE,
+                _ => MaplePotentialOptionType.OTHER
+            };
+            StatLevelType = statType switch
+            {
+                MaplePotentialOptionType.STR => MaplePotentialOptionType.LEVEL_STR,
+                MaplePotentialOptionType.DEX => MaplePotentialOptionType.LEVEL_DEX,
+                MaplePotentialOptionType.INT => MaplePotentialOptionType.LEVEL_INT,
+                MaplePotentialOptionType.LUK => MaplePotentialOptionType.LEVEL_LUK,
                 _ => MaplePotentialOptionType.OTHER
             };
             BaseValue = 4;
@@ -627,6 +636,7 @@ public class PlayerInfo
     public int BuffDurationIncrease { get; private set; }
     public int SummonDurationIncrease { get; private set; }
     public int Immune { get; private set; }
+    public int LevelStat { get; private set; }
     public double FinalDamage { get; private set; }
     public double IgnoreArmor { get; private set; }
     public double CriticalChance { get; private set; }
@@ -667,6 +677,8 @@ public class PlayerInfo
         CriticalChance = 0;
         CriticalDamage = 0;
         IgnoreImmune = 0;
+
+        LevelStat = (int) Math.Floor(level / 9.0);
         SetEffects = new SetEffect();
     }
 
@@ -707,14 +719,17 @@ public class PlayerInfo
         foreach (var pair in potential)
         {
             int value = pair.Value * sign;
-            if      (pair.Key == MainStat.StatType)     MainStat.BaseValue += value;
-            else if (pair.Key == MainStat.StatRateType) MainStat.RateValue += value;
-            else if (pair.Key == SubStat.StatType)      SubStat.BaseValue += value;
-            else if (pair.Key == SubStat.StatRateType)  SubStat.RateValue += value;
-            else if (pair.Key == SubStat2.StatType)     SubStat2.BaseValue += value;
-            else if (pair.Key == SubStat2.StatRateType) SubStat2.RateValue += value;
-            else if (pair.Key == AttackType)            AttackValue += value;
-            else if (pair.Key == AttackRateType)        AttackRate += value;
+            if      (pair.Key == MainStat.StatType)      MainStat.BaseValue += value;
+            else if (pair.Key == MainStat.StatRateType)  MainStat.RateValue += value;
+            else if (pair.Key == MainStat.StatLevelType) MainStat.BaseValue += LevelStat * value;
+            else if (pair.Key == SubStat.StatType)       SubStat.BaseValue += value;
+            else if (pair.Key == SubStat.StatRateType)   SubStat.RateValue += value;
+            else if (pair.Key == SubStat.StatLevelType)  SubStat.BaseValue += LevelStat * value;
+            else if (pair.Key == SubStat2.StatType)      SubStat2.BaseValue += value;
+            else if (pair.Key == SubStat2.StatRateType)  SubStat2.RateValue += value;
+            else if (pair.Key == SubStat2.StatLevelType) SubStat2.BaseValue += LevelStat * value;
+            else if (pair.Key == AttackType)             AttackValue += value;
+            else if (pair.Key == AttackRateType)         AttackRate += value;
             else switch (pair.Key)
             {
                 case MaplePotentialOptionType.ALL_STAT:
