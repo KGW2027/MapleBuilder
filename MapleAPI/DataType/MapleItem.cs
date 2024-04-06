@@ -34,9 +34,11 @@ public class MapleItem
     public uint SpecialRingLevel { get; private set; }
     public uint MaxUpgrade { get; private set; }
     public MapleOption? ExceptionalOption { get; private set; }
+    public MapleOption? BaseOption { get; private set; }
     public MapleOption? AddOption { get; private set; }
     public MapleOption? EtcOption { get; private set; }
     public MaplePotentialOption? Potential { get; private set; }
+    public List<KeyValuePair<MaplePotentialOptionType, int>> Specials { get; private set; }
     
     private MapleItem(JsonObject data)
     {
@@ -51,9 +53,11 @@ public class MapleItem
         EquipType = GetEquipType(data["item_equipment_slot"]!.ToString());
         StarForce = uint.TryParse(data["starforce"]!.ToString(), out uint val) ? val : 0;
         SpecialRingLevel = uint.TryParse(data["special_ring_level"]!.ToString(), out uint val2) ? val2 : 0;
+        BaseOption = new MapleOption(data["item_base_option"]!.AsObject());
         ExceptionalOption = new MapleOption(data["item_exceptional_option"]!.AsObject());
         AddOption = new MapleOption(data["item_add_option"]!.AsObject());
         EtcOption = new MapleOption(data["item_etc_option"]!.AsObject());
+        Specials = new List<KeyValuePair<MaplePotentialOptionType, int>>();
 
         if (int.TryParse(data["item_base_option"]!.AsObject()["base_equipment_level"]!.ToString(), out int level))
         {
@@ -64,10 +68,10 @@ public class MapleItem
             {
                 string index = $"potential_option_{idx}";
                 if (data[index] != null)
-                    Potential.SetPotential(idx, MaplePotentialOption.ParseOption(data[index]!.ToString()));
+                    Potential.SetPotential(idx-1, MaplePotentialOption.ParseOption(data[index]!.ToString()));
                 index = $"additional_{index}";
                 if (data[index] != null)
-                    Potential.SetAdditional(idx, MaplePotentialOption.ParseOption(data[index]!.ToString()));
+                    Potential.SetAdditional(idx-1, MaplePotentialOption.ParseOption(data[index]!.ToString()));
             }
         }
     }
@@ -86,6 +90,23 @@ public class MapleItem
             {"description", desc}
         };
         AddOption = new MapleOption();
+        Specials = new List<KeyValuePair<MaplePotentialOptionType, int>>();
+        foreach (string line in desc.Split("\n"))
+        {
+            foreach (string sep in line.Split(","))
+            {
+                var trim = sep.Trim();
+                int plusIndex = trim.IndexOf('+');
+                if (plusIndex < 0) continue;
+                string value = trim[plusIndex..].Trim();
+                string key = trim[..plusIndex];
+                foreach (string prefix in key.Split("/"))
+                {
+                    var pair = MaplePotentialOption.ParseOption($"{prefix.Trim()}{value}");
+                    if(pair.Key != MaplePotentialOptionType.OTHER) Specials.Add(pair);
+                }
+            }
+        }
     }
 
     private static MapleEquipType GetEquipType(string slot)

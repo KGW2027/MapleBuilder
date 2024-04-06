@@ -57,12 +57,12 @@ public class MaplePotentialOption
         else if (value.StartsWith("INT"))              optionType = bIsEndsPercent ? MaplePotentialOptionType.INT_RATE : MaplePotentialOptionType.INT;
         else if (value.StartsWith("LUK"))              optionType = bIsEndsPercent ? MaplePotentialOptionType.LUK_RATE : MaplePotentialOptionType.LUK;
         else if (value.StartsWith("올스탯"))            optionType = bIsEndsPercent ? MaplePotentialOptionType.ALL_STAT_RATE : MaplePotentialOptionType.ALL_STAT;
-        else if (value.StartsWith("최대 HP"))           optionType = bIsEndsPercent ? MaplePotentialOptionType.MAX_HP_RATE : MaplePotentialOptionType.MAX_HP;
-        else if (value.StartsWith("최대 MP"))           optionType = bIsEndsPercent ? MaplePotentialOptionType.MAX_MP_RATE : MaplePotentialOptionType.MAX_MP;
+        else if (value.StartsWith("최대 HP") || value.StartsWith("HP"))           optionType = bIsEndsPercent ? MaplePotentialOptionType.MAX_HP_RATE : MaplePotentialOptionType.MAX_HP;
+        else if (value.StartsWith("최대 MP") || value.StartsWith("MP"))           optionType = bIsEndsPercent ? MaplePotentialOptionType.MAX_MP_RATE : MaplePotentialOptionType.MAX_MP;
         else if (value.StartsWith("공격력"))            optionType = bIsEndsPercent ? MaplePotentialOptionType.ATTACK_RATE : MaplePotentialOptionType.ATTACK;
         else if (value.StartsWith("마력"))              optionType = bIsEndsPercent ? MaplePotentialOptionType.MAGIC_RATE : MaplePotentialOptionType.MAGIC;
         else if (value.StartsWith("데미지"))            optionType = MaplePotentialOptionType.DAMAGE;
-        else if (value.StartsWith("보스 몬스"))         optionType = MaplePotentialOptionType.BOSS_DAMAGE;
+        else if (value.StartsWith("보스 몬스터"))         optionType = MaplePotentialOptionType.BOSS_DAMAGE;
         else if (value.StartsWith("크리티컬 데미지"))    optionType = MaplePotentialOptionType.CRITICAL_DAMAGE;
         else if (value.StartsWith("몬스터 방어율"))      optionType = MaplePotentialOptionType.IGNORE_ARMOR;
         else if (value.StartsWith("아이템"))            optionType = MaplePotentialOptionType.ITEM_DROP;

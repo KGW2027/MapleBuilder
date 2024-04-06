@@ -14,7 +14,7 @@ public class MapleOption
     public int MagicPower { get; private set; }
     public int BossDamage { get; private set; }
     public int Damage { get; private set; }
-    public int IgnoreArmor { get; private set; }
+    public double IgnoreArmor { get; private set; }
     public int AllStat { get; private set; }
     public int MaxHpRate { get; private set; }
     public int MaxMpRate { get; private set; }
@@ -69,6 +69,26 @@ public class MapleOption
         AllStat = allStat;
         MaxHp = hpmp;
         MaxMp = hpmp;
+    }
+
+    public static MapleOption operator +(MapleOption lhs, MapleOption rhs)
+    {
+        lhs.Str += rhs.Str;
+        lhs.Dex += rhs.Dex;
+        lhs.Int += rhs.Int;
+        lhs.Luk += rhs.Luk;
+        lhs.MaxHp += rhs.MaxHp;
+        lhs.MaxMp += rhs.MaxMp;
+        lhs.MaxHpRate += rhs.MaxHpRate;
+        lhs.MaxMpRate += rhs.MaxMpRate;
+        lhs.AttackPower += rhs.AttackPower;
+        lhs.MagicPower += rhs.MagicPower;
+        lhs.BossDamage += rhs.BossDamage;
+        lhs.Damage += rhs.Damage;
+        lhs.IgnoreArmor = (1 - ((100 - lhs.IgnoreArmor) / 100.0) * ((100 - rhs.IgnoreArmor) / 100.0) ) * 100;
+        lhs.AllStat += rhs.AllStat;
+        
+        return lhs;
     }
     
     

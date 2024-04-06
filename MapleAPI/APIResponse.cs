@@ -46,6 +46,7 @@ public class APIResponse
         if (JsonData == null) return false;
         if (JsonData.TryGetPropertyValue(key, out var node))
         {
+            // TODO : 제로를 불러오기하면 오류
             if (node is JsonValue) value = node.ToString();
             else value = node!.ToJsonString();
             return true;

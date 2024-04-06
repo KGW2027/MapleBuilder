@@ -83,6 +83,82 @@ public class CharacterInfo
             _ => MapleClass.NONE
         };
     }
+
+
+    private static readonly MaplePotentialOptionType[] STR_DEX =
+        {MaplePotentialOptionType.STR, MaplePotentialOptionType.DEX, MaplePotentialOptionType.OTHER};
+    private static readonly MaplePotentialOptionType[] DEX_STR =
+        {MaplePotentialOptionType.DEX, MaplePotentialOptionType.STR, MaplePotentialOptionType.OTHER};
+    private static readonly MaplePotentialOptionType[] INT_LUK =
+        {MaplePotentialOptionType.INT, MaplePotentialOptionType.LUK, MaplePotentialOptionType.OTHER};
+    private static readonly MaplePotentialOptionType[] LUK_DEX =
+        {MaplePotentialOptionType.LUK, MaplePotentialOptionType.DEX, MaplePotentialOptionType.OTHER};
+    private static readonly MaplePotentialOptionType[] LUK_DEX_STR =
+        {MaplePotentialOptionType.LUK, MaplePotentialOptionType.DEX, MaplePotentialOptionType.STR};
+    private static readonly MaplePotentialOptionType[] HP =
+        {MaplePotentialOptionType.MAX_HP, MaplePotentialOptionType.OTHER, MaplePotentialOptionType.OTHER};
+    private static readonly MaplePotentialOptionType[] NONE =
+        {MaplePotentialOptionType.OTHER, MaplePotentialOptionType.OTHER, MaplePotentialOptionType.OTHER};
+    public static MaplePotentialOptionType[] GetClassStatType(MapleClass classType)
+    {
+        switch (classType)
+        {
+            case MapleClass.HERO: // 전사
+            case MapleClass.PALADIN:
+            case MapleClass.DARK_KNIGHT:
+            case MapleClass.SOUL_MASTER:
+            case MapleClass.MIKHAIL:
+            case MapleClass.BLASTER:
+            case MapleClass.DEMON_SLAYER:
+            case MapleClass.ARAN:
+            case MapleClass.KAISER:
+            case MapleClass.ADEL:
+            case MapleClass.ZERO:
+            case MapleClass.VAIPER: // 힘해적
+            case MapleClass.CANONSHOOTER:
+            case MapleClass.STRIKER:
+            case MapleClass.EUNWALL:
+            case MapleClass.ARC:
+                return STR_DEX;
+            case MapleClass.DEMON_AVENGER: // 데벤저
+                return HP;
+            case MapleClass.ARCMAGE_FP: // 법사
+            case MapleClass.ARCMAGE_TC:
+            case MapleClass.BISHOP:
+            case MapleClass.FLAME_WIZARD:
+            case MapleClass.BATTLE_MAGE:
+            case MapleClass.EVAN:
+            case MapleClass.LUMINUS:
+            case MapleClass.ILLIUM:
+            case MapleClass.LALA:
+            case MapleClass.KINESIS:
+                return INT_LUK;
+            case MapleClass.BOW_MASTER: // 궁수
+            case MapleClass.SINGOONG:
+            case MapleClass.PATH_FINDER:
+            case MapleClass.WIND_BREAKER:
+            case MapleClass.WILD_HUNTER:
+            case MapleClass.MERCEDES:
+            case MapleClass.KAIN:
+            case MapleClass.CAPTAIN: // 덱해적
+            case MapleClass.ANGELICBUSTER:
+            case MapleClass.MECHANIC:
+                return DEX_STR;
+            case MapleClass.NIGHTLOAD: // 도적
+            case MapleClass.NIGHTWALKER:
+            case MapleClass.PHANTOM:
+            case MapleClass.KALI:
+            case MapleClass.HOYOUNG:
+                return LUK_DEX;
+            case MapleClass.SHADOWER: // 2부스텟 도적 + 제논
+            case MapleClass.KADENA:
+            case MapleClass.DUALBLADE:
+            case MapleClass.XENON:
+                return LUK_DEX_STR;
+            default:
+                return NONE;
+        }
+    }
     
     public static CharacterInfo? FromOcid(string ocid)
     {
