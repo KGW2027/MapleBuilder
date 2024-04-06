@@ -23,9 +23,9 @@
         
         <!-- Control -->
         <Border Width="260" Height="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12, 162, 0, 0" BorderBrush="White" BorderThickness="1"/>
-        <Button Content="장비" Width="80" Height="24" Margin="16, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Content="유니온" Width="80" Height="24" Margin="102, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Button Content="코강" Width="80" Height="24" Margin="188, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Button Content="장비" Width="80" Height="24" Margin="16, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnRenderScreenToEquip"/>
+        <Button Content="유니온" Width="80" Height="24" Margin="102, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnRenderScreenToUnion"/>
+        <Button Content="기타" Width="80" Height="24" Margin="188, 171, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnRenderScreenToEtc"/>
         
         <!-- Summary -->
         <ScrollViewer Width="260" Height="440" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12, 202, 0, 0" Background="#515151" BorderBrush="#707070" BorderThickness="1" VerticalScrollBarVisibility="Disabled">

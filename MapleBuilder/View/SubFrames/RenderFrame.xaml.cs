@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -6,15 +7,61 @@ namespace MapleBuilder.View.SubFrames;
 
 public partial class RenderFrame : UserControl
 {
-    private int lastStage = -1;
-    public bool isReady;
     
     public RenderFrame()
     {
+        renderType = RenderScreenType.NOT_READY;
+        selfInstance = this;
         InitializeComponent();
+
+        ScreenElements = new Dictionary<RenderScreenType, List<UIElement>>
+        {
+            {RenderScreenType.OVERVIEW_EQUIPMENT, new List<UIElement> {ctFrameOverview}}
+        };
+        
         WaitReadyWithDisplayHelp();
     }
+    
+    public enum RenderScreenType
+    {
+        OVERVIEW_EQUIPMENT,
+        STAT_SYMBOL,
+        SPECIAL_EQUIPS,
+        CASH_EQUIPS,
+        UNION,
+        ETC,
+        NOT_READY
+    }
+    private static RenderFrame? selfInstance;
+    private static RenderScreenType renderType;
 
+    public static RenderScreenType RenderType
+    {
+        get => renderType;
+        set
+        {
+            selfInstance!.CollapseScreen();
+            renderType = value;
+            selfInstance.RenderScreen();
+        }
+    }
+
+    private Dictionary<RenderScreenType, List<UIElement>> ScreenElements;
+
+    private void CollapseScreen()
+    {
+        if (!ScreenElements.TryGetValue(renderType, out var list)) return;
+        Dispatcher.Invoke(() => { list.ForEach(element => element.Visibility = Visibility.Collapsed); });
+    }
+
+    private void RenderScreen()
+    {
+        if (!ScreenElements.TryGetValue(renderType, out var list)) return;
+        Dispatcher.Invoke(() => { list.ForEach(element => element.Visibility = Visibility.Visible); });
+    }
+
+    #region 사전설정 이전 로딩
+    private int lastStage = -1;
     private void DisplayHelps(int stage)
     {
         ctSeq1Title.Visibility = Visibility.Collapsed;
@@ -50,6 +97,7 @@ public partial class RenderFrame : UserControl
         if (stage != lastStage)
             DisplayHelps(stage);
         if (stage < 4) WaitReadyWithDisplayHelp();
-        else ctFrameOverview.Visibility = Visibility.Visible;
+        else RenderType = RenderScreenType.OVERVIEW_EQUIPMENT;
     }
+    #endregion
 }

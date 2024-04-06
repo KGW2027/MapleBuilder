@@ -15,10 +15,10 @@
         <Label Name="ctCharacterGuild" Content="" FontWeight="Light" FontSize="12" Margin="126, 80, 0, 0"/>
         <Label Name="ctCharacterSymbol" Content="" FontWeight="Light" FontSize="12" Margin="126, 102, 0, 0"/>
         
-        <Button Content="장비 설정" Width="134" Height="24" Margin="267, 31, 0, 0"/>
-        <Button Content="스텟 / 심볼" Width="134" Height="24" Margin="267, 59, 0, 0"/>
-        <Button Content="펫장비 / 특수 장비" Width="134" Height="24" Margin="267, 87, 0, 0"/>
-        <Button Content="캐시 장비" Width="134" Height="24" Margin="267, 115, 0, 0"/>
+        <Button Content="장비 설정" Width="134" Height="24" Margin="267, 31, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToEquip"/>
+        <Button Content="스텟 / 심볼" Width="134" Height="24" Margin="267, 59, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToStatSymbol"/>
+        <Button Content="펫장비 / 특수 장비" Width="134" Height="24" Margin="267, 87, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToSpecialEquip"/>
+        <Button Content="캐시 장비" Width="134" Height="24" Margin="267, 115, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToCashEquip"/>
         
         <!-- 장비 오버뷰 -->
         <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" CanContentScroll="True"

@@ -138,4 +138,24 @@ public partial class RenderOverview : UserControl
         
     }
     #endregion
+
+    private void OnChangeScreenToEquip(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.OVERVIEW_EQUIPMENT;
+    }
+
+    private void OnChangeScreenToStatSymbol(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.STAT_SYMBOL;
+    }
+
+    private void OnChangeScreenToSpecialEquip(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.SPECIAL_EQUIPS;
+    }
+
+    private void OnChangeScreenToCashEquip(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.CASH_EQUIPS;
+    }
 }

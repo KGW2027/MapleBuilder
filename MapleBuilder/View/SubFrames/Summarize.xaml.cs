@@ -134,4 +134,19 @@ public partial class Summarize : UserControl
             IsLoadComplete = true;
         }).Start();
     }
+
+    private void OnRenderScreenToEquip(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.OVERVIEW_EQUIPMENT;
+    }
+
+    private void OnRenderScreenToUnion(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.UNION;
+    }
+
+    private void OnRenderScreenToEtc(object sender, RoutedEventArgs e)
+    {
+        RenderFrame.RenderType = RenderFrame.RenderScreenType.ETC;
+    }
 }
