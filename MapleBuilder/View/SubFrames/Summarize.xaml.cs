@@ -24,6 +24,14 @@ public partial class Summarize : UserControl
         selfInstance.ctInputNickname.IsReadOnly = false;
     }
 
+    public static void VisibleLoadButton()
+    {
+        selfInstance!.Dispatcher.Invoke(() =>
+        {
+            selfInstance.ctLoadBtn.Visibility = Visibility.Visible;
+        });
+    }
+
     public static void DispatchSummary()
     {
         selfInstance!.Dispatcher.BeginInvoke(() =>
@@ -75,6 +83,7 @@ public partial class Summarize : UserControl
         selfInstance = this;
         
         InitializeComponent();
+        ctLoadBtn.Visibility = Visibility.Collapsed;
     }
 
     public static bool IsLoadComplete {get; private set;}

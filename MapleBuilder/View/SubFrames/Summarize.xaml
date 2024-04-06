@@ -11,7 +11,7 @@
         <TextBox Text="닉네임을입력" Width="111" Height="24" HorizontalAlignment="Left" Margin="12, 44, 0, 0"
                  IsReadOnly="True" Focusable="False" Name="ctInputNickname"/>
         <Button Content="검색" Width="56" Height="24" Margin="135, 44, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="TrySearch"/>
-        <Button Content="불러오기" Width="73" Height="24" Margin="199, 44, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoadData"/>
+        <Button x:Name="ctLoadBtn" Content="불러오기" Width="73" Height="24" Margin="199, 44, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="LoadData"/>
         
         <!-- Result of Search -->
         <Border Width="260" Height="74" Margin="12, 76, 0, 0" 

@@ -79,12 +79,8 @@ public static class ResourceManager
             itemIconLoading = true;
             LoadIcons("./CharacterExtractorResult.json");
             LoadIcons("./ItemExtractorResult.json");
+            Summarize.VisibleLoadButton();
             itemIconLoaded = true;
-        }
-
-        // Lazy-loop wait Icon Loaded
-        while (!itemIconLoaded)
-        {
         }
 
         return itemIcons!.GetValueOrDefault(itemName, null);
