@@ -56,5 +56,22 @@
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
         <Label x:Name="ctAuthenticForceDisplay" Content="AUT + 660" Margin="445, 335, 0, 0"/>
         <Label x:Name="ctAuthenticStatDisplay" Content="INT + 15,600" Margin="445, 355, 0, 0"/>
+        
+        <!-- 어빌리티 -->
+        <Label Content="어빌리티" Margin="429, 398, 0, 0"/>
+        <ComboBox x:Name="ctGradeAbility" Width="83" Height="24" Margin="445, 430, 0, 0" 
+                  Background="#222222" Text="레전드리"/>
+        
+        <ComboBox x:Name="ctAbility1" Width="318" Height="24" Margin="445, 462, 0, 0" 
+                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용"/>
+        <Slider x:Name="ctAbilitySlider1"  Width="200" Height="18" Margin="445, 489, 0, 0" Minimum="8" Maximum="10" Value="9" ValueChanged="CtAbilitySlider1_OnValueChanged"/>
+        
+        <ComboBox x:Name="ctAbility2" Width="318" Height="24" Margin="445, 511, 0, 0" 
+                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용"/>
+        <Slider x:Name="ctAbilitySlider2" Width="200" Height="18" Margin="445, 538, 0, 0" Minimum="8" Maximum="10" Value="9"/>
+        
+        <ComboBox x:Name="ctAbility3" Width="318" Height="24" Margin="445, 560, 0, 0" 
+                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용"/>
+        <Slider x:Name="ctAbilitySlider3"  Width="200" Height="18" Margin="445, 587, 0, 0" Minimum="8" Maximum="10" Value="9"/>
     </Grid>
 </UserControl>

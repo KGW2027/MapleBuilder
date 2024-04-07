@@ -170,4 +170,9 @@ public partial class StatSymbol : UserControl
             // ignored
         }
     }
+
+    private void CtAbilitySlider1_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        Console.WriteLine($"CT_SLIDER_1 VAL CHANGED : {e.NewValue}");
+    }
 }
