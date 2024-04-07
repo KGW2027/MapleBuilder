@@ -55,6 +55,7 @@ public class BuilderDataContainer
         MaplePotentialOption.OptionType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
+        StatSymbol.InitAbility(charInfo.AbilityValues);
         RenderOverview.Update(charInfo);
         RefreshAll();
     }

@@ -63,6 +63,33 @@ public class CharacterInfo
             }
         }
         
+        // 어빌 데이터 로드
+        APIResponse abilityInfo = await APIRequest.RequestAsync(APIRequestType.ABILITY, args);
+        if(abilityInfo.IsError) throw new WebException("API Request Failed! " + abilityInfo.ResponseType);
+        
+        cInfo.AbilityValues.Clear();
+        if (abilityInfo.JsonData!["ability_info"] is JsonArray abilityData)
+        {
+            foreach (var value in abilityData)
+            {
+                string abValue = value!["ability_value"]!.ToString();
+                MapleAbility.AbilityType abType = MapleAbility.TryParse(abValue);
+                string abStr = MapleAbility.GetAbilityString(abType);
+                int valueIndex = abStr.IndexOf("%d", StringComparison.CurrentCulture);
+                string parse = valueIndex >= 0 ? abValue.Substring(valueIndex, 2).Replace("%", "").Trim() : "";
+
+                if (int.TryParse(parse, out int abNumValue))
+                {
+                    cInfo.AbilityValues.Add(abType, abNumValue);
+                }
+                else
+                {
+                    MaplePotentialGrade.GradeType abGrade =
+                        MaplePotentialGrade.GetPotentialGrade(value["ability_grade"]);
+                    cInfo.AbilityValues.Add(abType, MapleAbility.GetMinMax(abType, abGrade)[0]);
+                }
+            }
+        }
         
         return cInfo;
     }
@@ -77,6 +104,7 @@ public class CharacterInfo
         WorldName = "";
         PlayerImage = Array.Empty<byte>();
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
+        AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
     }
     
     #region PlayerData
@@ -92,6 +120,7 @@ public class CharacterInfo
     #region SpecData
     public List<MapleItem> Items { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
+    public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
     #endregion
     
 

@@ -4,6 +4,7 @@ using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.MapleData;
+using MapleBuilder.View.SubFrames;
 using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.Control;
@@ -85,6 +86,7 @@ public class PlayerInfo
         LevelStat = (int) Math.Floor(level / 9.0);
         SetEffects = new SetEffect();
         LastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
+        LastAbilities = new Dictionary<MapleAbility.AbilityType, int>();
     }
 
     
@@ -116,6 +118,7 @@ public class PlayerInfo
     
     public SetEffect SetEffects { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> LastSymbols;
+    public Dictionary<MapleAbility.AbilityType, int> LastAbilities;
     
     ///<summary>
     ///    방어력 무시의 곱연산을 계산합니다.
@@ -340,6 +343,93 @@ public class PlayerInfo
         }
 
         LastSymbols = symbolData;
+        BuilderDataContainer.RefreshAll();
+    }
+    
+    #endregion
+    
+    #region 어빌리티 효과 적용
+
+    private MaplePotentialOption.OptionType GetOptionTypeByAbilityType(MapleAbility.AbilityType type)
+    {
+        return type switch
+        {
+            MapleAbility.AbilityType.STR => MaplePotentialOption.OptionType.STR,
+            MapleAbility.AbilityType.DEX => MaplePotentialOption.OptionType.DEX,
+            MapleAbility.AbilityType.INT => MaplePotentialOption.OptionType.INT,
+            MapleAbility.AbilityType.LUK => MaplePotentialOption.OptionType.LUK,
+            MapleAbility.AbilityType.HP => MaplePotentialOption.OptionType.MAX_HP,
+            MapleAbility.AbilityType.MAX_HP_RATE => MaplePotentialOption.OptionType.MAX_HP_RATE,
+            MapleAbility.AbilityType.ATTACK_POWER => MaplePotentialOption.OptionType.ATTACK,
+            MapleAbility.AbilityType.LEVEL_ATTACK_POWER => MaplePotentialOption.OptionType.ATTACK,
+            MapleAbility.AbilityType.MAGIC_POWER => MaplePotentialOption.OptionType.MAGIC,
+            MapleAbility.AbilityType.LEVEL_MAGIC_POWER => MaplePotentialOption.OptionType.MAGIC,
+            _ => MaplePotentialOption.OptionType.OTHER
+        };
+    }
+    
+    private void ApplyAbilityEach(MapleAbility.AbilityType type, int value)
+    {
+        MaplePotentialOption.OptionType optType = GetOptionTypeByAbilityType(type);
+        if (optType == MainStat.Stat) MainStat.FlatValue += value;
+        else if (optType == MainStat.StatRate) MainStat.RateValue += value;
+        else if (optType == SubStat.Stat) SubStat.FlatValue += value;
+        else if (optType == SubStat2.Stat) SubStat2.FlatValue += value;
+        else if (optType == AttackType)
+        {
+            if (type is MapleAbility.AbilityType.LEVEL_MAGIC_POWER or MapleAbility.AbilityType.LEVEL_ATTACK_POWER)
+                value = (int) (BuilderDataContainer.CharacterInfo!.Level / value);
+            AttackValue += value;
+        }
+        
+        switch (type)
+        {
+            case MapleAbility.AbilityType.CRITICAL_CHANCE:
+                CriticalChance += value;
+                break;
+            case MapleAbility.AbilityType.ALL_STAT:
+                MainStat.FlatValue += value;
+                SubStat.FlatValue += value;
+                SubStat2.FlatValue += value;
+                break;
+            case MapleAbility.AbilityType.BOSS_DAMAGE:
+                BossDamage += value;
+                break;
+            case MapleAbility.AbilityType.COMMON_DAMAGE:
+                CommonDamage += value;
+                break;
+            case MapleAbility.AbilityType.DEBUFF_DAMAGE:
+                DebuffDamage += value;
+                break;
+            case MapleAbility.AbilityType.COOLDOWN_IGNORE:
+                CooldownIgnoreRate += value;
+                break;
+            case MapleAbility.AbilityType.BUFF_DURATION_INCREASE:
+                BuffDurationIncrease += value;
+                break;
+            case MapleAbility.AbilityType.ITEM_DROP:
+                ItemDropIncrease += value;
+                break;
+            case MapleAbility.AbilityType.MESO_DROP:
+                MesoDropIncrease += value;
+                break;
+            case MapleAbility.AbilityType.ATTACK_SPEED:
+            case MapleAbility.AbilityType.PASSIVE_SKILL_LEVEL:
+            case MapleAbility.AbilityType.MULTI_TARGET:
+            case MapleAbility.AbilityType.OTHER:
+            default:
+                break;
+        }
+    }
+
+    public void ApplyAbility(Dictionary<MapleAbility.AbilityType, int> abilities)
+    {
+        foreach (var pair in LastAbilities)
+            ApplyAbilityEach(pair.Key, pair.Value * -1);
+        foreach (var pair in abilities)
+            ApplyAbilityEach(pair.Key, pair.Value);
+        LastAbilities = abilities;
+        
         BuilderDataContainer.RefreshAll();
     }
     

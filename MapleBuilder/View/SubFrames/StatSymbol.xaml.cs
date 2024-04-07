@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -14,6 +15,13 @@ public partial class StatSymbol : UserControl
 {
     private static StatSymbol? selfInstnace;
 
+    private readonly List<ComboBox>? abilityComboBoxes;
+    private readonly List<Slider>? abilitySliders;
+    private readonly List<CheckBox?> abilityCheckboxes;
+    private readonly List<MapleAbility.AbilityType> abilityTypes;
+    private readonly Dictionary<string, MapleAbility.AbilityType> displayToAbilityType;
+    private static bool syncLock = false;
+    
     public static void Update()
     {
         selfInstnace!.Dispatcher.BeginInvoke(() =>
@@ -66,6 +74,40 @@ public partial class StatSymbol : UserControl
         });
     }
 
+    public static void InitAbility(Dictionary<MapleAbility.AbilityType, int> abilities)
+    {
+        selfInstnace!.Dispatcher.BeginInvoke(() =>
+        {
+            syncLock = true;
+            int idx = 0;
+            MaplePotentialGrade.GradeType topGrade = MaplePotentialGrade.GradeType.NONE;
+            foreach (var pair in abilities)
+            {
+                selfInstnace.abilityTypes[idx] = pair.Key;
+                if (idx == 0)
+                {
+                    topGrade = MapleAbility.DetectAbilityGrade(pair.Key, pair.Value);
+                    if (topGrade < MaplePotentialGrade.GradeType.EPIC) topGrade = MaplePotentialGrade.GradeType.EPIC;
+                }
+                else
+                {
+                    MaplePotentialGrade.GradeType abGrade = MapleAbility.DetectAbilityGrade(pair.Key, pair.Value);
+                    selfInstnace.abilityCheckboxes[idx]!.IsChecked = topGrade - abGrade == 1;
+                }
+                
+                idx++;
+            }
+        
+            selfInstnace.ApplyAbility();
+            syncLock = false;
+            idx = 0;
+            foreach (var pair in abilities)
+            {
+                selfInstnace.abilitySliders![idx++].Value = pair.Value;
+            }
+        });
+    }
+
     private Dictionary<MapleSymbol.SymbolType, UIElement> symbolLevels;
     
     public StatSymbol()
@@ -88,6 +130,32 @@ public partial class StatSymbol : UserControl
             {MapleSymbol.SymbolType.ARTERIA, ctArteriaText},
             {MapleSymbol.SymbolType.CARCION, ctCarsionText},
         };
+
+        abilityComboBoxes = new List<ComboBox> {ctAbility1, ctAbility2, ctAbility3};
+        abilitySliders = new List<Slider> {ctAbilitySlider1, ctAbilitySlider2, ctAbilitySlider3};
+        abilityCheckboxes = new List<CheckBox?> {null, ctAbilityOver2, ctAbilityOver3};
+        abilityTypes = new List<MapleAbility.AbilityType>
+            {MapleAbility.AbilityType.OTHER, MapleAbility.AbilityType.OTHER, MapleAbility.AbilityType.OTHER};
+        
+        displayToAbilityType = new Dictionary<string, MapleAbility.AbilityType>();
+        foreach (MapleAbility.AbilityType abType in Enum.GetValues(typeof(MapleAbility.AbilityType)))
+        {
+            string str = MapleAbility.GetAbilityString(abType).Replace("%d", "[ ]").Trim();
+            if (!displayToAbilityType.TryAdd(str, abType)) continue;
+            ctAbility1.Items.Add(str);
+            ctAbility2.Items.Add(str);
+            ctAbility3.Items.Add(str);
+        }
+
+        foreach (MaplePotentialGrade.GradeType grade in Enum.GetValues(typeof(MaplePotentialGrade.GradeType)))
+        {
+            string str = MaplePotentialGrade.GetPotentialGradeString(grade);
+            if (str.Equals("")) continue;
+            ctGradeAbility.Items.Add(str);
+        }
+
+        ApplyAbility();
+
 
         new Thread(LoadSymbolIcons).Start();
     }
@@ -162,7 +230,8 @@ public partial class StatSymbol : UserControl
                 return;
             }
 
-            Dictionary<MapleSymbol.SymbolType, int> newSymbolTable = symbolLevels.ToDictionary(pair => pair.Key, pair => int.Parse(((TextBox) pair.Value).Text));
+            Dictionary<MapleSymbol.SymbolType, int> newSymbolTable =
+                symbolLevels.ToDictionary(pair => pair.Key, pair => int.Parse(((TextBox) pair.Value).Text));
             BuilderDataContainer.PlayerStatus!.ApplySymbolData(newSymbolTable);
         }
         catch (Exception ex)
@@ -171,8 +240,77 @@ public partial class StatSymbol : UserControl
         }
     }
 
-    private void CtAbilitySlider1_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    
+    private void ApplyAbilityToPlayerInfo()
     {
-        Console.WriteLine($"CT_SLIDER_1 VAL CHANGED : {e.NewValue}");
+        if (BuilderDataContainer.PlayerStatus == null) return;
+        Dictionary<MapleAbility.AbilityType, int> abilityPair = new Dictionary<MapleAbility.AbilityType, int>();
+        for (int idx = 0; idx < 3; idx++)
+            abilityPair.TryAdd(abilityTypes[idx], (int) abilitySliders![idx].Value);
+        BuilderDataContainer.PlayerStatus.ApplyAbility(abilityPair);
+    }
+    
+    private void OnSliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+    {
+        if (syncLock) return;
+        
+        string name = ((Slider) sender).Name;
+        int index = name[^1]-'1';
+        if (abilityComboBoxes == null || index < 0 || index >= abilityComboBoxes.Count) return;
+        ComboBox targetBox = abilityComboBoxes[index];
+        targetBox.Text = MapleAbility.GetAbilityString(abilityTypes[index])
+            .Replace("%d", e.NewValue.ToString(CultureInfo.CurrentCulture));
+        
+        ApplyAbilityToPlayerInfo();
+    }
+    
+    private void ApplyAbility()
+    {
+        if (abilitySliders == null || abilityComboBoxes == null) return;
+        
+        MaplePotentialGrade.GradeType topGrade = MaplePotentialGrade.GetPotentialGrade(ctGradeAbility.Text);
+        for (int slot = 0; slot < 3; slot++)
+        {
+            MaplePotentialGrade.GradeType applyType = slot == 0 ? topGrade :
+                (bool) abilityCheckboxes[slot]!.IsChecked! ? topGrade - 1 : topGrade - 2;
+            
+            int[] abV = MapleAbility.GetMinMax(abilityTypes[slot], applyType);
+            abilitySliders[slot].Minimum = abV[0];
+            abilitySliders[slot].Maximum = abV[1];
+            abilitySliders[slot].SmallChange = abV.Length == 2 ? 1 : abV[2];
+            abilitySliders[slot].Value = Math.Clamp(abilitySliders[slot].Value, abV[0], abV[1]);
+            abilityComboBoxes[slot].Text = MapleAbility.GetAbilityString(abilityTypes[slot])
+                .Replace("%d", abilitySliders[slot].Value.ToString(CultureInfo.CurrentCulture));
+        }
+        
+        ApplyAbilityToPlayerInfo();
+    }
+
+    private void OnAbilitySelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (syncLock) return;
+        
+        string name = ((ComboBox) sender).Name;
+        int index = name[^1] - '1';
+        if (abilitySliders == null || abilityComboBoxes == null || index < 0 || index >= abilitySliders.Count) return;
+        object selectedItem = abilityComboBoxes[index].SelectedItem;
+        if (selectedItem != null && !selectedItem.ToString()!.Equals(""))
+            abilityTypes[index] = displayToAbilityType[abilityComboBoxes[index].SelectedItem.ToString()!];
+        ApplyAbility();
+    }
+
+    private void OnCheckboxChecked(object sender, RoutedEventArgs e)
+    {
+        ApplyAbility();
+    }
+
+    private void OnCheckboxUnchecked(object sender, RoutedEventArgs e)
+    {
+        ApplyAbility();
+    }
+
+    private void OnAbilityGradeChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ApplyAbility();
     }
 }

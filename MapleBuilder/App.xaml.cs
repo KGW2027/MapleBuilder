@@ -18,7 +18,7 @@ namespace MapleBuilder
             if (thumb?.TemplatedParent is not Slider slider) return;
 
             double changed = e.HorizontalChange / slider.ActualWidth * (slider.Maximum - slider.Minimum);
-            double newValue = slider.Value + Math.Round(changed, 0);
+            double newValue = slider.Value + Math.Round(changed / slider.SmallChange) * slider.SmallChange;
             slider.Value = Math.Clamp(newValue, slider.Minimum, slider.Maximum);
         }
     }
