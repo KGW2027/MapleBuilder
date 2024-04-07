@@ -435,5 +435,63 @@ public class PlayerInfo
     
     #endregion
     
+    #region 하이퍼 스탯 효과 적용
+    
+    private MaplePotentialOption.OptionType GetOptionTypeByHyperStatType(MapleHyperStat.StatType type)
+    {
+        return type switch
+        {
+            MapleHyperStat.StatType.STR => MaplePotentialOption.OptionType.STR,
+            MapleHyperStat.StatType.DEX => MaplePotentialOption.OptionType.DEX,
+            MapleHyperStat.StatType.INT => MaplePotentialOption.OptionType.INT,
+            MapleHyperStat.StatType.LUK => MaplePotentialOption.OptionType.LUK,
+            MapleHyperStat.StatType.HP => MaplePotentialOption.OptionType.MAX_HP_RATE,
+            _ => MaplePotentialOption.OptionType.OTHER
+        };
+    }
+    public void ApplyHyperStat(MapleHyperStat.StatType statType, double delta)
+    {
+        MaplePotentialOption.OptionType optType = GetOptionTypeByHyperStatType(statType);
+        if (optType == MainStat.Stat) MainStat.FlatValue += (int) delta;
+        else if (optType == MainStat.StatRate) MainStat.RateValue += (int) delta;
+        else if (optType == SubStat.Stat) SubStat.FlatValue += (int) delta;
+        else if (optType == SubStat2.Stat) SubStat2.FlatValue += (int) delta;
+        
+        switch (statType)
+        {
+            case MapleHyperStat.StatType.CRITCIAL_CHANCE:
+                CriticalChance += delta;
+                break;
+            case MapleHyperStat.StatType.CRITICAL_DAMAGE:
+                CriticalDamage += delta;
+                break;
+            case MapleHyperStat.StatType.IGNORE_ARMOR:
+                IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, delta, delta >= 0);
+                break;
+            case MapleHyperStat.StatType.DAMAGE:
+                Damage += (int) delta;
+                break;
+            case MapleHyperStat.StatType.BOSS_DAMAGE:
+                BossDamage += (int) delta;
+                break;
+            case MapleHyperStat.StatType.COMMON_DAMAGE:
+                CommonDamage += (int) delta;
+                break;
+            case MapleHyperStat.StatType.IMMUNE:
+                Immune += (int) delta;
+                break;
+            case MapleHyperStat.StatType.ATTACK_POWER:
+                AttackValue += (int) delta;
+                break;
+            case MapleHyperStat.StatType.MP:
+            case MapleHyperStat.StatType.DF_TF_PP:
+            case MapleHyperStat.StatType.EXP_UP:
+            case MapleHyperStat.StatType.ARCANE_FORCE:
+                break;
+        }
+    }
+    
+    #endregion
+    
     // TODO : 스텟 적용 테스트 - 기본수치 4422, 실제수치 4477, 차이 125 - 아르카나세트 올스텟 15
 }

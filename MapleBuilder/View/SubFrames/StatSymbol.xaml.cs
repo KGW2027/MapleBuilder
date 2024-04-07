@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -160,6 +161,7 @@ public partial class StatSymbol : UserControl
         new Thread(LoadSymbolIcons).Start();
     }
 
+    #region 심볼
     private void LoadSymbolIcons()
     {
         while(!ResourceManager.itemIconLoaded) { }
@@ -239,8 +241,9 @@ public partial class StatSymbol : UserControl
             // ignored
         }
     }
-
+    #endregion
     
+    #region 어빌리티
     private void ApplyAbilityToPlayerInfo()
     {
         if (BuilderDataContainer.PlayerStatus == null) return;
@@ -313,4 +316,17 @@ public partial class StatSymbol : UserControl
     {
         ApplyAbility();
     }
+    
+    #endregion
+
+    #region 하이퍼스탯
+
+    private void OnHyperStatLevelChanged(object sender, RoutedEventArgs e)
+    {
+        if (e.Source is not HyperStatSlot slot) return;
+        if (BuilderDataContainer.PlayerStatus == null) return;
+        BuilderDataContainer.PlayerStatus.ApplyHyperStat(slot.StatType, slot.Delta);
+    }
+
+    #endregion
 }
