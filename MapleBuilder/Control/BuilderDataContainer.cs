@@ -56,6 +56,7 @@ public class BuilderDataContainer
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         StatSymbol.InitAbility(charInfo.AbilityValues);
+        StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
         RenderOverview.Update(charInfo);
         RefreshAll();
     }

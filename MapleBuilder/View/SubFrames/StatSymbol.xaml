@@ -6,7 +6,7 @@
              xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
-    <Grid>
+    <Grid Name="ParentGrid">
         <!-- 하이퍼 스탯 -->
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="417" Height="668" HorizontalAlignment="Left"/>
         
@@ -83,7 +83,7 @@
         <subObjects:HyperStatSlot Text="LUK" StatType="LUK" Margin="27.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="HP" StatType="HP" Margin="27.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="MP" StatType="MP" Margin="27.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="DF/TF/PP" StatType="DF_TF_PP" Margin="27.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="DF/TF/PP" StatType="DF_TT_PP" Margin="27.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="크리티컬 확률" StatType="CRITCIAL_CHANCE" Margin="27.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         
         <subObjects:HyperStatSlot Text="크리 데미지" StatType="CRITICAL_DAMAGE" Margin="219.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>

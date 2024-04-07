@@ -9,11 +9,11 @@ public class CharacterInfo
     public static async Task<CharacterInfo?> FromOcid(string ocid)
     {
         ArgBuilder args = new ArgBuilder().AddArg("ocid", ocid);
-        
+
         CharacterInfo cInfo = new CharacterInfo();
         APIResponse baseInfo = await APIRequest.RequestAsync(APIRequestType.BASIC, args);
         if (baseInfo.IsError) throw new WebException("API Request Failed! " + baseInfo.ResponseType);
-        
+
         baseInfo.TryGetValue("character_class", out var nameOfClass);
         cInfo.ClassString = nameOfClass!;
         cInfo.Class = MapleClass.GetMapleClass(nameOfClass!);
@@ -28,7 +28,7 @@ public class CharacterInfo
         // 장착 장비 로드
         APIResponse equipInfo = await APIRequest.RequestAsync(APIRequestType.ITEM, args);
         if (equipInfo.IsError) throw new WebException("API Request Failed! " + equipInfo.ResponseType);
-        
+
         cInfo.Items.Clear();
         HashSet<string> itemHashes = new HashSet<string>();
         for (int idx = 1; idx <= 3; idx++)
@@ -42,19 +42,20 @@ public class CharacterInfo
                 cInfo.Items.Add(item);
             }
         }
+
         cInfo.Items.Add(MapleItem.Parse(equipInfo.JsonData!["title"]!.AsObject()));
-        
+
         // 심볼 데이터 로드
         APIResponse symbolInfo = await APIRequest.RequestAsync(APIRequestType.SYMBOL, args);
         if (symbolInfo.IsError) throw new WebException("API Request Failed! " + symbolInfo.ResponseType);
-        
+
         cInfo.SymbolLevels.Clear();
         if (symbolInfo.JsonData!["symbol"] is JsonArray symbolData)
         {
             foreach (var value in symbolData)
             {
                 if (value is not JsonObject valueObject) continue;
-                
+
                 MapleSymbol.SymbolType symbolType = MapleSymbol.GetSymbolType(valueObject["symbol_name"]!.ToString());
                 if (symbolType == MapleSymbol.SymbolType.UNKNOWN) continue;
 
@@ -62,11 +63,11 @@ public class CharacterInfo
                 cInfo.SymbolLevels.Add(symbolType, level);
             }
         }
-        
+
         // 어빌 데이터 로드
         APIResponse abilityInfo = await APIRequest.RequestAsync(APIRequestType.ABILITY, args);
-        if(abilityInfo.IsError) throw new WebException("API Request Failed! " + abilityInfo.ResponseType);
-        
+        if (abilityInfo.IsError) throw new WebException("API Request Failed! " + abilityInfo.ResponseType);
+
         cInfo.AbilityValues.Clear();
         if (abilityInfo.JsonData!["ability_info"] is JsonArray abilityData)
         {
@@ -91,9 +92,28 @@ public class CharacterInfo
             }
         }
         
+        // 하이퍼 스탯 로드
+        APIResponse hyperStatInfo = await APIRequest.RequestAsync(APIRequestType.HYPER_STAT, args);
+        if (hyperStatInfo.IsError) throw new WebException("API Request Failed !" + hyperStatInfo.ResponseType);
+        
+        cInfo.HyperStatLevels.Clear();
+        int useHyperStatPreset =
+            int.TryParse(hyperStatInfo.JsonData!["use_preset_no"]!.ToString(), out int hsp) ? hsp : 1;
+        if (hyperStatInfo.JsonData[$"hyper_stat_preset_{useHyperStatPreset}"] is JsonArray hyperStats)
+        {
+            foreach (var stat in hyperStats)
+            {
+                if (stat is not JsonObject statObject) continue;
+                MapleHyperStat.StatType statType = MapleHyperStat.GetStatType(statObject["stat_type"]!.ToString());
+                if (statType == MapleHyperStat.StatType.UNKNOWN) continue;
+                if (!int.TryParse(statObject["stat_level"]!.ToString(), out int statLevel)) continue;
+                if (!cInfo.HyperStatLevels.TryAdd(statType, statLevel)) cInfo.HyperStatLevels[statType] = statLevel;
+            }
+        }
+
         return cInfo;
     }
-    
+
     private CharacterInfo()
     {
         Items = new List<MapleItem>();
@@ -105,6 +125,7 @@ public class CharacterInfo
         PlayerImage = Array.Empty<byte>();
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
+        HyperStatLevels = new Dictionary<MapleHyperStat.StatType, int>();
     }
     
     #region PlayerData
@@ -121,6 +142,7 @@ public class CharacterInfo
     public List<MapleItem> Items { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
+    public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
     #endregion
     
 

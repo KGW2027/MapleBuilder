@@ -20,8 +20,11 @@ public partial class HyperStatSlot : UserControl
     #region Public Properties
 
     private int befLevel;
-    private int Level => int.Parse(ctLevelInput.Text);
     private int BeforeLevel => befLevel;
+    public int Level {
+        get => int.Parse(ctLevelInput.Text);
+        set => ctLevelInput.Text = value.ToString();
+    }
 
     public double Delta => GetDelta();
     #endregion
@@ -89,7 +92,7 @@ public partial class HyperStatSlot : UserControl
             MapleHyperStat.StatType.LUK => 30,
             MapleHyperStat.StatType.HP => 2,
             MapleHyperStat.StatType.MP => 2,
-            MapleHyperStat.StatType.DF_TF_PP => level <= 10 ? 10 : 0,
+            MapleHyperStat.StatType.DF_TT_PP => level <= 10 ? 10 : 0,
             MapleHyperStat.StatType.CRITCIAL_CHANCE => level > 5 ? 2 : 1,
             MapleHyperStat.StatType.CRITICAL_DAMAGE => 1,
             MapleHyperStat.StatType.IGNORE_ARMOR => 3,

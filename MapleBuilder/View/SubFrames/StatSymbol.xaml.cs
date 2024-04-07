@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 using MapleBuilder.View.SubObjects;
@@ -19,6 +20,7 @@ public partial class StatSymbol : UserControl
     private readonly List<ComboBox>? abilityComboBoxes;
     private readonly List<Slider>? abilitySliders;
     private readonly List<CheckBox?> abilityCheckboxes;
+    private List<HyperStatSlot> hyperStatSlots;
     private readonly List<MapleAbility.AbilityType> abilityTypes;
     private readonly Dictionary<string, MapleAbility.AbilityType> displayToAbilityType;
     private static bool syncLock = false;
@@ -108,6 +110,20 @@ public partial class StatSymbol : UserControl
             }
         });
     }
+    
+    public static void InitHyperStat(Dictionary<MapleHyperStat.StatType, int> charInfoHyperStatLevels)
+    {
+        selfInstnace!.Dispatcher.BeginInvoke(() =>
+        {
+            foreach (var pair in charInfoHyperStatLevels)
+            {
+                foreach (var hsSlot in selfInstnace.hyperStatSlots.Where(hsSlot => hsSlot.StatType == pair.Key))
+                {
+                    hsSlot.Level = pair.Value;
+                }
+            }
+        });
+    }
 
     private Dictionary<MapleSymbol.SymbolType, UIElement> symbolLevels;
     
@@ -157,6 +173,9 @@ public partial class StatSymbol : UserControl
 
         ApplyAbility();
 
+        hyperStatSlots = new List<HyperStatSlot>();
+        foreach(var child in ParentGrid.GetChildren<HyperStatSlot>())
+            hyperStatSlots.Add(child);
 
         new Thread(LoadSymbolIcons).Start();
     }

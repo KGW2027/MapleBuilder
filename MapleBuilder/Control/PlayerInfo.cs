@@ -484,11 +484,12 @@ public class PlayerInfo
                 AttackValue += (int) delta;
                 break;
             case MapleHyperStat.StatType.MP:
-            case MapleHyperStat.StatType.DF_TF_PP:
+            case MapleHyperStat.StatType.DF_TT_PP:
             case MapleHyperStat.StatType.EXP_UP:
             case MapleHyperStat.StatType.ARCANE_FORCE:
                 break;
         }
+        BuilderDataContainer.RefreshAll();
     }
     
     #endregion
