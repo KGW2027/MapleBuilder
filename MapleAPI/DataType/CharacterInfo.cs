@@ -136,7 +136,30 @@ public class CharacterInfo
                 cInfo.UnionInfo.Add(new MapleUnion.UnionBlock {blockPositions = claims, classType = blockClass, raiderRank = blockRank});
             }
         }
+        
+        // 유니온 아티팩트 로드
+        APIResponse unionArtifactInfo = await APIRequest.RequestAsync(APIRequestType.UNION_ARTIFACT, args);
+        if (unionArtifactInfo.IsError) throw new WebException("API Request Failed !" + unionArtifactInfo.ResponseType);
+        
+        cInfo.ArtifactLevels.Clear();
+        if (unionArtifactInfo.JsonData!["union_artifact_crystal"] is JsonArray crystals)
+        {
+            foreach (var artifactCrystal in crystals)
+            {
+                if (artifactCrystal is not JsonObject crystal) continue;
 
+                int level = int.Parse(crystal["level"]!.ToString());
+                for (int idx = 1; idx < 3; idx++)
+                {
+                    MapleArtifact.ArtifactType artifactType =
+                        MapleArtifact.GetArtifactType(crystal[$"crystal_option_name_{idx}"]!.ToString());
+                    cInfo.ArtifactLevels.TryAdd(artifactType, 0);
+                    cInfo.ArtifactLevels[artifactType] = Math.Min(cInfo.ArtifactLevels[artifactType] + level, 10);
+                }
+            }
+        }
+
+            
         return cInfo;
     }
 
@@ -171,6 +194,7 @@ public class CharacterInfo
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
     public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
+    public Dictionary<MapleArtifact.ArtifactType, int> ArtifactLevels { get; private set; }
     #endregion
     
 
