@@ -58,6 +58,10 @@ public class BuilderDataContainer
         StatSymbol.InitAbility(charInfo.AbilityValues);
         StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
         RenderOverview.Update(charInfo);
+        foreach (var unionInfo in charInfo.UnionInfo)
+        {
+            UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
+        }
         RefreshAll();
     }
 

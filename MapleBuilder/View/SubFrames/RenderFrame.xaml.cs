@@ -23,7 +23,7 @@ public partial class RenderFrame : UserControl
             {RenderScreenType.STAT_SYMBOL, new List<UIElement> {ctCharacterTop, ctStatSymbol}},
             {RenderScreenType.SPECIAL_EQUIPS, new List<UIElement> {ctCharacterTop}},
             {RenderScreenType.CASH_EQUIPS, new List<UIElement> {ctCharacterTop}},
-            {RenderScreenType.UNION, new List<UIElement> {}},
+            {RenderScreenType.UNION, new List<UIElement> {ctUnionOverview}},
             {RenderScreenType.ETC, new List<UIElement> {}},
         };
         

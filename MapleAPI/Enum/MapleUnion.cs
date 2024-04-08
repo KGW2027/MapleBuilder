@@ -43,6 +43,35 @@ public class MapleUnion
         OTHER
     }
 
+    public static string GetRaiderEffectString(RaiderEffectType effectType)
+    {
+        return effectType switch
+        {
+            RaiderEffectType.INT => "INT %d 증가",
+            RaiderEffectType.STR => "STR %d 증가",
+            RaiderEffectType.LUK => "LUK %d 증가",
+            RaiderEffectType.DEX => "DEX %d 증가",
+            RaiderEffectType.MAX_HP => "최대 HP %d 증가",
+            RaiderEffectType.BOSS_DAMAGE => "보스 공격 시 데미지 %d 증가",
+            RaiderEffectType.MAX_HP_RATE => "최대 HP %d% 증가",
+            RaiderEffectType.IGNORE_ARMOR => "방어율 무시 %d% 증가",
+            RaiderEffectType.IMMUNE => "상태 이상 내성 %d 증가",
+            RaiderEffectType.STR_DEX_LUK => "STR, DEX, LUK %d 증가",
+            RaiderEffectType.MAX_MP_RATE => "최대 MP %d% 증가",
+            RaiderEffectType.ATTACK_MAGIC_POWER => "공격력/마력 %d 증가",
+            RaiderEffectType.MESO_DROP => "메소 획득량 %d 증가",
+            RaiderEffectType.EXP_UP => "경험치 획득량 %d 증가",
+            RaiderEffectType.CRIT_CHANCE => "크리티컬 확률 %d% 증가",
+            RaiderEffectType.BUFF_DURATION => "버프 지속 시간 %d% 증가",
+            RaiderEffectType.SUMMON_DURATION => "소환수 지속 시간 %d% 증가",
+            RaiderEffectType.CRIT_DAMAGE => "크리티컬 데미지 %d% 증가",
+            RaiderEffectType.CHANCE_DAMAGE => "공격 시 20% 확률로 데미지 %d% 증가",
+            RaiderEffectType.COOLDOWN_DECREASE_RATE => "스킬 재사용 대기시간 %d%감소 (1초 미만으로 줄어들지 않음)",
+            RaiderEffectType.OTHER => "효과 없음",
+            _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
+        };
+    }
+
     public static int GetRaiderEffectValue(RaiderEffectType effectType, RaiderRank rank)
     {
         switch (effectType)
@@ -127,8 +156,10 @@ public class MapleUnion
                     RaiderRank.B => 4,
                     _ => 0
                 };
-            case RaiderEffectType.BUFF_DURATION:
             case RaiderEffectType.ATTACK_MAGIC_POWER:
+                if (rank == RaiderRank.SSS) rank = RaiderRank.SS;
+                goto case RaiderEffectType.BUFF_DURATION;
+            case RaiderEffectType.BUFF_DURATION:
                 return rank switch
                 {
                     RaiderRank.SSS => 25,

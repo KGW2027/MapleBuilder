@@ -494,5 +494,92 @@ public class PlayerInfo
     
     #endregion
     
+    #region 유니온 공격대 효과 적용
+
+    private MaplePotentialOption.OptionType GetOptionTypeByRaiderEffectType(MapleUnion.RaiderEffectType effectType)
+    {
+        return effectType switch
+        {
+            MapleUnion.RaiderEffectType.INT => MaplePotentialOption.OptionType.INT,
+            MapleUnion.RaiderEffectType.STR => MaplePotentialOption.OptionType.STR,
+            MapleUnion.RaiderEffectType.LUK => MaplePotentialOption.OptionType.LUK,
+            MapleUnion.RaiderEffectType.DEX => MaplePotentialOption.OptionType.DEX,
+            MapleUnion.RaiderEffectType.MAX_HP => MaplePotentialOption.OptionType.MAX_HP,
+            MapleUnion.RaiderEffectType.MAX_HP_RATE => MaplePotentialOption.OptionType.MAX_HP_RATE,
+            _ => MaplePotentialOption.OptionType.OTHER
+        };
+    }
+    
+    public void ApplyUnionRaider(MapleUnion.RaiderEffectType effectType, int delta)
+    {
+        MaplePotentialOption.OptionType statChecker = GetOptionTypeByRaiderEffectType(effectType);
+        if (statChecker == MainStat.Stat) MainStat.FlatValue += delta;
+        else if (statChecker == MainStat.StatRate) MainStat.RateValue += delta;
+        else if (statChecker == SubStat.Stat) SubStat.FlatValue += delta;
+        else if (statChecker == SubStat2.Stat) SubStat2.FlatValue += delta;
+        
+        if(statChecker == MaplePotentialOption.OptionType.OTHER)
+        {
+            switch (effectType)
+            {
+                case MapleUnion.RaiderEffectType.BOSS_DAMAGE:
+                    BossDamage += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.IGNORE_ARMOR:
+                    IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, delta, delta >= 0);
+                    break;
+                case MapleUnion.RaiderEffectType.IMMUNE:
+                    Immune += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.STR_DEX_LUK:
+                    MaplePotentialOption.OptionType[] options =
+                    {
+                        MaplePotentialOption.OptionType.STR, MaplePotentialOption.OptionType.DEX,
+                        MaplePotentialOption.OptionType.LUK
+                    };
+                    if (options.Contains(MainStat.Stat)) MainStat.FlatValue += delta;
+                    if (options.Contains(SubStat.Stat)) SubStat.FlatValue += delta;
+                    if (options.Contains(SubStat2.Stat)) SubStat2.FlatValue += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.ATTACK_MAGIC_POWER:
+                    AttackValue += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.MESO_DROP:
+                    MesoDropIncrease += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.CRIT_CHANCE:
+                    CriticalChance += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.BUFF_DURATION:
+                    BuffDurationIncrease += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.SUMMON_DURATION:
+                    SummonDurationIncrease += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.CRIT_DAMAGE:
+                    CriticalDamage += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.COOLDOWN_DECREASE_RATE:
+                    CooldownDecreaseRate += delta;
+                    break;
+                case MapleUnion.RaiderEffectType.OTHER:
+                case MapleUnion.RaiderEffectType.INT:
+                case MapleUnion.RaiderEffectType.STR:
+                case MapleUnion.RaiderEffectType.LUK:
+                case MapleUnion.RaiderEffectType.DEX:
+                case MapleUnion.RaiderEffectType.MAX_HP:
+                case MapleUnion.RaiderEffectType.MAX_HP_RATE:
+                case MapleUnion.RaiderEffectType.MAX_MP_RATE:
+                case MapleUnion.RaiderEffectType.EXP_UP:
+                case MapleUnion.RaiderEffectType.CHANCE_DAMAGE:
+                default:
+                    break;
+            }
+        }
+        Summarize.DispatchSummary();
+    }
+    
+    #endregion
+    
     // TODO : 스텟 적용 테스트 - 기본수치 4422, 실제수치 4477, 차이 125 - 아르카나세트 올스텟 15
 }

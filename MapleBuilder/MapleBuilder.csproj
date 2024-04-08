@@ -16,6 +16,11 @@
 
     <ItemGroup>
         <Resource Include="Resources\Font\*.ttf"/>
+        <Resource Include="Resources\Image\*.png"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Resources\Image\" />
     </ItemGroup>
     
 </Project>

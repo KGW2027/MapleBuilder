@@ -67,6 +67,61 @@ public class MapleClass
         {MaplePotentialOption.OptionType.MAX_HP, MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER};
     private static readonly MaplePotentialOption.OptionType[] NONE =
         {MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER};
+
+    public static string GetMapleClassString(ClassType classType)
+    {
+        return classType switch
+        {
+            ClassType.HERO => "히어로",
+            ClassType.PALADIN => "팔라딘",
+            ClassType.DARK_KNIGHT => "다크나이트",
+            ClassType.SOUL_MASTER => "소울마스터",
+            ClassType.MIKHAIL => "미하일",
+            ClassType.BLASTER => "블래스터",
+            ClassType.DEMON_SLAYER => "데몬슬레이어",
+            ClassType.DEMON_AVENGER => "데몬어벤저",
+            ClassType.ARAN => "아란",
+            ClassType.KAISER => "카이저",
+            ClassType.ADEL => "아델",
+            ClassType.ZERO => "제로",
+            ClassType.ARCMAGE_FP => "아크메이지(불,독)",
+            ClassType.ARCMAGE_TC => "아크메이지(썬,콜)",
+            ClassType.BISHOP => "비숍",
+            ClassType.FLAME_WIZARD => "플레임위자드",
+            ClassType.BATTLE_MAGE => "배틀메이지",
+            ClassType.EVAN => "에반",
+            ClassType.LUMINUS => "루미너스",
+            ClassType.ILLIUM => "일리움",
+            ClassType.LALA => "라라",
+            ClassType.KINESIS => "키네시스",
+            ClassType.BOW_MASTER => "보우마스터",
+            ClassType.SINGOONG => "신궁",
+            ClassType.PATH_FINDER => "패스파인더",
+            ClassType.WIND_BREAKER => "윈드브레이커",
+            ClassType.WILD_HUNTER => "와일드헌터",
+            ClassType.MERCEDES => "메르세데스",
+            ClassType.KAIN => "카인",
+            ClassType.NIGHTLOAD => "나이트로드",
+            ClassType.SHADOWER => "섀도어",
+            ClassType.DUALBLADE => "듀얼블레이더",
+            ClassType.NIGHTWALKER => "나이트워커",
+            ClassType.XENON => "제논",
+            ClassType.PHANTOM => "팬텀",
+            ClassType.KADENA => "카데나",
+            ClassType.KALI => "칼리",
+            ClassType.HOYOUNG => "호영",
+            ClassType.VAIPER => "바이퍼",
+            ClassType.CAPTAIN => "캡틴",
+            ClassType.CANONSHOOTER => "캐논슈터",
+            ClassType.STRIKER => "스트라이커",
+            ClassType.MECHANIC => "메카닉",
+            ClassType.EUNWALL => "은월",
+            ClassType.ANGELICBUSTER => "엔젤릭버스터",
+            ClassType.ARC => "아크",
+            ClassType.NONE => "메이플스토리 M",
+            _ => "알 수 없음"
+        };
+    }
     
     public static ClassType GetMapleClass(string className)
     {

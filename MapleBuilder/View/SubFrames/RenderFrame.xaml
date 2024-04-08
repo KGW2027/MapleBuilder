@@ -31,5 +31,8 @@
         <!-- Top bar -->
         <subObjects:OverviewTopbar x:Name="ctCharacterTop" Margin="12, 12, 0, 0" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
         
+        <!-- Union Display -->
+        <local:UnionFrame x:Name="ctUnionOverview" Margin="12, 12, 0, 0" Padding="0, 0, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
+        
     </Grid>
 </UserControl>
