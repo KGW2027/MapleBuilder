@@ -56,10 +56,10 @@ public class PlayerInfo
         SubStat = new StatInfo(subStat);
         SubStat2 = new StatInfo(subStat2);
 
-        AttackType = MainStat.Stat == MaplePotentialOption.OptionType.INT
+        AttackType = mainStat == MaplePotentialOption.OptionType.INT
             ? MaplePotentialOption.OptionType.MAGIC
             : MaplePotentialOption.OptionType.ATTACK;
-        AttackRateType = MainStat.Stat == MaplePotentialOption.OptionType.INT
+        AttackRateType = mainStat == MaplePotentialOption.OptionType.INT
             ? MaplePotentialOption.OptionType.MAGIC_RATE
             : MaplePotentialOption.OptionType.ATTACK_RATE;
         AttackValue = 0;
@@ -254,6 +254,7 @@ public class PlayerInfo
         SubStat.RateValue += itemOption.AllStatRate * sign;
         SubStat2.RateValue += itemOption.AllStatRate * sign;
 
+        AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? itemOption.AttackPower : itemOption.MagicPower;
         BossDamage += itemOption.BossDamage;
         IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, itemOption.IgnoreArmor, isAdd);
         
@@ -577,6 +578,19 @@ public class PlayerInfo
             }
         }
         Summarize.DispatchSummary();
+    }
+    
+    #endregion
+    
+    #region
+
+    public void ApplyPetItem(List<MaplePetItem> petItems)
+    {
+        foreach (MaplePetItem petItem in petItems)
+        {
+            Console.WriteLine($"[{petItem.Name}] 공 : {petItem.Attack} / 마 : {petItem.Magic}");
+            AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? petItem.Attack : petItem.Magic;
+        }
     }
     
     #endregion

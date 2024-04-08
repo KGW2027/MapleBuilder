@@ -55,13 +55,12 @@ public class BuilderDataContainer
         MaplePotentialOption.OptionType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
+        PlayerStatus.ApplyPetItem(charInfo.PetInfo);
         StatSymbol.InitAbility(charInfo.AbilityValues);
         StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
         RenderOverview.Update(charInfo);
         foreach (var unionInfo in charInfo.UnionInfo)
-        {
             UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
-        }
         RefreshAll();
     }
 
