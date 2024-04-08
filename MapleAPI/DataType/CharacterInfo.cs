@@ -164,7 +164,7 @@ public class CharacterInfo
         if (petInfo.IsError) throw new WebException("API Request Failed !" + petInfo.ResponseType);
         
         cInfo.PetInfo.Clear();
-        for (int index = 1; index < 3; index++)
+        for (int index = 1; index <= 3; index++)
         {
             if (petInfo.JsonData![$"pet_{index}_equipment"] is not JsonObject petEquip) continue;
             JsonNode? petTypeNode = petInfo.JsonData![$"pet_{index}_pet_type"];

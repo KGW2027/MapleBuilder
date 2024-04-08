@@ -87,8 +87,9 @@ public class MapleItem
         CachedStarforce = new Dictionary<int, MapleOption>();
         StarForce = 0;
         
-        foreach (string line in desc.Split("\n"))
+        foreach (string lineText in desc.Split("\n"))
         {
+            string line = lineText.Trim().Replace("- ", "");
             foreach (string sep in line.Split(","))
             {
                 var trim = sep.Trim();
