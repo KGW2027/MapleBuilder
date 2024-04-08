@@ -7,6 +7,7 @@ public class MaplePetItem : MapleItem
 {
     public MaplePetItem(JsonObject data, MaplePetType.PetType petType)
     {
+        this.data = data;
         IsEmpty = data["item_name"] == null;
         if (IsEmpty) return;
 

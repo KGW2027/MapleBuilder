@@ -122,15 +122,15 @@ public class CharacterInfo
             {
                 if (unionNode is not JsonObject unionBlock) continue;
                 
-                MapleClass.ClassType blockClass = MapleClass.GetMapleClass(unionBlocks["block_class"]!.ToString());
+                MapleClass.ClassType blockClass = MapleClass.GetMapleClass(unionBlock["block_class"]!.ToString());
                 MapleUnion.RaiderRank blockRank =
-                    MapleUnion.GetRaiderRank(int.Parse(unionBlocks["block_level"]!.ToString()), blockClass);
-                byte[][] claims = new byte[(int) blockRank][];
+                    MapleUnion.GetRaiderRank(int.Parse(unionBlock["block_level"]!.ToString()), blockClass);
+                sbyte[][] claims = new sbyte[(int) blockRank][];
                 JsonArray unionClaims = unionBlock["block_position"]!.AsArray();
                 for (int idx = 0; idx < unionClaims.Count; idx++)
                 {
                     JsonObject claimVector = unionClaims[idx]!.AsObject();
-                    claims[idx] = new[] {byte.Parse(claimVector["x"]!.ToString()), byte.Parse(claimVector["y"]!.ToString())};
+                    claims[idx] = new[] {sbyte.Parse(claimVector["x"]!.ToString()), sbyte.Parse(claimVector["y"]!.ToString())};
                 }
                 
                 cInfo.UnionInfo.Add(new MapleUnion.UnionBlock {blockPositions = claims, classType = blockClass, raiderRank = blockRank});

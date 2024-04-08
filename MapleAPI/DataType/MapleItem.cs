@@ -9,7 +9,13 @@ namespace MapleAPI.DataType;
 public class MapleItem
 {
     private protected MapleItem()
-    { }
+    {
+        data = new JsonObject();
+        Name = "";
+        DisplayName = "";
+        Specials = new List<KeyValuePair<MaplePotentialOption.OptionType, int>>();
+        CachedStarforce = new Dictionary<int, MapleOption>();
+    }
 
     /// <summary>
     /// Nexon API에서 가져온 JSON 객체를 토대로 구성한 MapleItem 객체
@@ -131,8 +137,8 @@ public class MapleItem
     }
     
 
-    private readonly JsonObject data;
-    public MapleEquipType.EquipType EquipType { get; private set; }
+    private protected JsonObject data;
+    public MapleEquipType.EquipType EquipType { get; private protected set; }
     public string Name { get; private protected set; }
     public string DisplayName { get; set; }
     public int ItemLevel { get; private set; }

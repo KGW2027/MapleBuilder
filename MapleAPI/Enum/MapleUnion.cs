@@ -8,13 +8,13 @@ public class MapleUnion
     {
         public MapleClass.ClassType classType;
         public RaiderRank raiderRank;
-        public byte[][] blockPositions;
+        public sbyte[][] blockPositions;
 
         public UnionBlock()
         {
             classType = MapleClass.ClassType.NONE;
             raiderRank = RaiderRank.NONE;
-            blockPositions = Array.Empty<byte[]>();
+            blockPositions = Array.Empty<sbyte[]>();
         }
     }
     
@@ -152,7 +152,6 @@ public class MapleUnion
             default:
                 return 0;
         }
-        return 0;
     }
 
     public static RaiderEffectType GetRaiderEffectByClass(MapleClass.ClassType classType)
@@ -263,6 +262,18 @@ public class MapleUnion
 
     public static RaiderRank GetRaiderRank(int level, MapleClass.ClassType classType = MapleClass.ClassType.NONE)
     {
+        if (classType == MapleClass.ClassType.NONE) // 메이플스토리 M
+        {
+            return level switch
+            {
+                >= 120 => RaiderRank.SS,
+                >= 70 => RaiderRank.S,
+                >= 50 => RaiderRank.A,
+                >= 30 => RaiderRank.B,
+                _ => RaiderRank.NONE
+            };
+        }
+        
         if (classType == MapleClass.ClassType.ZERO)
         {
             return level switch
@@ -331,16 +342,16 @@ public class MapleUnion
         new byte[]{17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 14}, // Y = -9
     };
 
-    public static ClaimType GetOptionBySlot(byte x, byte y)
+    public static ClaimType GetOptionBySlot(sbyte x, sbyte y)
     {
         int rx = x + 11, ry = Math.Abs(y - 10);
         return (ClaimType) UnionField[ry][rx];
     }
 
-    public static Dictionary<ClaimType, int> GetUnionOption(byte[][] claims)
+    public static Dictionary<ClaimType, int> GetUnionOption(sbyte[][] claims)
     {
         Dictionary<ClaimType, int> claimCount = new Dictionary<ClaimType, int>();
-        foreach (byte[] claim in claims)
+        foreach (sbyte[] claim in claims)
         {
             ClaimType ct = GetOptionBySlot(claim[0], claim[1]);
             int c = claimCount.GetValueOrDefault(ct, 0) + 1;
