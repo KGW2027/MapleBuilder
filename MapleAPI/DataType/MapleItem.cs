@@ -8,6 +8,9 @@ namespace MapleAPI.DataType;
 
 public class MapleItem
 {
+    private protected MapleItem()
+    { }
+
     /// <summary>
     /// Nexon API에서 가져온 JSON 객체를 토대로 구성한 MapleItem 객체
     /// </summary>
@@ -130,11 +133,11 @@ public class MapleItem
 
     private readonly JsonObject data;
     public MapleEquipType.EquipType EquipType { get; private set; }
-    public string Name { get; private set; }
+    public string Name { get; private protected set; }
     public string DisplayName { get; set; }
     public int ItemLevel { get; private set; }
     public int SpecialRingLevel { get; private set; }
-    public int MaxUpgrade { get; private set; }
+    public int MaxUpgrade { get; private protected set; }
     public MapleOption? ExceptionalOption { get; private set; }
     public MapleOption? BaseOption { get; private set; }
     public MapleOption? AddOption { get; private set; }

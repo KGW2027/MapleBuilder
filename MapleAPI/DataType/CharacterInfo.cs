@@ -158,6 +158,22 @@ public class CharacterInfo
                 }
             }
         }
+        
+        // 펫장비 로드
+        APIResponse petInfo = await APIRequest.RequestAsync(APIRequestType.PET, args);
+        if (petInfo.IsError) throw new WebException("API Request Failed !" + petInfo.ResponseType);
+        
+        cInfo.PetInfo.Clear();
+        for (int index = 1; index < 3; index++)
+        {
+            if (petInfo.JsonData![$"pet_{index}_equipment"] is not JsonObject petEquip) continue;
+            JsonNode? petTypeNode = petInfo.JsonData![$"pet_{index}_pet_type"];
+            MaplePetType.PetType petType = petTypeNode == null
+                ? MaplePetType.PetType.OTHER
+                : MaplePetType.GetPetType(petTypeNode.ToString());
+            
+            cInfo.PetInfo.Add(new MaplePetItem(petEquip, petType));
+        }
 
             
         return cInfo;
@@ -176,6 +192,8 @@ public class CharacterInfo
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
         HyperStatLevels = new Dictionary<MapleHyperStat.StatType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
+        ArtifactLevels = new Dictionary<MapleArtifact.ArtifactType, int>();
+        PetInfo = new List<MaplePetItem>();
     }
     
     #region PlayerData
@@ -195,6 +213,7 @@ public class CharacterInfo
     public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public Dictionary<MapleArtifact.ArtifactType, int> ArtifactLevels { get; private set; }
+    public List<MaplePetItem> PetInfo { get; private set; }
     #endregion
     
 
