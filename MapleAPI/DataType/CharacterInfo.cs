@@ -183,6 +183,7 @@ public class CharacterInfo
             args.AddArg("character_skill_grade", grade);
             APIResponse skillInfo = await APIRequest.RequestAsync(APIRequestType.SKILL, args);
             if (skillInfo.IsError) throw new WebException("API Request Failed !" + skillInfo.ResponseType);
+            args.Remove("character_skill_grade");
 
             if (skillInfo.JsonData!["character_skill"] is not JsonArray skillList) continue;
 
@@ -194,7 +195,21 @@ public class CharacterInfo
                 cInfo.SkillData.TryAdd(skillName, skillLevel);
             }
         }
-
+        
+        // 캐시 착용 정보 로드
+        APIResponse cashInfo = await APIRequest.RequestAsync(APIRequestType.CASH_ITEM, args);
+        if (cashInfo.IsError) throw new WebException("API Request Failed !" + cashInfo.ResponseType);
+        
+        cInfo.CashItems.Clear();
+        if (cashInfo.JsonData!["cash_item_equipment_base"] is JsonArray cashItems)
+        {
+            foreach (var cashItemNode in cashItems)
+            {
+                if (cashItemNode is not JsonObject cashItemData) continue;
+                MapleCashItem cashItem = new MapleCashItem(cashItemData);
+                if(!cashItem.IsEmpty) cInfo.CashItems.Add(cashItem);
+            }
+        }
             
         return cInfo;
     }
@@ -216,6 +231,7 @@ public class CharacterInfo
         UnionInfo = new List<MapleUnion.UnionBlock>();
         ArtifactLevels = new Dictionary<MapleArtifact.ArtifactType, int>();
         PetInfo = new List<MaplePetItem>();
+        CashItems = new List<MapleCashItem>();
     }
     
     #region PlayerData
@@ -231,12 +247,13 @@ public class CharacterInfo
     
     #region SpecData
     public List<MapleItem> Items { get; private set; }
+    public List<MaplePetItem> PetInfo { get; private set; }
+    public List<MapleCashItem> CashItems { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
     public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public Dictionary<MapleArtifact.ArtifactType, int> ArtifactLevels { get; private set; }
-    public List<MaplePetItem> PetInfo { get; private set; }
     #endregion
     
 
