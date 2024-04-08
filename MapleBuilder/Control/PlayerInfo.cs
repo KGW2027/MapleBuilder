@@ -125,8 +125,8 @@ public class PlayerInfo
     ///</summary>
     private double CalcIgnoreArmor(double baseValue, double additional, bool isAdd)
     {
-        double cvtBase = (100 - baseValue) / 100.0;
-        double cvtAdd = (100 - additional) / 100.0;
+        double cvtBase = (100 - Math.Abs(baseValue)) / 100.0;
+        double cvtAdd = (100 -  Math.Abs(additional)) / 100.0;
         return isAdd ? (1 - cvtBase * cvtAdd) * 100 : (1 - cvtBase / cvtAdd) * 100;
     }
     
