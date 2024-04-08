@@ -110,6 +110,32 @@ public class CharacterInfo
                 if (!cInfo.HyperStatLevels.TryAdd(statType, statLevel)) cInfo.HyperStatLevels[statType] = statLevel;
             }
         }
+        
+        // 유니온 공격대 로드
+        APIResponse unionRaiderInfo = await APIRequest.RequestAsync(APIRequestType.UNION_RADIER, args);
+        if (unionRaiderInfo.IsError) throw new WebException("API Request Failed !" + unionRaiderInfo.ResponseType);
+
+        cInfo.UnionInfo.Clear();
+        if (unionRaiderInfo.JsonData!["union_block"] is JsonArray unionBlocks)
+        {
+            foreach (var unionNode in unionBlocks)
+            {
+                if (unionNode is not JsonObject unionBlock) continue;
+                
+                MapleClass.ClassType blockClass = MapleClass.GetMapleClass(unionBlocks["block_class"]!.ToString());
+                MapleUnion.RaiderRank blockRank =
+                    MapleUnion.GetRaiderRank(int.Parse(unionBlocks["block_level"]!.ToString()), blockClass);
+                byte[][] claims = new byte[(int) blockRank][];
+                JsonArray unionClaims = unionBlock["block_position"]!.AsArray();
+                for (int idx = 0; idx < unionClaims.Count; idx++)
+                {
+                    JsonObject claimVector = unionClaims[idx]!.AsObject();
+                    claims[idx] = new[] {byte.Parse(claimVector["x"]!.ToString()), byte.Parse(claimVector["y"]!.ToString())};
+                }
+                
+                cInfo.UnionInfo.Add(new MapleUnion.UnionBlock {blockPositions = claims, classType = blockClass, raiderRank = blockRank});
+            }
+        }
 
         return cInfo;
     }
@@ -126,6 +152,7 @@ public class CharacterInfo
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
         HyperStatLevels = new Dictionary<MapleHyperStat.StatType, int>();
+        UnionInfo = new List<MapleUnion.UnionBlock>();
     }
     
     #region PlayerData
@@ -143,6 +170,7 @@ public class CharacterInfo
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
     public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
+    public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     #endregion
     
 
