@@ -174,6 +174,26 @@ public class CharacterInfo
             
             cInfo.PetInfo.Add(new MaplePetItem(petEquip, petType));
         }
+        
+        // 스킬 정보 로드
+        string[] skillGrade = {"1", "1.5", "2", "2.5", "3", "4", "hyperpassive", "hyperactive", "5", "6"};
+        cInfo.SkillData.Clear();
+        foreach (string grade in skillGrade)
+        {
+            args.AddArg("character_skill_grade", grade);
+            APIResponse skillInfo = await APIRequest.RequestAsync(APIRequestType.SKILL, args);
+            if (skillInfo.IsError) throw new WebException("API Request Failed !" + skillInfo.ResponseType);
+
+            if (skillInfo.JsonData!["character_skill"] is not JsonArray skillList) continue;
+
+            foreach (var skillNode in skillList)
+            {
+                if (skillNode is not JsonObject skillData || skillData["skill_name"] == null) continue;
+                string skillName = skillData["skill_name"]!.ToString();
+                int skillLevel = int.Parse(skillData["skill_level"]!.ToString());
+                cInfo.SkillData.TryAdd(skillName, skillLevel);
+            }
+        }
 
             
         return cInfo;
@@ -188,6 +208,8 @@ public class CharacterInfo
         UserName = "";
         WorldName = "";
         PlayerImage = Array.Empty<byte>();
+        SkillData = new Dictionary<string, int>();
+        
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
         HyperStatLevels = new Dictionary<MapleHyperStat.StatType, int>();
@@ -204,6 +226,7 @@ public class CharacterInfo
     public string WorldName { get; private set; }
     public string GuildName { get; private set; }
     public byte[] PlayerImage { get; private set; }
+    public Dictionary<string, int> SkillData { get; private set; }
     #endregion
     
     #region SpecData

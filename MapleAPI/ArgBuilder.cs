@@ -9,7 +9,13 @@ public class ArgBuilder : Dictionary<string, string>
 
     public ArgBuilder AddArg(string key, string val)
     {
-        Add(key, val);
+        if (!TryAdd(key, val)) this[key] = val;
+        return this;
+    }
+
+    public ArgBuilder RemoveArg(string key)
+    {
+        if (ContainsKey(key)) Remove(key);
         return this;
     }
 
