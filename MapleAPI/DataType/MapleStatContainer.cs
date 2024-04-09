@@ -48,7 +48,9 @@ public class MapleStatContainer
         set
         {
             statContainer.TryAdd(type, 0);
-            statContainer[type] = value;
+            if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                statContainer[type] = ApplyMultipleCalc(statContainer[type], value - statContainer[type]);
+            else statContainer[type] = value;
         }
     }
 
@@ -126,13 +128,10 @@ public class MapleStatContainer
             subStatType = lhs.subStatType,
             subStat2Type = lhs.subStat2Type
         };
+
         foreach (var pair in lhs.statContainer)
         {
-            msc.statContainer.TryAdd(pair.Key, 0);
-            if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
-                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], pair.Value);
-            else
-                msc.statContainer[pair.Key] += pair.Value;
+            msc.statContainer.TryAdd(pair.Key, pair.Value);
         }
         foreach (var pair in rhs.statContainer)
         {
@@ -157,11 +156,7 @@ public class MapleStatContainer
         
         foreach (var pair in lhs.statContainer)
         {
-            msc.statContainer.TryAdd(pair.Key, 0);
-            if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
-                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], pair.Value);
-            else
-                msc.statContainer[pair.Key] += pair.Value;
+            msc.statContainer.TryAdd(pair.Key, pair.Value);
         }
         foreach (var pair in rhs.statContainer)
         {
