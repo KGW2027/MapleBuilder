@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MapleAPI.DataType;
+using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.MapleData;
 using MapleBuilder.View.SubFrames;
@@ -101,6 +102,7 @@ public class PlayerInfo
     public double CriticalDamage { get; private set; }
     public double IgnoreImmune { get; private set; }
     
+    public MapleStatContainer PlayerStat { get; private set; }
     public SetEffect SetEffects { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> LastSymbols;
     public Dictionary< MapleStatus.StatusType, int> LastAbilities;
@@ -119,37 +121,37 @@ public class PlayerInfo
     ///<summary>
     ///    장비 아이템의 기본 스텟, 작, 추옵, 익셉셔널 정보를 가져옵니다.
     ///</summary>
-    private MapleOption GetOption(MapleItem item)
-    {
-        MapleOption option = new MapleOption();
-        if (item.BaseOption != null) option += item.BaseOption;
-        if (item.AddOption != null) option += item.AddOption;
-        if (item.EtcOption != null) option += item.EtcOption;
-        if (item.ExceptionalOption != null) option += item.ExceptionalOption;
-        if (item.StarforceOption != null) option += item.StarforceOption;
-        return option;
-    }
+    // private MapleOption GetOption(MapleItem item)
+    // {
+    //     MapleOption option = new MapleOption();
+    //     if (item.BaseOption != null) option += item.BaseOption;
+    //     if (item.AddOption != null) option += item.AddOption;
+    //     if (item.EtcOption != null) option += item.EtcOption;
+    //     if (item.ExceptionalOption != null) option += item.ExceptionalOption;
+    //     if (item.StarforceOption != null) option += item.StarforceOption;
+    //     return option;
+    // }
     
     ///<summary>
     ///    장비 정보에서 원하는 스텟에 해당하는 값을 추출합니다.
     ///</summary>
-    private int GetStatFromOption(MapleOption option,  MapleStatus.StatusType stat)
-    {
-        return stat switch
-        {
-            MapleStatus.StatusType.STR => option.Str,
-            MapleStatus.StatusType.DEX => option.Dex,
-            MapleStatus.StatusType.INT => option.Int,
-            MapleStatus.StatusType.LUK => option.Luk,
-            MapleStatus.StatusType.HP => option.MaxHp,
-            _ => 0
-        };
-    }
+    // private int GetStatFromOption(MapleOption option,  MapleStatus.StatusType stat)
+    // {
+    //     return stat switch
+    //     {
+    //         MapleStatus.StatusType.STR => option.Str,
+    //         MapleStatus.StatusType.DEX => option.Dex,
+    //         MapleStatus.StatusType.INT => option.Int,
+    //         MapleStatus.StatusType.LUK => option.Luk,
+    //         MapleStatus.StatusType.HP => option.MaxHp,
+    //         _ => 0
+    //     };
+    // }
     
     ///<summary>
     ///    잠재능력, 에디셔널 잠재능력을 현재 스텟에 적용합니다.
     ///</summary>
-    private void ApplyPotential(KeyValuePair< MapleStatus.StatusType, int>[] potential, bool isAdd = true)
+    private void ApplyPotential(KeyValuePair<MapleStatus.StatusType, int>[] potential, bool isAdd = true)
     {
         int sign = isAdd ? 1 : -1;
 
@@ -207,41 +209,43 @@ public class PlayerInfo
     ///<summary>
     ///    MapleOption 객체의 정보를 현재 스텟에 적용하는 것으로, 세트 아이템 효과 적용에 사용합니다.
     ///</summary>
-    private void ApplyMapleOption(MapleOption option)
-    {
-        MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat);
-        SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat);
-        SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat);
-        AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? option.AttackPower : option.MagicPower;
-        BossDamage += option.BossDamage;
-        Damage += option.Damage;
-        CommonDamage += option.CommonDamage;
-        CriticalDamage += option.CriticalDamage;
-        IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, option.IgnoreArmor, option.IgnoreArmor >= 0);
-        
-        if (MainStat.Stat ==  MapleStatus.StatusType.HP)
-            MainStat.RateValue += option.MaxHpRate;
-    }
+    // private void ApplyMapleOption(MapleOption option)
+    // {
+    //     MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat);
+    //     SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat);
+    //     SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat);
+    //     AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? option.AttackPower : option.MagicPower;
+    //     BossDamage += option.BossDamage;
+    //     Damage += option.Damage;
+    //     CommonDamage += option.CommonDamage;
+    //     CriticalDamage += option.CriticalDamage;
+    //     IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, option.IgnoreArmor, option.IgnoreArmor >= 0);
+    //     
+    //     if (MainStat.Stat ==  MapleStatus.StatusType.HP)
+    //         MainStat.RateValue += option.MaxHpRate;
+    // }
     
     ///<summary>
     ///    아이템 착용과 해제를 현재 스텟에 시뮬레이션합니다.
     ///</summary>
-    private void ApplyAddSub(MapleItem item, bool isAdd)
+    private void ApplyAddSub(MapleCommonItem item, bool isAdd)
     {
         int sign = isAdd ? 1 : -1;
         
         // 아이템 기본 효과 적용
-        MapleOption itemOption = GetOption(item);
-        MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat) * sign;
-        SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat) * sign;
-        SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat) * sign;
-        MainStat.RateValue += itemOption.AllStatRate * sign;
-        SubStat.RateValue += itemOption.AllStatRate * sign;
-        SubStat2.RateValue += itemOption.AllStatRate * sign;
-
-        AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? itemOption.AttackPower : itemOption.MagicPower;
-        BossDamage += itemOption.BossDamage;
-        IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, itemOption.IgnoreArmor, isAdd);
+        // MapleOption itemOption = GetOption(item);
+        // MainStat.BaseValue += GetStatFromOption(itemOption, MainStat.Stat) * sign;
+        // SubStat.BaseValue += GetStatFromOption(itemOption, SubStat.Stat) * sign;
+        // SubStat2.BaseValue += GetStatFromOption(itemOption, SubStat2.Stat) * sign;
+        // MainStat.RateValue += itemOption.AllStatRate * sign;
+        // SubStat.RateValue += itemOption.AllStatRate * sign;
+        // SubStat2.RateValue += itemOption.AllStatRate * sign;
+        // AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? itemOption.AttackPower : itemOption.MagicPower;
+        // BossDamage += itemOption.BossDamage;
+        // IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, itemOption.IgnoreArmor, isAdd);
+        
+        if (isAdd)  PlayerStat += item.Status;
+        else        PlayerStat -= item.Status;
         
         // 잠재능력 적용
         if (item.Potential != null)
@@ -251,21 +255,21 @@ public class PlayerInfo
         }
         
         // 칭호 효과 적용
-        ApplyPotential(item.Specials.ToArray(), isAdd);
+        // ApplyPotential(item.Specials.ToArray(), isAdd);
         
         // 세트 효과 적용
-        MapleOption setEffectPrev = SetEffects.GetSetOptions();
+        MapleStatContainer setEffectPrev = SetEffects.GetSetOptions();
         if(isAdd)
             SetEffects.Add(item);
         else
             SetEffects.Sub(item);
-        ApplyMapleOption(SetEffects.GetSetOptions() - setEffectPrev);
+        PlayerStat += SetEffects.GetSetOptions() - setEffectPrev;
     }
     
     ///<summary>
     ///    아이템을 장착합니다.
     ///</summary>
-    public void AddItem(MapleItem item)
+    public void AddCommonItem(MapleCommonItem item)
     {
         ApplyAddSub(item, true);
     }
@@ -273,7 +277,7 @@ public class PlayerInfo
     ///<summary>
     ///    아이템을 해제합니다.
     ///</summary>
-    public void SubtractItem(MapleItem item)
+    public void SubCommonItem(MapleCommonItem item)
     {
         ApplyAddSub(item, false);
     }
@@ -525,8 +529,10 @@ public class PlayerInfo
     {
         foreach (MaplePetItem petItem in petItems)
         {
-            Console.WriteLine($"[{petItem.Name}] 공 : {petItem.Attack} / 마 : {petItem.Magic}");
-            AttackValue += AttackType == MapleStatus.StatusType.ATTACK_POWER ? petItem.Attack : petItem.Magic;
+            Console.WriteLine($"[{petItem.Name}] 공 : {petItem.Status[MapleStatus.StatusType.ATTACK_POWER]} / 마 : {petItem.Status[MapleStatus.StatusType.MAGIC_POWER]}");
+            AttackValue += AttackType == MapleStatus.StatusType.ATTACK_POWER 
+                ? (int) petItem.Status[MapleStatus.StatusType.ATTACK_POWER] 
+                : (int) petItem.Status[MapleStatus.StatusType.MAGIC_POWER];
         }
     }
     

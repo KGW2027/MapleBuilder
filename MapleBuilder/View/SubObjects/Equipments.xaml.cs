@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using MapleAPI.DataType;
+using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 
@@ -48,16 +49,16 @@ public partial class Equipments : UserControl
         });
     }
 
-    private void PushEquipment(MapleEquipType.EquipType equipType, MapleItem item)
+    private void PushEquipment(MapleEquipType.EquipType equipType, MapleCommonItem commonItem)
     {
         foreach (UIElement itemSlot in SlotMap[equipType])
-            if (((EquipmentSlot) itemSlot).SetItemIfNull(item))
+            if (((EquipmentSlot) itemSlot).SetItemIfNull(commonItem))
                 break;
     }
 
     public void UpdateEquipments(CharacterInfo cInfo)
     {
-        foreach(MapleItem item in cInfo.Items)
+        foreach(MapleCommonItem item in cInfo.Items)
             PushEquipment(item.EquipType, item);
     }
 

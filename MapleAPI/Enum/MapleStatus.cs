@@ -67,12 +67,13 @@ public class MapleStatus
         AUTHENTIC_FORCE = 0x65,
         
         HP_AND_MP       = 0x71,
-        ATTACK_AND_MAGIC= 0x72,
-        STR_DEX_LUK     = 0x73,
-        MAIN_STAT       = 0x74,
-        SUB_STAT        = 0x75,
-        FINAL_DAMAGE    = 0x76,
-        FINAL_DAMAGE_SUM= 0x77,
+        HP_AND_MP_RATE  = 0x72,
+        ATTACK_AND_MAGIC= 0x73,
+        STR_DEX_LUK     = 0x74,
+        MAIN_STAT       = 0x75,
+        SUB_STAT        = 0x76,
+        FINAL_DAMAGE    = 0x77,
+        FINAL_DAMAGE_SUM= 0x78,
         
     }
 }

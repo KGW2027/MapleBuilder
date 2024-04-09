@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using MapleAPI.DataType;
+using MapleAPI.DataType.Item;
 using MapleBuilder.Control;
 using MapleBuilder.MapleData;
 using MapleBuilder.View.SubObjects;
@@ -50,10 +51,10 @@ public partial class RenderOverview : UserControl
 
     private void OnRegisterItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dictionary<string, MapleItem> hashToItem = new();
+        Dictionary<string, MapleCommonItem> hashToItem = new();
         Dictionary<string, bool> hashToBool = new();
 
-        foreach (MapleItem item in BuilderDataContainer.RegisterItems)
+        foreach (MapleCommonItem item in BuilderDataContainer.RegisterItems)
         {
             hashToBool.Add(item.Hash, false);
             hashToItem.Add(item.Hash, item);

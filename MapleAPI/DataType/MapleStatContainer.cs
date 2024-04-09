@@ -38,9 +38,9 @@ public class MapleStatContainer
     #endregion
     
     private Dictionary<MapleStatus.StatusType, double> statContainer;
-    private MapleStatus.StatusType mainStatType;
-    private MapleStatus.StatusType subStatType;
-    private MapleStatus.StatusType subStat2Type;
+    public MapleStatus.StatusType mainStatType;
+    public MapleStatus.StatusType subStatType;
+    public MapleStatus.StatusType subStat2Type;
 
     public double this[MapleStatus.StatusType type]
     {
@@ -93,6 +93,16 @@ public class MapleStatContainer
             else lhs.statContainer[pair.Key] -= rhs.statContainer[pair.Key];
         }
         return lhs;
+    }
+
+    public static MapleStatContainer operator -(MapleStatContainer self)
+    {
+        foreach (var pair in self.statContainer)
+        {
+            self[pair.Key] = -pair.Value;
+        }
+
+        return self;
     }
     #endregion
 

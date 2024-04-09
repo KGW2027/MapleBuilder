@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using MapleAPI.DataType;
+using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.View.SubFrames;
 using MapleBuilder.View.SubObjects;
@@ -27,7 +28,7 @@ public class BuilderDataContainer
     private static HashSet<string> RegisteredItemHashes = new();
     private static List<EquipmentSlot> Equipments = new();
     
-    public static ObservableCollection<MapleItem> RegisterItems = new();
+    public static ObservableCollection<MapleItemBase> RegisterItems = new();
 
     /// <summary>
     ///    내부 데이터가 업데이트되었을 때, 디스플레이들에게 이를 알리는 역할을 합니다.
@@ -46,7 +47,7 @@ public class BuilderDataContainer
     private static void UpdateCharacterInfo()
     {
         if (charInfo == null) return;
-        foreach (MapleItem newItem in charInfo.Items)
+        foreach (MapleItemBase newItem in charInfo.Items)
         {
             if (!RegisteredItemHashes.Add(newItem.Hash)) continue;
             RegisterItems.Add(newItem);
@@ -86,12 +87,12 @@ public class BuilderDataContainer
     /// </summary>
     /// <param name="prevItem"></param>
     /// <param name="newItem"></param>
-    private static void OnSlotItemChanged(MapleItem? prevItem, MapleItem? newItem)
+    private static void OnSlotItemChanged(MapleItemBase? prevItem, MapleItemBase? newItem)
     {
-        if (prevItem != null)
-            PlayerStatus!.SubtractItem(prevItem);
-        if (newItem != null)
-            PlayerStatus!.AddItem(newItem);
+        if (prevItem != null && prevItem is MapleCommonItem mci)
+            PlayerStatus!.SubCommonItem(mci);
+        if (newItem != null && newItem is MapleCommonItem mci2)
+            PlayerStatus!.AddCommonItem(mci2);
         
         RenderOverview.UpdateSetDisplay(PlayerStatus!.SetEffects.GetSetOptionString());
         Summarize.DispatchSummary();

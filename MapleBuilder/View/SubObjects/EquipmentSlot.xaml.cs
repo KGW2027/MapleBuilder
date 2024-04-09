@@ -5,15 +5,16 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using MapleAPI.DataType;
+using MapleAPI.DataType.Item;
 using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubObjects;
 
 public partial class EquipmentSlot : UserControl
 {
-    public delegate void OnItemChanged(MapleItem? prevItem, MapleItem? newItem);
+    public delegate void OnItemChanged(MapleCommonItem? prevItem, MapleCommonItem? newItem);
     
-    private MapleItem? itemInfo;
+    private MapleCommonItem? itemInfo;
     private WzItem? wzItemInfo;
     public OnItemChanged? itemChanged;
     private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
@@ -43,16 +44,16 @@ public partial class EquipmentSlot : UserControl
         });
     }
     
-    public bool SetItemIfNull(MapleItem item)
+    public bool SetItemIfNull(MapleCommonItem commonItem)
     {
         if (itemInfo != null) return false;
-        itemInfo = item;
+        itemInfo = commonItem;
         Update();
-        itemChanged?.Invoke(null, item);
+        itemChanged?.Invoke(null, commonItem);
         return true;
     }
 
-    public bool GetItem(out MapleItem? item)
+    public bool GetItem(out MapleCommonItem? item)
     {
         item = null;
         if (itemInfo == null || wzItemInfo == null) return false;
@@ -60,9 +61,9 @@ public partial class EquipmentSlot : UserControl
         return true;
     }
 
-    public void SetItem(MapleItem? newItem)
+    public void SetItem(MapleCommonItem? newItem)
     {
-        MapleItem? prevItem = itemInfo;
+        MapleCommonItem? prevItem = itemInfo;
         itemInfo = newItem;
         itemChanged?.Invoke(prevItem, newItem);
     }
