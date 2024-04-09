@@ -35,46 +35,27 @@ public partial class Summarize : UserControl
 
     public static void DispatchSummary()
     {   
-        Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
-        int arcane = 0, authentic = 0;
-        foreach (var pair in symbols)
-        {
-            switch (pair.Key)
-            {
-                case MapleSymbol.SymbolType.YEORO:
-                case MapleSymbol.SymbolType.CHUCHU:
-                case MapleSymbol.SymbolType.LACHELEIN:
-                case MapleSymbol.SymbolType.ARCANA:
-                case MapleSymbol.SymbolType.MORAS:
-                case MapleSymbol.SymbolType.ESFERA:
-                    arcane += (pair.Value + 2) * 10;
-                    break;
-                case MapleSymbol.SymbolType.CERNIUM:
-                case MapleSymbol.SymbolType.ARCS:
-                case MapleSymbol.SymbolType.ODIUM:
-                case MapleSymbol.SymbolType.DOWONKYUNG:
-                case MapleSymbol.SymbolType.ARTERIA:
-                case MapleSymbol.SymbolType.CARCION:
-                    authentic += pair.Value * 10;
-                    break;
-                case MapleSymbol.SymbolType.UNKNOWN:
-                default:
-                    break;
-            }
-        }
         selfInstance!.Dispatcher.BeginInvoke(() =>
         {
-            PlayerInfo pInfo = BuilderDataContainer.PlayerStatus;
-            int mainStat = (int) Math.Floor(pInfo.MainStat.BaseValue * (1 + pInfo.MainStat.RateValue / 100.0)) + pInfo.MainStat.FlatValue;
-            int subStat  = (int) Math.Floor(pInfo.SubStat.BaseValue * (1 + pInfo.SubStat.RateValue / 100.0)) + pInfo.SubStat.FlatValue;
-            int subStat2 = pInfo.SubStat2.Stat == MapleStatus.StatusType.OTHER 
-                ? 0 
-                : (int) Math.Floor(pInfo.SubStat2.BaseValue * (1 + pInfo.SubStat2.RateValue / 100.0)) + pInfo.SubStat2.FlatValue;
-            double attackRate = 1 + pInfo.AttackRate / 100.0;
-            double dmg = 1 + (pInfo.Damage + pInfo.BossDamage) / 100.0;
-            double critDmg = 1.35 + pInfo.CriticalDamage / 100.0;
+            MapleStatContainer pInfo = BuilderDataContainer.PlayerStatus!.PlayerStat;
+            pInfo.Flush();
+            MapleStatus.StatusType atkFlat = pInfo.mainStatType == MapleStatus.StatusType.INT
+                ? MapleStatus.StatusType.MAGIC_POWER
+                : MapleStatus.StatusType.ATTACK_POWER;
+            MapleStatus.StatusType atkRate = pInfo.mainStatType == MapleStatus.StatusType.INT
+                ? MapleStatus.StatusType.MAGIC_RATE
+                : MapleStatus.StatusType.ATTACK_RATE;
             
-            var totalDmg = (long) Math.Round((mainStat * 4 + subStat + subStat2) * 0.01 * (pInfo.AttackValue * attackRate) * dmg * critDmg, 0);
+            
+            int mainStat = (int) Math.Floor(pInfo[pInfo.mainStatType] * (1 + pInfo[pInfo.mainStatType+0x10] / 100.0) + pInfo[pInfo.mainStatType+0x20]);
+            int subStat  = (int) Math.Floor(pInfo[pInfo.subStatType ] * (1 + pInfo[pInfo.subStatType +0x10] / 100.0) + pInfo[pInfo.subStatType +0x20]);
+            int subStat2 = pInfo.subStat2Type == MapleStatus.StatusType.OTHER ? 0 
+                : (int) Math.Floor(pInfo[pInfo.subStat2Type] * (1 +pInfo[pInfo.subStat2Type + 0x10] / 100.0) + pInfo[pInfo.subStat2Type + 0x20]);
+            double attackRate = 1 + pInfo[atkRate] / 100.0;
+            double dmg = 1 + (pInfo[MapleStatus.StatusType.DAMAGE] + pInfo[MapleStatus.StatusType.BOSS_DAMAGE]) / 100.0;
+            double critDmg = 1.35 + pInfo[MapleStatus.StatusType.CRITICAL_DAMAGE] / 100.0;
+            
+            var totalDmg = (long) Math.Round((mainStat * 4 + subStat + subStat2) * 0.01 * (pInfo[atkFlat] * attackRate) * dmg * critDmg, 0);
             var hMil = totalDmg / 100000000;
             var hTho = totalDmg % 100000000 / 10000;
             var tho = totalDmg % 10000;
@@ -84,50 +65,50 @@ public partial class Summarize : UserControl
             else selfInstance.ctDisplayPower.Content = $"{tho:0000}";
 
             selfInstance.ctMainStatType.Content =
-                $"주스탯 [{pInfo!.MainStat.Stat.ToString()}]";
-            selfInstance.ctMainStatFlat.Content = pInfo!.MainStat.BaseValue;
-            selfInstance.ctMainStatRate.Content = pInfo.MainStat.RateValue;
-            selfInstance.ctMainStatNonRateFlat.Content = pInfo.MainStat.FlatValue;
+                $"주스탯 [{pInfo.mainStatType.ToString()}]";
+            selfInstance.ctMainStatFlat.Content = pInfo[pInfo.mainStatType];
+            selfInstance.ctMainStatRate.Content = pInfo[pInfo.mainStatType + 0x10];
+            selfInstance.ctMainStatNonRateFlat.Content = pInfo[pInfo.mainStatType + 0x20];
 
-            selfInstance.ctSymbolArcane.Content = $"{arcane:N0}";
-            selfInstance.ctSymbolAuthentic.Content = $"{authentic:N0}";
+            selfInstance.ctSymbolArcane.Content = $"{pInfo[MapleStatus.StatusType.ARCANE_FORCE]:N0}";
+            selfInstance.ctSymbolAuthentic.Content = $"{pInfo[MapleStatus.StatusType.AUTHENTIC_FORCE]:N0}";
 
             selfInstance.ctSubStatType.Content =
-                $"부스탯 [{pInfo.SubStat.Stat.ToString()}]";
-            selfInstance.ctSubStatFlat.Content = pInfo.SubStat.BaseValue;
-            selfInstance.ctSubStatRate.Content = pInfo.SubStat.RateValue;
-            selfInstance.ctSubStatNonRateFlat.Content = pInfo.SubStat.FlatValue;
+                $"부스탯 [{pInfo.subStatType.ToString()}]";
+            selfInstance.ctSubStatFlat.Content = pInfo[pInfo.subStatType];
+            selfInstance.ctSubStatRate.Content = pInfo[pInfo.subStatType + 0x10];
+            selfInstance.ctSubStatNonRateFlat.Content = pInfo[pInfo.subStatType + 0x20];
 
             selfInstance.ctSubStat2Grid.Visibility =
-                pInfo.SubStat2.Stat == MapleStatus.StatusType.OTHER
+                pInfo.subStat2Type == MapleStatus.StatusType.OTHER
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             selfInstance.ctSubStat2Type.Content =
-                $"부스탯 [{pInfo.SubStat2.Stat.ToString()}]";
-            selfInstance.ctSubStat2Flat.Content = pInfo.SubStat2.BaseValue;
-            selfInstance.ctSubStat2Rate.Content = pInfo.SubStat2.RateValue;
-            selfInstance.ctSubStat2NonRateFlat.Content = pInfo.SubStat2.FlatValue;
+                $"부스탯 [{pInfo.subStat2Type.ToString()}]";
+            selfInstance.ctSubStat2Flat.Content = pInfo[pInfo.subStat2Type];
+            selfInstance.ctSubStat2Rate.Content = pInfo[pInfo.subStat2Type + 0x10];
+            selfInstance.ctSubStat2NonRateFlat.Content = pInfo[pInfo.subStat2Type + 0x20];
 
-            selfInstance.ctBossDmg.Content = $"{pInfo.BossDamage}%";
-            selfInstance.ctIgnoreArmor.Content = $"{pInfo.IgnoreArmor:F2}%";
+            selfInstance.ctBossDmg.Content = $"{pInfo[MapleStatus.StatusType.BOSS_DAMAGE]}%";
+            selfInstance.ctIgnoreArmor.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_DEF]:F2}%";
 
-            selfInstance.ctCommonDmg.Content = $"{pInfo.CommonDamage}%";
-            selfInstance.ctDropItem.Content = $"{pInfo.ItemDropIncrease}%";
-            selfInstance.ctDropMeso.Content = $"{pInfo.MesoDropIncrease}%";
+            selfInstance.ctCommonDmg.Content = $"{pInfo[MapleStatus.StatusType.COMMON_DAMAGE]}%";
+            selfInstance.ctDropItem.Content = $"{pInfo[MapleStatus.StatusType.ITEM_DROP]}%";
+            selfInstance.ctDropMeso.Content = $"{pInfo[MapleStatus.StatusType.MESO_DROP]}%";
 
-            selfInstance.ctDmg.Content = $"{pInfo.Damage}%";
-            selfInstance.ctCritChance.Content = $"{pInfo.CriticalChance}%";
-            selfInstance.ctCritDmg.Content = $"{pInfo.CriticalDamage:F2}%";
-            selfInstance.ctDurBuff.Content = $"{pInfo.BuffDurationIncrease}%";
-            selfInstance.ctDurSummon.Content = $"{pInfo.SummonDurationIncrease}%";
-            selfInstance.ctDebuffDmg.Content = $"{pInfo.DebuffDamage}%";
-            selfInstance.ctCooldownDecrease.Content = $"{pInfo.CooldownDecreaseValue}초, {pInfo.CooldownDecreaseRate}%";
-            selfInstance.ctCooldownIgnore.Content = $"{pInfo.CooldownIgnoreRate:F2}%";
-            selfInstance.ctTolerance.Content = $"{pInfo.Immune}%";
-            selfInstance.ctIgnoreImmune.Content = $"{pInfo.IgnoreImmune:F2}%";
+            selfInstance.ctDmg.Content = $"{pInfo[MapleStatus.StatusType.DAMAGE]}%";
+            selfInstance.ctCritChance.Content = $"{pInfo[MapleStatus.StatusType.CRITICAL_CHANCE]}%";
+            selfInstance.ctCritDmg.Content = $"{pInfo[MapleStatus.StatusType.CRITICAL_DAMAGE]:F2}%";
+            selfInstance.ctDurBuff.Content = $"{pInfo[MapleStatus.StatusType.BUFF_DURATION]}%";
+            selfInstance.ctDurSummon.Content = $"{pInfo[MapleStatus.StatusType.SUMMON_DURATION]}%";
+            selfInstance.ctDebuffDmg.Content = $"{pInfo[MapleStatus.StatusType.DEBUFF_DAMAGE]}%";
+            selfInstance.ctCooldownDecrease.Content = $"{pInfo[MapleStatus.StatusType.COOL_DEC_SECOND]}초, {pInfo[MapleStatus.StatusType.COOL_DEC_RATE]}%";
+            selfInstance.ctCooldownIgnore.Content = $"{pInfo[MapleStatus.StatusType.COOL_IGNORE]:F2}%";
+            selfInstance.ctTolerance.Content = $"{pInfo[MapleStatus.StatusType.ABN_STATUS_RESIS]}%";
+            selfInstance.ctIgnoreImmune.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
 
-            selfInstance.ctAtkVal.Content = $"{pInfo.AttackValue:N0}";
-            selfInstance.ctAtkRate.Content = $"{pInfo.AttackRate}%";
+            selfInstance.ctAtkVal.Content = $"{pInfo[atkFlat]:N0}";
+            selfInstance.ctAtkRate.Content = $"{pInfo[atkRate]}%";
         });
     }
     

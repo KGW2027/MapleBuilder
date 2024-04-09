@@ -17,6 +17,7 @@ public class MapleStatus
         MP              = 0x09,
         DF_TT_PP        = 0x0A,
         
+        STAT_RATE       = 0x10,
         STR_RATE        = 0x11,
         DEX_RATE        = 0x12,
         INT_RATE        = 0x13,
@@ -27,6 +28,7 @@ public class MapleStatus
         HP_RATE         = 0x18,
         MP_RATE         = 0x19,
         
+        STAT_FLAT       = 0x20,
         STR_FLAT        = 0x21,
         DEX_FLAT        = 0x22,
         INT_FLAT        = 0x23,

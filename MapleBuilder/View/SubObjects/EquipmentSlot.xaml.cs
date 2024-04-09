@@ -12,9 +12,9 @@ namespace MapleBuilder.View.SubObjects;
 
 public partial class EquipmentSlot : UserControl
 {
-    public delegate void OnItemChanged(MapleCommonItem? prevItem, MapleCommonItem? newItem);
+    public delegate void OnItemChanged(MapleItemBase? prevItem, MapleItemBase? newItem);
     
-    private MapleCommonItem? itemInfo;
+    private MapleItemBase? itemInfo;
     private WzItem? wzItemInfo;
     public OnItemChanged? itemChanged;
     private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
@@ -44,7 +44,7 @@ public partial class EquipmentSlot : UserControl
         });
     }
     
-    public bool SetItemIfNull(MapleCommonItem commonItem)
+    public bool SetItemIfNull(MapleItemBase commonItem)
     {
         if (itemInfo != null) return false;
         itemInfo = commonItem;
@@ -53,7 +53,7 @@ public partial class EquipmentSlot : UserControl
         return true;
     }
 
-    public bool GetItem(out MapleCommonItem? item)
+    public bool GetItem(out MapleItemBase? item)
     {
         item = null;
         if (itemInfo == null || wzItemInfo == null) return false;
@@ -61,9 +61,9 @@ public partial class EquipmentSlot : UserControl
         return true;
     }
 
-    public void SetItem(MapleCommonItem? newItem)
+    public void SetItem(MapleItemBase? newItem)
     {
-        MapleCommonItem? prevItem = itemInfo;
+        MapleItemBase? prevItem = itemInfo;
         itemInfo = newItem;
         itemChanged?.Invoke(prevItem, newItem);
     }

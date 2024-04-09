@@ -100,7 +100,7 @@ public partial class HyperStatSlot : UserControl
             MapleStatus.StatusType.BOSS_DAMAGE => level > 5 ? 4 : 3,
             MapleStatus.StatusType.COMMON_DAMAGE => level > 5 ? 4 : 3,
             MapleStatus.StatusType.ABN_STATUS_RESIS => level > 5 ? 2 : 1,
-            MapleStatus.StatusType.ATTACK_POWER => 3,
+            MapleStatus.StatusType.ATTACK_AND_MAGIC => 3,
             MapleStatus.StatusType.EXP_INCREASE => level > 10 ? 1 : 0.5,
             MapleStatus.StatusType.ARCANE_FORCE => level > 10 ? 10 : 5,
             _ => 0

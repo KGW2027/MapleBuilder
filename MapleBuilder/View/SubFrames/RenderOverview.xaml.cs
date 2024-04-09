@@ -51,10 +51,10 @@ public partial class RenderOverview : UserControl
 
     private void OnRegisterItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dictionary<string, MapleCommonItem> hashToItem = new();
+        Dictionary<string, MapleItemBase> hashToItem = new();
         Dictionary<string, bool> hashToBool = new();
 
-        foreach (MapleCommonItem item in BuilderDataContainer.RegisterItems)
+        foreach (MapleItemBase item in BuilderDataContainer.RegisterItems)
         {
             hashToBool.Add(item.Hash, false);
             hashToItem.Add(item.Hash, item);

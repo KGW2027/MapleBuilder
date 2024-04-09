@@ -53,7 +53,7 @@ public class MapleUnion
             MapleStatus.StatusType.DEX_FLAT => "DEX %d 증가",
             MapleStatus.StatusType.HP => "최대 HP %d 증가",
             MapleStatus.StatusType.HP_RATE => "최대 HP %d% 증가",
-            MapleStatus.StatusType.BOSS_DAMAGE => "보스 공격 시 데미지 %d 증가",
+            MapleStatus.StatusType.BOSS_DAMAGE => "보스 공격 시 데미지 %d% 증가",
             MapleStatus.StatusType.IGNORE_DEF => "방어율 무시 %d% 증가",
             MapleStatus.StatusType.ABN_STATUS_RESIS => "상태 이상 내성 %d 증가",
             MapleStatus.StatusType.STR_DEX_LUK => "STR, DEX, LUK %d 증가",

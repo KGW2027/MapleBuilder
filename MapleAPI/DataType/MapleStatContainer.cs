@@ -52,6 +52,47 @@ public class MapleStatContainer
         }
     }
 
+    private double ClearAndGet(MapleStatus.StatusType statusType)
+    {
+        double value = 0;
+        if (!statContainer.ContainsKey(statusType)) return value;
+        
+        value = statContainer[statusType];
+        statContainer.Remove(statusType);
+        return value;
+    }
+    
+    public void Flush()
+    {
+        if (mainStatType != MapleStatus.StatusType.OTHER)
+            statContainer[mainStatType] += ClearAndGet(MapleStatus.StatusType.MAIN_STAT);
+
+        if (subStatType != MapleStatus.StatusType.OTHER)
+        {
+            double subStatValue = ClearAndGet(MapleStatus.StatusType.SUB_STAT);
+            statContainer[subStatType] += subStatValue;
+            if (subStat2Type != MapleStatus.StatusType.OTHER)
+                statContainer[subStat2Type] += subStatValue;
+        }
+
+        double allStatFlat = ClearAndGet(MapleStatus.StatusType.ALL_STAT);
+        statContainer[MapleStatus.StatusType.STR] += allStatFlat;
+        statContainer[MapleStatus.StatusType.DEX] += allStatFlat;
+        statContainer[MapleStatus.StatusType.INT] += allStatFlat;
+        statContainer[MapleStatus.StatusType.LUK] += allStatFlat;
+
+        double allStatRate = ClearAndGet(MapleStatus.StatusType.ALL_STAT_RATE);
+        statContainer[MapleStatus.StatusType.STR_RATE] += allStatRate;
+        statContainer[MapleStatus.StatusType.DEX_RATE] += allStatRate;
+        statContainer[MapleStatus.StatusType.INT_RATE] += allStatRate;
+        statContainer[MapleStatus.StatusType.LUK_RATE] += allStatRate;
+
+        double atkmag = ClearAndGet(MapleStatus.StatusType.ATTACK_AND_MAGIC);
+        statContainer[MapleStatus.StatusType.ATTACK_POWER] += atkmag;
+        statContainer[MapleStatus.StatusType.MAGIC_POWER] += atkmag;
+
+    }
+
     #region Operator Related
     private static int ReadNumericData(JsonObject data, string key)
     {

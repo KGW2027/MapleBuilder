@@ -89,9 +89,9 @@ public class BuilderDataContainer
     /// <param name="newItem"></param>
     private static void OnSlotItemChanged(MapleItemBase? prevItem, MapleItemBase? newItem)
     {
-        if (prevItem != null && prevItem is MapleCommonItem mci)
+        if (prevItem is MapleCommonItem mci)
             PlayerStatus!.SubCommonItem(mci);
-        if (newItem != null && newItem is MapleCommonItem mci2)
+        if (newItem is MapleCommonItem mci2)
             PlayerStatus!.AddCommonItem(mci2);
         
         RenderOverview.UpdateSetDisplay(PlayerStatus!.SetEffects.GetSetOptionString());

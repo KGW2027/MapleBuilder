@@ -34,7 +34,7 @@ public partial class StatSymbol : UserControl
             bool isAvenger = BuilderDataContainer.CharacterInfo.Class == MapleClass.ClassType.DEMON_AVENGER;
             foreach (var pair in selfInstnace.symbolLevels)
             {
-                int level = BuilderDataContainer.PlayerStatus!.LastSymbols.TryGetValue(pair.Key, out int val) ? val : 0;
+                int level = BuilderDataContainer.PlayerStatus!.lastSymbols.TryGetValue(pair.Key, out int val) ? val : 0;
                 ((TextBox) pair.Value).Text = level.ToString();
 
                 if (level == 0) continue;
@@ -68,12 +68,12 @@ public partial class StatSymbol : UserControl
             selfInstnace.ctArcaneForceDisplay.Content = $"ARC +{arcane:N0}";
             selfInstnace.ctArcaneStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{arcaneStat:N0}" :
                 isAvenger ? $"MAX HP +{arcaneStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.MainStat.Stat} +{arcaneStat:N0}";
+                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.mainStatType} +{arcaneStat:N0}";
             
             selfInstnace.ctAuthenticForceDisplay.Content = $"AUT +{authentic:N0}";
             selfInstnace.ctAuthenticStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{authenticStat:N0}" :
                 isAvenger ? $"MAX HP +{authenticStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.MainStat.Stat} +{authenticStat:N0}";
+                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.mainStatType} +{authenticStat:N0}";
         });
     }
 

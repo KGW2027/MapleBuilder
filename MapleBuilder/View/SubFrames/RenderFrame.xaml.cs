@@ -120,7 +120,7 @@ public partial class RenderFrame : UserControl
             charTop.ctCharacterGuild.Content = $"길드 {BuilderDataContainer.CharacterInfo.GuildName}";
             charTop.ctCharacterLevelAndClass.Content = $"Lv. {BuilderDataContainer.CharacterInfo.Level} {BuilderDataContainer.CharacterInfo.ClassString}";
 
-            Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
+            Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.lastSymbols;
             int arcane = 0, authentic = 0;
             foreach (var pair in symbols)
             {

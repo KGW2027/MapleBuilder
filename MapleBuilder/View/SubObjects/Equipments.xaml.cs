@@ -49,7 +49,7 @@ public partial class Equipments : UserControl
         });
     }
 
-    private void PushEquipment(MapleEquipType.EquipType equipType, MapleCommonItem commonItem)
+    private void PushEquipment(MapleEquipType.EquipType equipType, MapleItemBase commonItem)
     {
         foreach (UIElement itemSlot in SlotMap[equipType])
             if (((EquipmentSlot) itemSlot).SetItemIfNull(commonItem))
@@ -58,7 +58,7 @@ public partial class Equipments : UserControl
 
     public void UpdateEquipments(CharacterInfo cInfo)
     {
-        foreach(MapleCommonItem item in cInfo.Items)
+        foreach(MapleItemBase item in cInfo.Items)
             PushEquipment(item.EquipType, item);
     }
 
