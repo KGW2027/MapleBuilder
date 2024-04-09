@@ -31,7 +31,7 @@ public class MaplePetType
             PetType.LUNA_SWEET => "루나 스윗",
             PetType.LUNA_DREAM => "루나 드림",
             PetType.LUNA_PETIT => "루나 쁘띠",
-            PetType.OTHER => "세트 없음",
+            PetType.OTHER => "멀티펫",
             _ => throw new ArgumentOutOfRangeException(nameof(petType), petType, null)
         };
     }

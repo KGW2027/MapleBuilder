@@ -10,6 +10,7 @@
     <Grid>
         <!-- Pet 장비 -->
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="417" Height="668" HorizontalAlignment="Left"/>
+        <Label x:Name="ctPetSetEffectLabel" Margin="289, 156, 0, 0" Content="세트효과 - 공/마 + 30" FontSize="12"/>
         <subObjects:PetEquipSlot x:Name="ctPetEquip1" PetType="OTHER" PetOrder="1" PetSetNumber="1" Margin="8, 153, 0, 0" 
                                  SetChanged="OnPetEquipSetChanged" TypeChanged="OnPetTypeChanged"/>
         <subObjects:PetEquipSlot x:Name="ctPetEquip2" PetType="OTHER" PetOrder="2" PetSetNumber="2" Margin="8, 292, 0, 0" 

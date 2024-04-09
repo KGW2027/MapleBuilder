@@ -9,7 +9,7 @@
     <Grid>
         <Label x:Name="ctTitle" Content="펫 슬롯 [NUM]"/>
         <ComboBox x:Name="ctSetName" SelectionChanged="OnPetTypeChanged"
-                  Width="83" Height="24" Margin="0, 30, 0, 0" Text="세트 없음" Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 0, 8, 0"/>
+                  Width="83" Height="24" Margin="0, 30, 0, 0" Text="멀티펫" Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 0, 8, 0"/>
         <ComboBox x:Name="ctSetNum" SelectionChanged="OnPetSetNumChanged"
                   Width="70" Height="24" Margin="87, 30, 0, 0" Text="세트 1" Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 0, 6, 0"/>
         
