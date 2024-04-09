@@ -47,11 +47,11 @@ public partial class HyperStatSlot : UserControl
     }
     
     public static readonly DependencyProperty STAT_PROPERTY =
-        DependencyProperty.Register("StatType", typeof(MapleHyperStat.StatType), typeof(HyperStatSlot));
+        DependencyProperty.Register("StatType", typeof(MapleStatus.StatusType), typeof(HyperStatSlot));
 
-    public MapleHyperStat.StatType StatType
+    public MapleStatus.StatusType StatType
     {
-        get => (MapleHyperStat.StatType) GetValue(STAT_PROPERTY);
+        get => (MapleStatus.StatusType) GetValue(STAT_PROPERTY);
         set => SetValue(STAT_PROPERTY, value);
     }
 
@@ -82,27 +82,27 @@ public partial class HyperStatSlot : UserControl
         befLevel = level;
     }
 
-    private double GetIncrease(MapleHyperStat.StatType type, int level)
+    private double GetIncrease(MapleStatus.StatusType type, int level)
     {
         return type switch
         {
-            MapleHyperStat.StatType.STR => 30,
-            MapleHyperStat.StatType.DEX => 30,
-            MapleHyperStat.StatType.INT => 30,
-            MapleHyperStat.StatType.LUK => 30,
-            MapleHyperStat.StatType.HP => 2,
-            MapleHyperStat.StatType.MP => 2,
-            MapleHyperStat.StatType.DF_TT_PP => level <= 10 ? 10 : 0,
-            MapleHyperStat.StatType.CRITCIAL_CHANCE => level > 5 ? 2 : 1,
-            MapleHyperStat.StatType.CRITICAL_DAMAGE => 1,
-            MapleHyperStat.StatType.IGNORE_ARMOR => 3,
-            MapleHyperStat.StatType.DAMAGE => 3,
-            MapleHyperStat.StatType.BOSS_DAMAGE => level > 5 ? 4 : 3,
-            MapleHyperStat.StatType.COMMON_DAMAGE => level > 5 ? 4 : 3,
-            MapleHyperStat.StatType.IMMUNE => level > 5 ? 2 : 1,
-            MapleHyperStat.StatType.ATTACK_POWER => 3,
-            MapleHyperStat.StatType.EXP_UP => level > 10 ? 1 : 0.5,
-            MapleHyperStat.StatType.ARCANE_FORCE => level > 10 ? 10 : 5,
+            MapleStatus.StatusType.STR_FLAT => 30,
+            MapleStatus.StatusType.DEX_FLAT => 30,
+            MapleStatus.StatusType.INT_FLAT => 30,
+            MapleStatus.StatusType.LUK_FLAT => 30,
+            MapleStatus.StatusType.HP_RATE => 2,
+            MapleStatus.StatusType.MP_RATE => 2,
+            MapleStatus.StatusType.DF_TT_PP => level <= 10 ? 10 : 0,
+            MapleStatus.StatusType.CRITICAL_CHANCE => level > 5 ? 2 : 1,
+            MapleStatus.StatusType.CRITICAL_DAMAGE => 1,
+            MapleStatus.StatusType.IGNORE_DEF => 3,
+            MapleStatus.StatusType.DAMAGE => 3,
+            MapleStatus.StatusType.BOSS_DAMAGE => level > 5 ? 4 : 3,
+            MapleStatus.StatusType.COMMON_DAMAGE => level > 5 ? 4 : 3,
+            MapleStatus.StatusType.ABN_STATUS_RESIS => level > 5 ? 2 : 1,
+            MapleStatus.StatusType.ATTACK_POWER => 3,
+            MapleStatus.StatusType.EXP_INCREASE => level > 10 ? 1 : 0.5,
+            MapleStatus.StatusType.ARCANE_FORCE => level > 10 ? 10 : 5,
             _ => 0
         };
     }

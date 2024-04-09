@@ -21,8 +21,8 @@ public partial class StatSymbol : UserControl
     private readonly List<Slider>? abilitySliders;
     private readonly List<CheckBox?> abilityCheckboxes;
     private List<HyperStatSlot> hyperStatSlots;
-    private readonly List<MapleAbility.AbilityType> abilityTypes;
-    private readonly Dictionary<string, MapleAbility.AbilityType> displayToAbilityType;
+    private readonly List<MapleStatus.StatusType> abilityTypes;
+    private readonly Dictionary<string, MapleStatus.StatusType> displayToAbilityType;
     private static bool syncLock = false;
     
     public static void Update()
@@ -77,7 +77,7 @@ public partial class StatSymbol : UserControl
         });
     }
 
-    public static void InitAbility(Dictionary<MapleAbility.AbilityType, int> abilities)
+    public static void InitAbility(Dictionary<MapleStatus.StatusType, int> abilities)
     {
         selfInstnace!.Dispatcher.BeginInvoke(() =>
         {
@@ -111,7 +111,7 @@ public partial class StatSymbol : UserControl
         });
     }
     
-    public static void InitHyperStat(Dictionary<MapleHyperStat.StatType, int> charInfoHyperStatLevels)
+    public static void InitHyperStat(Dictionary<MapleStatus.StatusType, int> charInfoHyperStatLevels)
     {
         selfInstnace!.Dispatcher.BeginInvoke(() =>
         {
@@ -151,11 +151,11 @@ public partial class StatSymbol : UserControl
         abilityComboBoxes = new List<ComboBox> {ctAbility1, ctAbility2, ctAbility3};
         abilitySliders = new List<Slider> {ctAbilitySlider1, ctAbilitySlider2, ctAbilitySlider3};
         abilityCheckboxes = new List<CheckBox?> {null, ctAbilityOver2, ctAbilityOver3};
-        abilityTypes = new List<MapleAbility.AbilityType>
-            {MapleAbility.AbilityType.OTHER, MapleAbility.AbilityType.OTHER, MapleAbility.AbilityType.OTHER};
+        abilityTypes = new List<MapleStatus.StatusType>
+            {MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER};
         
-        displayToAbilityType = new Dictionary<string, MapleAbility.AbilityType>();
-        foreach (MapleAbility.AbilityType abType in Enum.GetValues(typeof(MapleAbility.AbilityType)))
+        displayToAbilityType = new Dictionary<string, MapleStatus.StatusType>();
+        foreach (MapleStatus.StatusType abType in Enum.GetValues(typeof(MapleStatus.StatusType)))
         {
             string str = MapleAbility.GetAbilityString(abType).Replace("%d", "[ ]").Trim();
             if (!displayToAbilityType.TryAdd(str, abType)) continue;
@@ -266,7 +266,7 @@ public partial class StatSymbol : UserControl
     private void ApplyAbilityToPlayerInfo()
     {
         if (BuilderDataContainer.PlayerStatus == null) return;
-        Dictionary<MapleAbility.AbilityType, int> abilityPair = new Dictionary<MapleAbility.AbilityType, int>();
+        Dictionary<MapleStatus.StatusType, int> abilityPair = new Dictionary<MapleStatus.StatusType, int>();
         for (int idx = 0; idx < 3; idx++)
             abilityPair.TryAdd(abilityTypes[idx], (int) abilitySliders![idx].Value);
         BuilderDataContainer.PlayerStatus.ApplyAbility(abilityPair);

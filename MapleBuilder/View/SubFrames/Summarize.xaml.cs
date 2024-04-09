@@ -67,7 +67,7 @@ public partial class Summarize : UserControl
             PlayerInfo pInfo = BuilderDataContainer.PlayerStatus;
             int mainStat = (int) Math.Floor(pInfo.MainStat.BaseValue * (1 + pInfo.MainStat.RateValue / 100.0)) + pInfo.MainStat.FlatValue;
             int subStat  = (int) Math.Floor(pInfo.SubStat.BaseValue * (1 + pInfo.SubStat.RateValue / 100.0)) + pInfo.SubStat.FlatValue;
-            int subStat2 = pInfo.SubStat2.Stat == MaplePotentialOption.OptionType.OTHER 
+            int subStat2 = pInfo.SubStat2.Stat == MapleStatus.StatusType.OTHER 
                 ? 0 
                 : (int) Math.Floor(pInfo.SubStat2.BaseValue * (1 + pInfo.SubStat2.RateValue / 100.0)) + pInfo.SubStat2.FlatValue;
             double attackRate = 1 + pInfo.AttackRate / 100.0;
@@ -99,7 +99,7 @@ public partial class Summarize : UserControl
             selfInstance.ctSubStatNonRateFlat.Content = pInfo.SubStat.FlatValue;
 
             selfInstance.ctSubStat2Grid.Visibility =
-                pInfo.SubStat2.Stat == MaplePotentialOption.OptionType.OTHER
+                pInfo.SubStat2.Stat == MapleStatus.StatusType.OTHER
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             selfInstance.ctSubStat2Type.Content =

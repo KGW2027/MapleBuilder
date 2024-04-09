@@ -84,16 +84,16 @@
         <subObjects:HyperStatSlot Text="HP" StatType="HP" Margin="27.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="MP" StatType="MP" Margin="27.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="DF/TF/PP" StatType="DF_TT_PP" Margin="27.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="크리티컬 확률" StatType="CRITCIAL_CHANCE" Margin="27.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="크리티컬 확률" StatType="CRITICAL_CHANCE" Margin="27.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         
         <subObjects:HyperStatSlot Text="크리 데미지" StatType="CRITICAL_DAMAGE" Margin="219.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="방어율 무시" StatType="IGNORE_ARMOR" Margin="219.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="방어율 무시" StatType="IGNORE_DEF" Margin="219.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="데미지" StatType="DAMAGE" Margin="219.5, 336, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="보스 데미지" StatType="BOSS_DAMAGE" Margin="219.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="일반 데미지" StatType="COMMON_DAMAGE" Margin="219.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="상태 이상 내성" StatType="IMMUNE" Margin="219.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="상태 이상 내성" StatType="ABN_STATUS_RESIS" Margin="219.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="공격력 / 마력" StatType="ATTACK_POWER" Margin="219.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="획득 경험치" StatType="EXP_UP" Margin="219.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="획득 경험치" StatType="EXP_INCREASE" Margin="219.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
         <subObjects:HyperStatSlot Text="아케인 포스" StatType="ARCANE_FORCE" Margin="219.5, 504, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
     </Grid>
 </UserControl>

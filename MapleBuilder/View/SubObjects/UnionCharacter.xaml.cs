@@ -38,7 +38,7 @@ public partial class UnionCharacter : UserControl
         MapleClass.ClassType ct = (MapleClass.ClassType) e.NewValue;
         control.ctClassLabel.Content = MapleClass.GetMapleClassString(ct);
 
-        MapleUnion.RaiderEffectType raiderEffect = MapleUnion.GetRaiderEffectByClass(ct);
+        MapleStatus.StatusType raiderEffect = MapleUnion.GetRaiderEffectByClass(ct);
         int value = MapleUnion.GetRaiderEffectValue(raiderEffect, MapleUnion.RaiderRank.NONE);
         control.ctRaiderEffect.Content = MapleUnion.GetRaiderEffectString(raiderEffect).Replace("%d", value.ToString());
 
@@ -53,7 +53,7 @@ public partial class UnionCharacter : UserControl
 
     private void OnRaiderRankChanged(object sender, SelectionChangedEventArgs e)
     {        
-        MapleUnion.RaiderEffectType raiderEffect = MapleUnion.GetRaiderEffectByClass(TargetClass);
+        MapleStatus.StatusType raiderEffect = MapleUnion.GetRaiderEffectByClass(TargetClass);
         int value = MapleUnion.GetRaiderEffectValue(raiderEffect, (MapleUnion.RaiderRank) ctRaiderRankBox.SelectedItem);
         ctRaiderEffect.Content = MapleUnion.GetRaiderEffectString(raiderEffect).Replace("%d", value.ToString());
 

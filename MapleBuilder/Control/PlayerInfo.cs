@@ -13,55 +13,40 @@ public class PlayerInfo
 {
     public class StatInfo
     {
-        public MaplePotentialOption.OptionType Stat { get; }
-        public MaplePotentialOption.OptionType StatRate { get; }
-        public MaplePotentialOption.OptionType StatLevel { get; }
+        public MapleStatus.StatusType Stat { get; }
+        public MapleStatus.StatusType StatRate { get; }
+        public MapleStatus.StatusType StatLevel { get; }
         public int BaseValue { get; protected internal set; } // 기본 수치
         public int RateValue { get; protected internal set; } // % 수치
         public int FlatValue { get; protected internal set; } // % 미적용 수치
 
-        protected internal StatInfo(MaplePotentialOption.OptionType stat)
+        protected internal StatInfo(MapleStatus.StatusType stat)
         {
             Stat = stat;
-            StatRate = stat switch
-            {
-                MaplePotentialOption.OptionType.STR => MaplePotentialOption.OptionType.STR_RATE,
-                MaplePotentialOption.OptionType.DEX => MaplePotentialOption.OptionType.DEX_RATE,
-                MaplePotentialOption.OptionType.INT => MaplePotentialOption.OptionType.INT_RATE,
-                MaplePotentialOption.OptionType.LUK => MaplePotentialOption.OptionType.LUK_RATE,
-                MaplePotentialOption.OptionType.MAX_HP => MaplePotentialOption.OptionType.MAX_HP_RATE,
-                _ => MaplePotentialOption.OptionType.OTHER
-            };
-            StatLevel = stat switch
-            {
-                MaplePotentialOption.OptionType.STR => MaplePotentialOption.OptionType.LEVEL_STR,
-                MaplePotentialOption.OptionType.DEX => MaplePotentialOption.OptionType.LEVEL_DEX,
-                MaplePotentialOption.OptionType.INT => MaplePotentialOption.OptionType.LEVEL_INT,
-                MaplePotentialOption.OptionType.LUK => MaplePotentialOption.OptionType.LEVEL_LUK,
-                _ => MaplePotentialOption.OptionType.OTHER
-            };
+            StatRate = Stat + 0x10;
+            StatLevel = stat == MapleStatus.StatusType.HP ? MapleStatus.StatusType.OTHER : Stat + 0x20;
             BaseValue = 4;
             RateValue = 0;
             FlatValue = 0;
         }
     }
     
-    public PlayerInfo(uint level, MaplePotentialOption.OptionType mainStat, 
-        MaplePotentialOption.OptionType subStat, MaplePotentialOption.OptionType subStat2 = MaplePotentialOption.OptionType.OTHER)
+    public PlayerInfo(uint level, MapleStatus.StatusType mainStat, 
+        MapleStatus.StatusType subStat, MapleStatus.StatusType subStat2 = 0)
     {
         MainStat = new StatInfo(mainStat)
         {
-            BaseValue = (int) (mainStat == MaplePotentialOption.OptionType.MAX_HP ? 90 * level + 545 : 5 * level + 18)
+            BaseValue = (int) (mainStat == MapleStatus.StatusType.HP ? 90 * level + 545 : 5 * level + 18) // 레벨 자동 분배 수치 적용
         };
         SubStat = new StatInfo(subStat);
         SubStat2 = new StatInfo(subStat2);
 
-        AttackType = mainStat == MaplePotentialOption.OptionType.INT
-            ? MaplePotentialOption.OptionType.MAGIC
-            : MaplePotentialOption.OptionType.ATTACK;
-        AttackRateType = mainStat == MaplePotentialOption.OptionType.INT
-            ? MaplePotentialOption.OptionType.MAGIC_RATE
-            : MaplePotentialOption.OptionType.ATTACK_RATE;
+        AttackType = mainStat == MapleStatus.StatusType.INT
+            ? MapleStatus.StatusType.MAGIC_POWER
+            : MapleStatus.StatusType.ATTACK_POWER;
+        AttackRateType = mainStat == MapleStatus.StatusType.INT
+            ? MapleStatus.StatusType.MAGIC_RATE
+            : MapleStatus.StatusType.ATTACK_RATE;
         AttackValue = 0;
         AttackRate = 0;
 
@@ -86,15 +71,15 @@ public class PlayerInfo
         LevelStat = (int) Math.Floor(level / 9.0);
         SetEffects = new SetEffect();
         LastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
-        LastAbilities = new Dictionary<MapleAbility.AbilityType, int>();
+        LastAbilities = new Dictionary< MapleStatus.StatusType, int>();
     }
 
     
     public StatInfo MainStat { get; private set; }
     public StatInfo SubStat { get; private set; }
     public StatInfo SubStat2 { get; private set; }
-    public MaplePotentialOption.OptionType AttackType { get; private set; }
-    public MaplePotentialOption.OptionType AttackRateType { get; private set; }
+    public MapleStatus.StatusType AttackType { get; private set; }
+    public MapleStatus.StatusType AttackRateType { get; private set; }
     public int AttackValue { get; private set; }
     public int AttackRate { get; private set; }
     public int Damage { get; private set; }
@@ -118,7 +103,7 @@ public class PlayerInfo
     
     public SetEffect SetEffects { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> LastSymbols;
-    public Dictionary<MapleAbility.AbilityType, int> LastAbilities;
+    public Dictionary< MapleStatus.StatusType, int> LastAbilities;
     
     ///<summary>
     ///    방어력 무시의 곱연산을 계산합니다.
@@ -148,15 +133,15 @@ public class PlayerInfo
     ///<summary>
     ///    장비 정보에서 원하는 스텟에 해당하는 값을 추출합니다.
     ///</summary>
-    private int GetStatFromOption(MapleOption option, MaplePotentialOption.OptionType stat)
+    private int GetStatFromOption(MapleOption option,  MapleStatus.StatusType stat)
     {
         return stat switch
         {
-            MaplePotentialOption.OptionType.STR => option.Str,
-            MaplePotentialOption.OptionType.DEX => option.Dex,
-            MaplePotentialOption.OptionType.INT => option.Int,
-            MaplePotentialOption.OptionType.LUK => option.Luk,
-            MaplePotentialOption.OptionType.MAX_HP => option.MaxHp,
+            MapleStatus.StatusType.STR => option.Str,
+            MapleStatus.StatusType.DEX => option.Dex,
+            MapleStatus.StatusType.INT => option.Int,
+            MapleStatus.StatusType.LUK => option.Luk,
+            MapleStatus.StatusType.HP => option.MaxHp,
             _ => 0
         };
     }
@@ -164,7 +149,7 @@ public class PlayerInfo
     ///<summary>
     ///    잠재능력, 에디셔널 잠재능력을 현재 스텟에 적용합니다.
     ///</summary>
-    private void ApplyPotential(KeyValuePair<MaplePotentialOption.OptionType, int>[] potential, bool isAdd = true)
+    private void ApplyPotential(KeyValuePair< MapleStatus.StatusType, int>[] potential, bool isAdd = true)
     {
         int sign = isAdd ? 1 : -1;
 
@@ -184,35 +169,35 @@ public class PlayerInfo
             else if (pair.Key == AttackRateType)         AttackRate += value;
             else switch (pair.Key)
             {
-                case MaplePotentialOption.OptionType.ALL_STAT:
+                case MapleStatus.StatusType.ALL_STAT:
                     MainStat.BaseValue += value;
                     SubStat.BaseValue += value;
                     SubStat2.BaseValue += value;
                     break;
-                case MaplePotentialOption.OptionType.ALL_STAT_RATE:
+                case  MapleStatus.StatusType.ALL_STAT_RATE:
                     MainStat.RateValue += value;
                     SubStat.RateValue += value;
                     SubStat2.RateValue += value;
                     break;
-                case MaplePotentialOption.OptionType.DAMAGE:
+                case MapleStatus.StatusType.DAMAGE:
                     Damage += value;
                     break;
-                case MaplePotentialOption.OptionType.BOSS_DAMAGE:
+                case MapleStatus.StatusType.BOSS_DAMAGE:
                     BossDamage += value;
                     break;
-                case MaplePotentialOption.OptionType.CRITICAL_DAMAGE:
+                case MapleStatus.StatusType.CRITICAL_DAMAGE:
                     CriticalDamage += value;
                     break;
-                case MaplePotentialOption.OptionType.IGNORE_ARMOR:
+                case MapleStatus.StatusType.IGNORE_DEF:
                     IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, value, isAdd);
                     break;
-                case MaplePotentialOption.OptionType.ITEM_DROP:
+                case MapleStatus.StatusType.ITEM_DROP:
                     ItemDropIncrease += value;
                     break;
-                case MaplePotentialOption.OptionType.MESO_DROP:
+                case MapleStatus.StatusType.MESO_DROP:
                     MesoDropIncrease += value;
                     break;
-                case MaplePotentialOption.OptionType.COOLDOWN_DECREASE:
+                case MapleStatus.StatusType.COOL_DEC_SECOND:
                     CooldownDecreaseValue += value;
                     break;
             }
@@ -227,14 +212,14 @@ public class PlayerInfo
         MainStat.BaseValue += GetStatFromOption(option, MainStat.Stat);
         SubStat.BaseValue += GetStatFromOption(option, SubStat.Stat);
         SubStat2.BaseValue += GetStatFromOption(option, SubStat2.Stat);
-        AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? option.AttackPower : option.MagicPower;
+        AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? option.AttackPower : option.MagicPower;
         BossDamage += option.BossDamage;
         Damage += option.Damage;
         CommonDamage += option.CommonDamage;
         CriticalDamage += option.CriticalDamage;
         IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, option.IgnoreArmor, option.IgnoreArmor >= 0);
         
-        if (MainStat.Stat == MaplePotentialOption.OptionType.MAX_HP)
+        if (MainStat.Stat ==  MapleStatus.StatusType.HP)
             MainStat.RateValue += option.MaxHpRate;
     }
     
@@ -254,7 +239,7 @@ public class PlayerInfo
         SubStat.RateValue += itemOption.AllStatRate * sign;
         SubStat2.RateValue += itemOption.AllStatRate * sign;
 
-        AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? itemOption.AttackPower : itemOption.MagicPower;
+        AttackValue += AttackType ==  MapleStatus.StatusType.ATTACK_POWER ? itemOption.AttackPower : itemOption.MagicPower;
         BossDamage += itemOption.BossDamage;
         IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, itemOption.IgnoreArmor, isAdd);
         
@@ -350,80 +335,61 @@ public class PlayerInfo
     #endregion
     
     #region 어빌리티 효과 적용
-
-    private MaplePotentialOption.OptionType GetOptionTypeByAbilityType(MapleAbility.AbilityType type)
-    {
-        return type switch
-        {
-            MapleAbility.AbilityType.STR => MaplePotentialOption.OptionType.STR,
-            MapleAbility.AbilityType.DEX => MaplePotentialOption.OptionType.DEX,
-            MapleAbility.AbilityType.INT => MaplePotentialOption.OptionType.INT,
-            MapleAbility.AbilityType.LUK => MaplePotentialOption.OptionType.LUK,
-            MapleAbility.AbilityType.HP => MaplePotentialOption.OptionType.MAX_HP,
-            MapleAbility.AbilityType.MAX_HP_RATE => MaplePotentialOption.OptionType.MAX_HP_RATE,
-            MapleAbility.AbilityType.ATTACK_POWER => MaplePotentialOption.OptionType.ATTACK,
-            MapleAbility.AbilityType.LEVEL_ATTACK_POWER => MaplePotentialOption.OptionType.ATTACK,
-            MapleAbility.AbilityType.MAGIC_POWER => MaplePotentialOption.OptionType.MAGIC,
-            MapleAbility.AbilityType.LEVEL_MAGIC_POWER => MaplePotentialOption.OptionType.MAGIC,
-            _ => MaplePotentialOption.OptionType.OTHER
-        };
-    }
     
-    private void ApplyAbilityEach(MapleAbility.AbilityType type, int value)
+    private void ApplyAbilityEach(MapleStatus.StatusType type, int value)
     {
-        MaplePotentialOption.OptionType optType = GetOptionTypeByAbilityType(type);
-        if (optType == MainStat.Stat) MainStat.FlatValue += value;
-        else if (optType == MainStat.StatRate) MainStat.RateValue += value;
-        else if (optType == SubStat.Stat) SubStat.FlatValue += value;
-        else if (optType == SubStat2.Stat) SubStat2.FlatValue += value;
-        else if (optType == AttackType)
+        if (type == MainStat.Stat) MainStat.FlatValue += value;
+        else if (type == MainStat.StatRate) MainStat.RateValue += value;
+        else if (type == SubStat.Stat) SubStat.FlatValue += value;
+        else if (type == SubStat2.Stat) SubStat2.FlatValue += value;
+        else if (type == AttackType)
         {
-            if (type is MapleAbility.AbilityType.LEVEL_MAGIC_POWER or MapleAbility.AbilityType.LEVEL_ATTACK_POWER)
+            if (type is MapleStatus.StatusType.MAG_PER_LEVEL or MapleStatus.StatusType.ATK_PER_LEVEL)
                 value = (int) (BuilderDataContainer.CharacterInfo!.Level / value);
             AttackValue += value;
         }
         
         switch (type)
         {
-            case MapleAbility.AbilityType.CRITICAL_CHANCE:
+            case MapleStatus.StatusType.CRITICAL_CHANCE:
                 CriticalChance += value;
                 break;
-            case MapleAbility.AbilityType.ALL_STAT:
+            case MapleStatus.StatusType.ALL_STAT:
                 MainStat.FlatValue += value;
                 SubStat.FlatValue += value;
                 SubStat2.FlatValue += value;
                 break;
-            case MapleAbility.AbilityType.BOSS_DAMAGE:
+            case MapleStatus.StatusType.BOSS_DAMAGE:
                 BossDamage += value;
                 break;
-            case MapleAbility.AbilityType.COMMON_DAMAGE:
+            case MapleStatus.StatusType.COMMON_DAMAGE:
                 CommonDamage += value;
                 break;
-            case MapleAbility.AbilityType.DEBUFF_DAMAGE:
+            case MapleStatus.StatusType.DEBUFF_DAMAGE:
                 DebuffDamage += value;
                 break;
-            case MapleAbility.AbilityType.COOLDOWN_IGNORE:
+            case MapleStatus.StatusType.COOL_IGNORE:
                 CooldownIgnoreRate += value;
                 break;
-            case MapleAbility.AbilityType.BUFF_DURATION_INCREASE:
+            case MapleStatus.StatusType.BUFF_DURATION:
                 BuffDurationIncrease += value;
                 break;
-            case MapleAbility.AbilityType.ITEM_DROP:
+            case MapleStatus.StatusType.ITEM_DROP:
                 ItemDropIncrease += value;
                 break;
-            case MapleAbility.AbilityType.MESO_DROP:
+            case MapleStatus.StatusType.MESO_DROP:
                 MesoDropIncrease += value;
                 break;
-            case MapleAbility.AbilityType.ATTACK_SPEED:
-            case MapleAbility.AbilityType.PASSIVE_SKILL_LEVEL:
-            case MapleAbility.AbilityType.MULTI_TARGET:
-            case MapleAbility.AbilityType.OTHER:
+            case MapleStatus.StatusType.ATTACK_SPEED:
+            case MapleStatus.StatusType.PASSIVE_LEVEL:
+            case MapleStatus.StatusType.TARGET_COUNT:
+            case MapleStatus.StatusType.OTHER:
             default:
                 break;
         }
     }
 
-    public void ApplyAbility(Dictionary<MapleAbility.AbilityType, int> abilities)
+    public void ApplyAbility(Dictionary<MapleStatus.StatusType, int> abilities)
     {
         foreach (var pair in LastAbilities)
             ApplyAbilityEach(pair.Key, pair.Value * -1);
@@ -438,56 +404,43 @@ public class PlayerInfo
     
     #region 하이퍼 스탯 효과 적용
     
-    private MaplePotentialOption.OptionType GetOptionTypeByHyperStatType(MapleHyperStat.StatType type)
+    public void ApplyHyperStat(MapleStatus.StatusType type, double delta)
     {
-        return type switch
-        {
-            MapleHyperStat.StatType.STR => MaplePotentialOption.OptionType.STR,
-            MapleHyperStat.StatType.DEX => MaplePotentialOption.OptionType.DEX,
-            MapleHyperStat.StatType.INT => MaplePotentialOption.OptionType.INT,
-            MapleHyperStat.StatType.LUK => MaplePotentialOption.OptionType.LUK,
-            MapleHyperStat.StatType.HP => MaplePotentialOption.OptionType.MAX_HP_RATE,
-            _ => MaplePotentialOption.OptionType.OTHER
-        };
-    }
-    public void ApplyHyperStat(MapleHyperStat.StatType statType, double delta)
-    {
-        MaplePotentialOption.OptionType optType = GetOptionTypeByHyperStatType(statType);
-        if (optType == MainStat.Stat) MainStat.FlatValue += (int) delta;
-        else if (optType == MainStat.StatRate) MainStat.RateValue += (int) delta;
-        else if (optType == SubStat.Stat) SubStat.FlatValue += (int) delta;
-        else if (optType == SubStat2.Stat) SubStat2.FlatValue += (int) delta;
+        if (type == MainStat.Stat) MainStat.FlatValue += (int) delta;
+        else if (type == MainStat.StatRate) MainStat.RateValue += (int) delta;
+        else if (type == SubStat.Stat) SubStat.FlatValue += (int) delta;
+        else if (type == SubStat2.Stat) SubStat2.FlatValue += (int) delta;
         
-        switch (statType)
+        switch (type)
         {
-            case MapleHyperStat.StatType.CRITCIAL_CHANCE:
+            case MapleStatus.StatusType.CRITICAL_CHANCE:
                 CriticalChance += delta;
                 break;
-            case MapleHyperStat.StatType.CRITICAL_DAMAGE:
+            case MapleStatus.StatusType.CRITICAL_DAMAGE:
                 CriticalDamage += delta;
                 break;
-            case MapleHyperStat.StatType.IGNORE_ARMOR:
+            case MapleStatus.StatusType.IGNORE_DEF:
                 IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, delta, delta >= 0);
                 break;
-            case MapleHyperStat.StatType.DAMAGE:
+            case MapleStatus.StatusType.DAMAGE:
                 Damage += (int) delta;
                 break;
-            case MapleHyperStat.StatType.BOSS_DAMAGE:
+            case MapleStatus.StatusType.BOSS_DAMAGE:
                 BossDamage += (int) delta;
                 break;
-            case MapleHyperStat.StatType.COMMON_DAMAGE:
+            case MapleStatus.StatusType.COMMON_DAMAGE:
                 CommonDamage += (int) delta;
                 break;
-            case MapleHyperStat.StatType.IMMUNE:
+            case MapleStatus.StatusType.ABN_STATUS_RESIS:
                 Immune += (int) delta;
                 break;
-            case MapleHyperStat.StatType.ATTACK_POWER:
+            case MapleStatus.StatusType.ATTACK_POWER:
                 AttackValue += (int) delta;
                 break;
-            case MapleHyperStat.StatType.MP:
-            case MapleHyperStat.StatType.DF_TT_PP:
-            case MapleHyperStat.StatType.EXP_UP:
-            case MapleHyperStat.StatType.ARCANE_FORCE:
+            case MapleStatus.StatusType.MP:
+            case MapleStatus.StatusType.DF_TT_PP:
+            case MapleStatus.StatusType.EXP_INCREASE:
+            case MapleStatus.StatusType.ARCANE_FORCE:
                 break;
         }
         BuilderDataContainer.RefreshAll();
@@ -496,87 +449,71 @@ public class PlayerInfo
     #endregion
     
     #region 유니온 공격대 효과 적용
-
-    private MaplePotentialOption.OptionType GetOptionTypeByRaiderEffectType(MapleUnion.RaiderEffectType effectType)
-    {
-        return effectType switch
-        {
-            MapleUnion.RaiderEffectType.INT => MaplePotentialOption.OptionType.INT,
-            MapleUnion.RaiderEffectType.STR => MaplePotentialOption.OptionType.STR,
-            MapleUnion.RaiderEffectType.LUK => MaplePotentialOption.OptionType.LUK,
-            MapleUnion.RaiderEffectType.DEX => MaplePotentialOption.OptionType.DEX,
-            MapleUnion.RaiderEffectType.MAX_HP => MaplePotentialOption.OptionType.MAX_HP,
-            MapleUnion.RaiderEffectType.MAX_HP_RATE => MaplePotentialOption.OptionType.MAX_HP_RATE,
-            _ => MaplePotentialOption.OptionType.OTHER
-        };
-    }
     
-    public void ApplyUnionRaider(MapleUnion.RaiderEffectType effectType, int delta)
+    public void ApplyUnionRaider(MapleStatus.StatusType type, int delta)
     {
-        MaplePotentialOption.OptionType statChecker = GetOptionTypeByRaiderEffectType(effectType);
-        if (statChecker == MainStat.Stat) MainStat.FlatValue += delta;
-        else if (statChecker == MainStat.StatRate) MainStat.RateValue += delta;
-        else if (statChecker == SubStat.Stat) SubStat.FlatValue += delta;
-        else if (statChecker == SubStat2.Stat) SubStat2.FlatValue += delta;
-        
-        if(statChecker == MaplePotentialOption.OptionType.OTHER)
+        if (type == MainStat.Stat) MainStat.FlatValue += delta;
+        else if (type == MainStat.StatRate) MainStat.RateValue += delta;
+        else if (type == SubStat.Stat) SubStat.FlatValue += delta;
+        else if (type == SubStat2.Stat) SubStat2.FlatValue += delta;
+
+        switch (type)
         {
-            switch (effectType)
-            {
-                case MapleUnion.RaiderEffectType.BOSS_DAMAGE:
-                    BossDamage += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.IGNORE_ARMOR:
-                    IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, delta, delta >= 0);
-                    break;
-                case MapleUnion.RaiderEffectType.IMMUNE:
-                    Immune += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.STR_DEX_LUK:
-                    MaplePotentialOption.OptionType[] options =
-                    {
-                        MaplePotentialOption.OptionType.STR, MaplePotentialOption.OptionType.DEX,
-                        MaplePotentialOption.OptionType.LUK
-                    };
-                    if (options.Contains(MainStat.Stat)) MainStat.FlatValue += delta;
-                    if (options.Contains(SubStat.Stat)) SubStat.FlatValue += delta;
-                    if (options.Contains(SubStat2.Stat)) SubStat2.FlatValue += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.ATTACK_MAGIC_POWER:
-                    AttackValue += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.MESO_DROP:
-                    MesoDropIncrease += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.CRIT_CHANCE:
-                    CriticalChance += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.BUFF_DURATION:
-                    BuffDurationIncrease += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.SUMMON_DURATION:
-                    SummonDurationIncrease += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.CRIT_DAMAGE:
-                    CriticalDamage += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.COOLDOWN_DECREASE_RATE:
-                    CooldownDecreaseRate += delta;
-                    break;
-                case MapleUnion.RaiderEffectType.OTHER:
-                case MapleUnion.RaiderEffectType.INT:
-                case MapleUnion.RaiderEffectType.STR:
-                case MapleUnion.RaiderEffectType.LUK:
-                case MapleUnion.RaiderEffectType.DEX:
-                case MapleUnion.RaiderEffectType.MAX_HP:
-                case MapleUnion.RaiderEffectType.MAX_HP_RATE:
-                case MapleUnion.RaiderEffectType.MAX_MP_RATE:
-                case MapleUnion.RaiderEffectType.EXP_UP:
-                case MapleUnion.RaiderEffectType.CHANCE_DAMAGE:
-                default:
-                    break;
-            }
+            case MapleStatus.StatusType.BOSS_DAMAGE:
+                BossDamage += delta;
+                break;
+            case MapleStatus.StatusType.IGNORE_DEF:
+                IgnoreArmor = CalcIgnoreArmor(IgnoreArmor, delta, delta >= 0);
+                break;
+            case MapleStatus.StatusType.ABN_STATUS_RESIS:
+                Immune += delta;
+                break;
+            case MapleStatus.StatusType.STR_DEX_LUK:
+                MapleStatus.StatusType[] options =
+                {
+                    MapleStatus.StatusType.STR, MapleStatus.StatusType.DEX,
+                    MapleStatus.StatusType.LUK
+                };
+                if (options.Contains(MainStat.Stat)) MainStat.FlatValue += delta;
+                if (options.Contains(SubStat.Stat)) SubStat.FlatValue += delta;
+                if (options.Contains(SubStat2.Stat)) SubStat2.FlatValue += delta;
+                break;
+            case MapleStatus.StatusType.ATTACK_AND_MAGIC:
+                AttackValue += delta;
+                break;
+            case MapleStatus.StatusType.MESO_DROP:
+                MesoDropIncrease += delta;
+                break;
+            case MapleStatus.StatusType.CRITICAL_CHANCE:
+                CriticalChance += delta;
+                break;
+            case MapleStatus.StatusType.BUFF_DURATION:
+                BuffDurationIncrease += delta;
+                break;
+            case MapleStatus.StatusType.SUMMON_DURATION:
+                SummonDurationIncrease += delta;
+                break;
+            case MapleStatus.StatusType.CRITICAL_DAMAGE:
+                CriticalDamage += delta;
+                break;
+            case MapleStatus.StatusType.COOL_DEC_RATE:
+                CooldownDecreaseRate += delta;
+                break;
+            case MapleStatus.StatusType.OTHER:
+            case MapleStatus.StatusType.INT:
+            case MapleStatus.StatusType.STR:
+            case MapleStatus.StatusType.LUK:
+            case MapleStatus.StatusType.DEX:
+            case MapleStatus.StatusType.HP:
+            case MapleStatus.StatusType.HP_RATE:
+            case MapleStatus.StatusType.MP_RATE:
+            case MapleStatus.StatusType.EXP_INCREASE:
+            case MapleStatus.StatusType.WILD_HUNTER_DMG:
+            default:
+                break;
+
         }
+
         Summarize.DispatchSummary();
     }
     
@@ -589,7 +526,7 @@ public class PlayerInfo
         foreach (MaplePetItem petItem in petItems)
         {
             Console.WriteLine($"[{petItem.Name}] 공 : {petItem.Attack} / 마 : {petItem.Magic}");
-            AttackValue += AttackType == MaplePotentialOption.OptionType.ATTACK ? petItem.Attack : petItem.Magic;
+            AttackValue += AttackType == MapleStatus.StatusType.ATTACK_POWER ? petItem.Attack : petItem.Magic;
         }
     }
     

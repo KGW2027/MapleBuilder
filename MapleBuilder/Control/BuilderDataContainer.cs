@@ -52,7 +52,7 @@ public class BuilderDataContainer
             RegisterItems.Add(newItem);
         }
         
-        MaplePotentialOption.OptionType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
+        MapleStatus.StatusType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         PlayerStatus.ApplyPetItem(charInfo.PetInfo);
