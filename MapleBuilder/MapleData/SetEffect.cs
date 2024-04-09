@@ -482,7 +482,6 @@ public class SetEffect
         {
             result += GetSetOption(pair.Key, pair.Value);
         }
-
         return result;
     }
 

@@ -42,7 +42,6 @@ public class MapleCommonItem : MapleItemBase
         EtcOption = MapleStatContainer.LoadFromJson(data["item_etc_option"]!.AsObject());
 
         CachedStarforce = new Dictionary<int, MapleStatContainer>();
-        Console.WriteLine($"{Name}의 Starforce Value : {data["starforce"]}");
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
 
         Potential = new MapleItemPotential(ItemLevel, EquipType,
@@ -322,7 +321,6 @@ public class MapleCommonItem : MapleItemBase
     public MapleStatContainer ParseStarforceOption()
     {
         if (CachedStarforce.TryGetValue(sfv, out var opt)) return opt;
-        Console.Write($"{Name} 아이템 스타포스 {sfv}성 시뮬레이트 => ");
         MapleStatContainer option = new MapleStatContainer();
         if (sfv == 0) return option;
 
@@ -334,7 +332,6 @@ public class MapleCommonItem : MapleItemBase
                 : GetArmorAttackIncreaseByStarforce(idx);
             option[MapleStatus.StatusType.ATTACK_AND_MAGIC] += apmp;
         }
-        Console.WriteLine($" 결과 : 스텟-{option[MapleStatus.StatusType.ALL_STAT]}, 공마-{option[MapleStatus.StatusType.ATTACK_AND_MAGIC]}");
         option.Flush();
         return option;
     }

@@ -13,7 +13,6 @@ public class PlayerInfo
     public PlayerInfo(uint level, MapleStatus.StatusType mainStat, 
         MapleStatus.StatusType subStat, MapleStatus.StatusType subStat2 = 0)
     {
-
         PlayerStat = new MapleStatContainer
         {
             mainStatType = mainStat,
@@ -52,6 +51,7 @@ public class PlayerInfo
     ///</summary>
     private void ApplyAddSub(MapleCommonItem item, bool isAdd)
     {
+        // item.Status.Flush();
         if (isAdd)  PlayerStat += item.Status;
         else        PlayerStat -= item.Status;
         
@@ -194,6 +194,4 @@ public class PlayerInfo
     }
     
     #endregion
-    
-    // TODO : 스텟 적용 테스트 - 기본수치 4422, 실제수치 4477, 차이 125 - 아르카나세트 올스텟 15
 }

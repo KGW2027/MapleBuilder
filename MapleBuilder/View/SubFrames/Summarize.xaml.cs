@@ -46,7 +46,6 @@ public partial class Summarize : UserControl
                 ? MapleStatus.StatusType.MAGIC_RATE
                 : MapleStatus.StatusType.ATTACK_RATE;
             
-            
             int mainStat = (int) Math.Floor(pInfo[pInfo.mainStatType] * (1 + pInfo[pInfo.mainStatType+0x10] / 100.0) + pInfo[pInfo.mainStatType+0x20]);
             int subStat  = (int) Math.Floor(pInfo[pInfo.subStatType ] * (1 + pInfo[pInfo.subStatType +0x10] / 100.0) + pInfo[pInfo.subStatType +0x20]);
             int subStat2 = pInfo.subStat2Type == MapleStatus.StatusType.OTHER ? 0 

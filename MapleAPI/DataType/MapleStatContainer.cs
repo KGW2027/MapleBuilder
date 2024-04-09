@@ -157,9 +157,9 @@ public class MapleStatContainer
         {
             msc.statContainer.TryAdd(pair.Key, 0);
             if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
-                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], -pair.Value);
+                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], pair.Value);
             else
-                msc.statContainer[pair.Key] -= pair.Value;
+                msc.statContainer[pair.Key] += pair.Value;
         }
         foreach (var pair in rhs.statContainer)
         {
