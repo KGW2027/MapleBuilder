@@ -53,20 +53,20 @@ public class MapleClass
         NONE
     }
     
-    private static readonly MaplePotentialOption.OptionType[] STR_DEX =
-        {MaplePotentialOption.OptionType.STR, MaplePotentialOption.OptionType.DEX, MaplePotentialOption.OptionType.OTHER};
-    private static readonly MaplePotentialOption.OptionType[] DEX_STR =
-        {MaplePotentialOption.OptionType.DEX, MaplePotentialOption.OptionType.STR, MaplePotentialOption.OptionType.OTHER};
-    private static readonly MaplePotentialOption.OptionType[] INT_LUK =
-        {MaplePotentialOption.OptionType.INT, MaplePotentialOption.OptionType.LUK, MaplePotentialOption.OptionType.OTHER};
-    private static readonly MaplePotentialOption.OptionType[] LUK_DEX =
-        {MaplePotentialOption.OptionType.LUK, MaplePotentialOption.OptionType.DEX, MaplePotentialOption.OptionType.OTHER};
-    private static readonly MaplePotentialOption.OptionType[] LUK_DEX_STR =
-        {MaplePotentialOption.OptionType.LUK, MaplePotentialOption.OptionType.DEX, MaplePotentialOption.OptionType.STR};
-    private static readonly MaplePotentialOption.OptionType[] HP =
-        {MaplePotentialOption.OptionType.MAX_HP, MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER};
-    private static readonly MaplePotentialOption.OptionType[] NONE =
-        {MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER, MaplePotentialOption.OptionType.OTHER};
+    private static readonly MapleStatus.StatusType[] STR_DEX =
+        {MapleStatus.StatusType.STR, MapleStatus.StatusType.DEX, MapleStatus.StatusType.OTHER};
+    private static readonly MapleStatus.StatusType[] DEX_STR =
+        {MapleStatus.StatusType.DEX, MapleStatus.StatusType.STR, MapleStatus.StatusType.OTHER};
+    private static readonly MapleStatus.StatusType[] INT_LUK =
+        {MapleStatus.StatusType.INT, MapleStatus.StatusType.LUK, MapleStatus.StatusType.OTHER};
+    private static readonly MapleStatus.StatusType[] LUK_DEX =
+        {MapleStatus.StatusType.LUK, MapleStatus.StatusType.DEX, MapleStatus.StatusType.OTHER};
+    private static readonly MapleStatus.StatusType[] LUK_DEX_STR =
+        {MapleStatus.StatusType.LUK, MapleStatus.StatusType.DEX, MapleStatus.StatusType.STR};
+    private static readonly MapleStatus.StatusType[] HP =
+        {MapleStatus.StatusType.HP, MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER};
+    private static readonly MapleStatus.StatusType[] NONE =
+        {MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER};
 
     public static string GetMapleClassString(ClassType classType)
     {
@@ -177,7 +177,7 @@ public class MapleClass
         };
     }
     
-    public static MaplePotentialOption.OptionType[] GetClassStatType(ClassType classType)
+    public static MapleStatus.StatusType[] GetClassStatType(ClassType classType)
     {
         switch (classType)
         {

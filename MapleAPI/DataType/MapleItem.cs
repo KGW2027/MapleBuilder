@@ -13,7 +13,7 @@ public class MapleItem
         data = new JsonObject();
         Name = "";
         DisplayName = "";
-        Specials = new List<KeyValuePair<MaplePotentialOption.OptionType, int>>();
+        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
         CachedStarforce = new Dictionary<int, MapleOption>();
     }
 
@@ -41,7 +41,7 @@ public class MapleItem
         ExceptionalOption = new MapleOption(data["item_exceptional_option"]!.AsObject());
         AddOption = new MapleOption(data["item_add_option"]!.AsObject());
         EtcOption = new MapleOption(data["item_etc_option"]!.AsObject());
-        Specials = new List<KeyValuePair<MaplePotentialOption.OptionType, int>>();
+        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
 
         CachedStarforce = new Dictionary<int, MapleOption>();
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
@@ -82,7 +82,7 @@ public class MapleItem
             {"description", desc}
         };
         AddOption = new MapleOption();
-        Specials = new List<KeyValuePair<MaplePotentialOption.OptionType, int>>();
+        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
         
         CachedStarforce = new Dictionary<int, MapleOption>();
         StarForce = 0;
@@ -100,7 +100,7 @@ public class MapleItem
                 foreach (string prefix in key.Split("/"))
                 {
                     var pair = MaplePotentialOption.ParseOptionFromPotential($"{prefix.Trim()}{value}");
-                    if(pair.Key != MaplePotentialOption.OptionType.OTHER) Specials.Add(pair);
+                    if(pair.Key != MapleStatus.StatusType.OTHER) Specials.Add(pair);
                 }
             }
         }
@@ -151,7 +151,7 @@ public class MapleItem
     public MapleOption? EtcOption { get; private set; }
     public MapleOption? StarforceOption { get; private set; }
     public MapleItemPotential? Potential { get; private set; }
-    public List<KeyValuePair<MaplePotentialOption.OptionType, int>> Specials { get; private set; }
+    public List<KeyValuePair<MapleStatus.StatusType, int>> Specials { get; private set; }
     private Dictionary<int, MapleOption> CachedStarforce { get; }
 
     public static MapleItem Parse(JsonObject data)
