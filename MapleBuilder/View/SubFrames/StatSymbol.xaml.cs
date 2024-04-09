@@ -164,12 +164,9 @@ public partial class StatSymbol : UserControl
             ctAbility3.Items.Add(str);
         }
 
-        foreach (MaplePotentialGrade.GradeType grade in Enum.GetValues(typeof(MaplePotentialGrade.GradeType)))
-        {
-            string str = MaplePotentialGrade.GetPotentialGradeString(grade);
-            if (str.Equals("")) continue;
-            ctGradeAbility.Items.Add(str);
-        }
+        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.EPIC));
+        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.UNIQUE));
+        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.LEGENDARY));
 
         ApplyAbility();
 
@@ -295,6 +292,7 @@ public partial class StatSymbol : UserControl
         {
             MaplePotentialGrade.GradeType applyType = slot == 0 ? topGrade :
                 (bool) abilityCheckboxes[slot]!.IsChecked! ? topGrade - 1 : topGrade - 2;
+            if (applyType == MaplePotentialGrade.GradeType.NONE) applyType = MaplePotentialGrade.GradeType.RARE;
             
             int[] abV = MapleAbility.GetMinMax(abilityTypes[slot], applyType);
             abilitySliders[slot].Minimum = abV[0];
@@ -333,6 +331,8 @@ public partial class StatSymbol : UserControl
 
     private void OnAbilityGradeChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (e.AddedItems.Count == 0) return;
+        ctGradeAbility.Text = e.AddedItems[0]!.ToString();
         ApplyAbility();
     }
     
