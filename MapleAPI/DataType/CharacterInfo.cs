@@ -136,6 +136,16 @@ public class CharacterInfo
                 cInfo.UnionInfo.Add(new MapleUnion.UnionBlock {blockPositions = claims, classType = blockClass, raiderRank = blockRank});
             }
         }
+
+        cInfo.UnionInner.Clear();
+        if (unionRaiderInfo.JsonData!["union_inner_stat"] is JsonArray unionInners)
+        {
+            foreach (var unionInnerNode in unionInners)
+            {
+                if (unionInnerNode is not JsonObject unionInner) continue;
+                cInfo.UnionInner.Add(MapleUnion.GetStatusTypeByUnionField(unionInner["stat_field_effect"]!.ToString()));
+            }
+        }
         
         // 유니온 아티팩트 로드
         APIResponse unionArtifactInfo = await APIRequest.RequestAsync(APIRequestType.UNION_ARTIFACT, args);
@@ -229,6 +239,7 @@ public class CharacterInfo
         AbilityValues = new Dictionary<MapleStatus.StatusType, int>();
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
+        UnionInner = new List<MapleStatus.StatusType>();
         ArtifactLevels = new Dictionary<MapleStatus.StatusType, int>();
         PetInfo = new List<MaplePetItem>();
         CashItems = new List<MapleCashItem>();
@@ -253,6 +264,7 @@ public class CharacterInfo
     public Dictionary<MapleStatus.StatusType, int> AbilityValues { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
+    public List<MapleStatus.StatusType> UnionInner { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> ArtifactLevels { get; private set; }
     #endregion
     

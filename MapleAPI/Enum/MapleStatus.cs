@@ -16,8 +16,6 @@ public class MapleStatus
         HP              = 0x08,
         MP              = 0x09,
         DF_TT_PP        = 0x0A,
-        HP_AND_MP       = 0x0B,
-        ATTACK_AND_MAGIC= 0x0C,
         
         STR_RATE        = 0x11,
         DEX_RATE        = 0x12,
@@ -67,6 +65,10 @@ public class MapleStatus
         EXP_INCREASE    = 0x63,
         ARCANE_FORCE    = 0x64,
         AUTHENTIC_FORCE = 0x65,
+        
+        HP_AND_MP       = 0x71,
+        ATTACK_AND_MAGIC= 0x72,
+        STR_DEX_LUK     = 0x73,
         
     }
 }

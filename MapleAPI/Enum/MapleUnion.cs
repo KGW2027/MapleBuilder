@@ -43,43 +43,43 @@ public class MapleUnion
         OTHER
     }
 
-    public static string GetRaiderEffectString(RaiderEffectType effectType)
+    public static string GetRaiderEffectString(MapleStatus.StatusType effectType)
     {
         return effectType switch
         {
-            RaiderEffectType.INT => "INT %d 증가",
-            RaiderEffectType.STR => "STR %d 증가",
-            RaiderEffectType.LUK => "LUK %d 증가",
-            RaiderEffectType.DEX => "DEX %d 증가",
-            RaiderEffectType.MAX_HP => "최대 HP %d 증가",
-            RaiderEffectType.BOSS_DAMAGE => "보스 공격 시 데미지 %d 증가",
-            RaiderEffectType.MAX_HP_RATE => "최대 HP %d% 증가",
-            RaiderEffectType.IGNORE_ARMOR => "방어율 무시 %d% 증가",
-            RaiderEffectType.IMMUNE => "상태 이상 내성 %d 증가",
-            RaiderEffectType.STR_DEX_LUK => "STR, DEX, LUK %d 증가",
-            RaiderEffectType.MAX_MP_RATE => "최대 MP %d% 증가",
-            RaiderEffectType.ATTACK_MAGIC_POWER => "공격력/마력 %d 증가",
-            RaiderEffectType.MESO_DROP => "메소 획득량 %d 증가",
-            RaiderEffectType.EXP_UP => "경험치 획득량 %d 증가",
-            RaiderEffectType.CRIT_CHANCE => "크리티컬 확률 %d% 증가",
-            RaiderEffectType.BUFF_DURATION => "버프 지속 시간 %d% 증가",
-            RaiderEffectType.SUMMON_DURATION => "소환수 지속 시간 %d% 증가",
-            RaiderEffectType.CRIT_DAMAGE => "크리티컬 데미지 %d% 증가",
-            RaiderEffectType.CHANCE_DAMAGE => "공격 시 20% 확률로 데미지 %d% 증가",
-            RaiderEffectType.COOLDOWN_DECREASE_RATE => "스킬 재사용 대기시간 %d%감소 (1초 미만으로 줄어들지 않음)",
-            RaiderEffectType.OTHER => "효과 없음",
+            MapleStatus.StatusType.INT_FLAT => "INT %d 증가",
+            MapleStatus.StatusType.STR_FLAT => "STR %d 증가",
+            MapleStatus.StatusType.LUK_FLAT => "LUK %d 증가",
+            MapleStatus.StatusType.DEX_FLAT => "DEX %d 증가",
+            MapleStatus.StatusType.HP => "최대 HP %d 증가",
+            MapleStatus.StatusType.HP_RATE => "최대 HP %d% 증가",
+            MapleStatus.StatusType.BOSS_DAMAGE => "보스 공격 시 데미지 %d 증가",
+            MapleStatus.StatusType.IGNORE_DEF => "방어율 무시 %d% 증가",
+            MapleStatus.StatusType.ABN_STATUS_RESIS => "상태 이상 내성 %d 증가",
+            MapleStatus.StatusType.STR_DEX_LUK => "STR, DEX, LUK %d 증가",
+            MapleStatus.StatusType.MP_RATE => "최대 MP %d% 증가",
+            MapleStatus.StatusType.ATTACK_AND_MAGIC => "공격력/마력 %d 증가",
+            MapleStatus.StatusType.MESO_DROP => "메소 획득량 %d 증가",
+            MapleStatus.StatusType.EXP_INCREASE => "경험치 획득량 %d 증가",
+            MapleStatus.StatusType.CRITICAL_CHANCE => "크리티컬 확률 %d% 증가",
+            MapleStatus.StatusType.BUFF_DURATION => "버프 지속 시간 %d% 증가",
+            MapleStatus.StatusType.SUMMON_DURATION => "소환수 지속 시간 %d% 증가",
+            MapleStatus.StatusType.CRITICAL_DAMAGE => "크리티컬 데미지 %d% 증가",
+            MapleStatus.StatusType.WILD_HUNTER_DMG => "공격 시 20% 확률로 데미지 %d% 증가",
+            MapleStatus.StatusType.COOL_DEC_RATE => "스킬 재사용 대기시간 %d%감소 (1초 미만으로 줄어들지 않음)",
+            MapleStatus.StatusType.OTHER => "효과 없음",
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }
 
-    public static int GetRaiderEffectValue(RaiderEffectType effectType, RaiderRank rank)
+    public static int GetRaiderEffectValue(MapleStatus.StatusType effectType, RaiderRank rank)
     {
         switch (effectType)
         {
-            case RaiderEffectType.INT:
-            case RaiderEffectType.STR:
-            case RaiderEffectType.LUK:
-            case RaiderEffectType.DEX:
+            case MapleStatus.StatusType.INT_FLAT:
+            case MapleStatus.StatusType.STR_FLAT:
+            case MapleStatus.StatusType.LUK_FLAT:
+            case MapleStatus.StatusType.DEX_FLAT:
                 return rank switch
                 {
                     RaiderRank.SSS => 100,
@@ -89,7 +89,7 @@ public class MapleUnion
                     RaiderRank.B => 10,
                     _ => 0
                 };
-            case RaiderEffectType.STR_DEX_LUK:
+            case MapleStatus.StatusType.STR_DEX_LUK:
                 return rank switch
                 {
                     RaiderRank.SSS => 50,
@@ -99,7 +99,7 @@ public class MapleUnion
                     RaiderRank.B => 5,
                     _ => 0
                 };
-            case RaiderEffectType.MAX_HP:
+            case MapleStatus.StatusType.HP:
                 return rank switch
                 {
                     RaiderRank.SSS => 2500,
@@ -109,9 +109,9 @@ public class MapleUnion
                     RaiderRank.B => 250,
                     _ => 0
                 };
-            case RaiderEffectType.MAX_HP_RATE:
-            case RaiderEffectType.MAX_MP_RATE:
-            case RaiderEffectType.COOLDOWN_DECREASE_RATE:
+            case MapleStatus.StatusType.HP_RATE:
+            case MapleStatus.StatusType.MP_RATE:
+            case MapleStatus.StatusType.COOL_DEC_RATE:
                 return rank switch
                 {
                     RaiderRank.SSS => 6,
@@ -121,9 +121,9 @@ public class MapleUnion
                     RaiderRank.B => 2,
                     _ => 0
                 };
-            case RaiderEffectType.IGNORE_ARMOR:
-            case RaiderEffectType.BOSS_DAMAGE:
-            case RaiderEffectType.CRIT_DAMAGE:
+            case MapleStatus.StatusType.IGNORE_DEF:
+            case MapleStatus.StatusType.BOSS_DAMAGE:
+            case MapleStatus.StatusType.CRITICAL_DAMAGE:
                 return rank switch
                 {
                     RaiderRank.SSS => 6,
@@ -133,9 +133,9 @@ public class MapleUnion
                     RaiderRank.B => 1,
                     _ => 0
                 };
-            case RaiderEffectType.IMMUNE:
-            case RaiderEffectType.CRIT_CHANCE:
-            case RaiderEffectType.MESO_DROP:
+            case MapleStatus.StatusType.ABN_STATUS_RESIS:
+            case MapleStatus.StatusType.CRITICAL_CHANCE:
+            case MapleStatus.StatusType.MESO_DROP:
                 return rank switch
                 {
                     RaiderRank.SSS => 5,
@@ -145,8 +145,8 @@ public class MapleUnion
                     RaiderRank.B => 1,
                     _ => 0
                 };
-            case RaiderEffectType.EXP_UP:
-            case RaiderEffectType.SUMMON_DURATION:
+            case MapleStatus.StatusType.EXP_INCREASE:
+            case MapleStatus.StatusType.SUMMON_DURATION:
                 return rank switch
                 {
                     RaiderRank.SSS => 12,
@@ -156,10 +156,10 @@ public class MapleUnion
                     RaiderRank.B => 4,
                     _ => 0
                 };
-            case RaiderEffectType.ATTACK_MAGIC_POWER:
+            case MapleStatus.StatusType.ATTACK_AND_MAGIC:
                 if (rank == RaiderRank.SSS) rank = RaiderRank.SS;
-                goto case RaiderEffectType.BUFF_DURATION;
-            case RaiderEffectType.BUFF_DURATION:
+                goto case MapleStatus.StatusType.BUFF_DURATION;
+            case MapleStatus.StatusType.BUFF_DURATION:
                 return rank switch
                 {
                     RaiderRank.SSS => 25,
@@ -169,7 +169,7 @@ public class MapleUnion
                     RaiderRank.B => 5,
                     _ => 0
                 };
-            case RaiderEffectType.CHANCE_DAMAGE:
+            case MapleStatus.StatusType.WILD_HUNTER_DMG:
                 return rank switch
                 {
                     RaiderRank.SSS => 20,
@@ -179,13 +179,13 @@ public class MapleUnion
                     RaiderRank.B => 4,
                     _ => 0
                 };
-            case RaiderEffectType.OTHER:
+            case MapleStatus.StatusType.OTHER:
             default:
                 return 0;
         }
     }
 
-    public static RaiderEffectType GetRaiderEffectByClass(MapleClass.ClassType classType)
+    public static MapleStatus.StatusType GetRaiderEffectByClass(MapleClass.ClassType classType)
     {
         switch (classType)
         {
@@ -197,14 +197,14 @@ public class MapleUnion
             case MapleClass.ClassType.KAISER:
             case MapleClass.ClassType.ARC:
             case MapleClass.ClassType.ADEL:
-                return RaiderEffectType.STR; // 10 20 40 80 100
+                return MapleStatus.StatusType.STR_FLAT; // 10 20 40 80 100
             
             case MapleClass.ClassType.BOW_MASTER:
             case MapleClass.ClassType.PATH_FINDER:
             case MapleClass.ClassType.WIND_BREAKER:
             case MapleClass.ClassType.ANGELICBUSTER:
             case MapleClass.ClassType.KAIN:
-                return RaiderEffectType.DEX;
+                return MapleStatus.StatusType.DEX_FLAT;
             
             case MapleClass.ClassType.ARCMAGE_TC:
             case MapleClass.ClassType.BISHOP:
@@ -214,7 +214,7 @@ public class MapleUnion
             case MapleClass.ClassType.ILLIUM:
             case MapleClass.ClassType.LALA:
             case MapleClass.ClassType.KINESIS:
-                return RaiderEffectType.INT;
+                return MapleStatus.StatusType.INT_FLAT;
             
             case MapleClass.ClassType.SHADOWER:
             case MapleClass.ClassType.DUALBLADE:
@@ -222,62 +222,62 @@ public class MapleUnion
             case MapleClass.ClassType.KADENA:
             case MapleClass.ClassType.KALI:
             case MapleClass.ClassType.HOYOUNG:
-                return RaiderEffectType.LUK;
+                return MapleStatus.StatusType.LUK_FLAT;
             
             case MapleClass.ClassType.XENON:
-                return RaiderEffectType.STR_DEX_LUK; // 5 10 20 40 50
+                return MapleStatus.StatusType.STR_DEX_LUK; // 5 10 20 40 50
             
             case MapleClass.ClassType.SOUL_MASTER:
             case MapleClass.ClassType.MIKHAIL:
-                return RaiderEffectType.MAX_HP; // 250 500 1000 2000 2500
+                return MapleStatus.StatusType.HP; // 250 500 1000 2000 2500
             
             case MapleClass.ClassType.DARK_KNIGHT:
-                return RaiderEffectType.MAX_HP_RATE; // 2 3 4 5 6
+                return MapleStatus.StatusType.HP_RATE; // 2 3 4 5 6
             
             case MapleClass.ClassType.BLASTER:
-                return RaiderEffectType.IGNORE_ARMOR; // 1 2 3 5 6
+                return MapleStatus.StatusType.IGNORE_DEF; // 1 2 3 5 6
             
             case MapleClass.ClassType.DEMON_SLAYER:
-                return RaiderEffectType.IMMUNE; // 1 2 3 4 5
+                return MapleStatus.StatusType.ABN_STATUS_RESIS; // 1 2 3 4 5
             
             case MapleClass.ClassType.DEMON_AVENGER:
-                return RaiderEffectType.BOSS_DAMAGE; // 1 2 3 5 6
+                return MapleStatus.StatusType.BOSS_DAMAGE; // 1 2 3 5 6
             
             case MapleClass.ClassType.ZERO:
-                return RaiderEffectType.EXP_UP; // 4 6 8 10 12
+                return MapleStatus.StatusType.EXP_INCREASE; // 4 6 8 10 12
             
             case MapleClass.ClassType.SINGOONG:
             case MapleClass.ClassType.NIGHTLOAD:
-                return RaiderEffectType.CRIT_CHANCE; // 1 2 3 4 5
+                return MapleStatus.StatusType.CRITICAL_CHANCE; // 1 2 3 4 5
             
             case MapleClass.ClassType.MERCEDES:
-                return RaiderEffectType.COOLDOWN_DECREASE_RATE; // 2 3 4 5 6
+                return MapleStatus.StatusType.COOL_DEC_RATE; // 2 3 4 5 6
             
             case MapleClass.ClassType.ARCMAGE_FP:
-                return RaiderEffectType.MAX_MP_RATE; // 2 3 4 5 6
+                return MapleStatus.StatusType.MP_RATE; // 2 3 4 5 6
             
             case MapleClass.ClassType.WILD_HUNTER:
-                return RaiderEffectType.CHANCE_DAMAGE; // 4 8 12 16 20
+                return MapleStatus.StatusType.WILD_HUNTER_DMG; // 4 8 12 16 20
             
             case MapleClass.ClassType.MECHANIC:
-                return RaiderEffectType.BUFF_DURATION; // 5 10 15 20 25
+                return MapleStatus.StatusType.BUFF_DURATION; // 5 10 15 20 25
             
             case MapleClass.ClassType.CAPTAIN:
-                return RaiderEffectType.SUMMON_DURATION; // 4 6 8 10 12
+                return MapleStatus.StatusType.SUMMON_DURATION; // 4 6 8 10 12
             
             case MapleClass.ClassType.PHANTOM:
-                return RaiderEffectType.MESO_DROP; // 1 2 3 4 5
+                return MapleStatus.StatusType.MESO_DROP; // 1 2 3 4 5
             
             case MapleClass.ClassType.EUNWALL:
-                return RaiderEffectType.CRIT_DAMAGE; // 1 2 3 5 6
+                return MapleStatus.StatusType.CRITICAL_DAMAGE; // 1 2 3 5 6
             
             case MapleClass.ClassType.NONE: // 메이플 M
-                return RaiderEffectType.ATTACK_MAGIC_POWER; // 5 10 15 20
+                return MapleStatus.StatusType.ATTACK_AND_MAGIC; // 5 10 15 20
             
             case MapleClass.ClassType.EVAN:
             case MapleClass.ClassType.ARAN:
             default:
-                return RaiderEffectType.OTHER;
+                return MapleStatus.StatusType.OTHER;
         }
     }
 
@@ -379,14 +379,55 @@ public class MapleUnion
         return (ClaimType) UnionField[ry][rx];
     }
 
-    public static Dictionary<ClaimType, int> GetUnionOption(sbyte[][] claims)
+    public static MapleStatus.StatusType GetStatusTypeByUnionField(string field)
     {
-        Dictionary<ClaimType, int> claimCount = new Dictionary<ClaimType, int>();
+        return field switch
+        {
+            "유니온 STR" => MapleStatus.StatusType.STR_FLAT,
+            "유니온 DEX" => MapleStatus.StatusType.DEX_FLAT,
+            "유니온 INT" => MapleStatus.StatusType.INT_FLAT,
+            "유니온 LUK" => MapleStatus.StatusType.LUK_FLAT,
+            "유니온 최대 HP" => MapleStatus.StatusType.HP,
+            "유니온 최대 MP" => MapleStatus.StatusType.MP,
+            "유니온 공격력" => MapleStatus.StatusType.ATTACK_POWER,
+            "유니온 마력" => MapleStatus.StatusType.MAGIC_POWER,
+            _ => MapleStatus.StatusType.OTHER
+        };
+    }
+
+    private static MapleStatus.StatusType GetStatusTypeByClaimType(ClaimType claimType, List<MapleStatus.StatusType> innerTypes)
+    {
+        return claimType switch
+        {
+            ClaimType.INNER_0 => innerTypes[0],
+            ClaimType.INNER_1 => innerTypes[1],
+            ClaimType.INNER_2 => innerTypes[2],
+            ClaimType.INNER_3 => innerTypes[3],
+            ClaimType.INNER_4 => innerTypes[4],
+            ClaimType.INNER_5 => innerTypes[5],
+            ClaimType.INNER_6 => innerTypes[6],
+            ClaimType.INNER_7 => innerTypes[7],
+            ClaimType.IMMUNE => MapleStatus.StatusType.ABN_STATUS_RESIS,
+            ClaimType.EXP_UP => MapleStatus.StatusType.EXP_INCREASE,
+            ClaimType.CRIT_CHANCE => MapleStatus.StatusType.CRITICAL_CHANCE,
+            ClaimType.BOSS_DAMAGE => MapleStatus.StatusType.BOSS_DAMAGE,
+            ClaimType.COMMON_DAMAGE => MapleStatus.StatusType.COMMON_DAMAGE,
+            ClaimType.BUFF_DURATION => MapleStatus.StatusType.BUFF_DURATION,
+            ClaimType.IGNORE_ARMOR => MapleStatus.StatusType.IGNORE_DEF,
+            ClaimType.CRIT_DAMAGE => MapleStatus.StatusType.CRITICAL_DAMAGE,
+            _ => throw new ArgumentOutOfRangeException(nameof(claimType), claimType, null)
+        };
+    }
+
+    public static Dictionary<MapleStatus.StatusType, int> GetUnionOption(sbyte[][] claims, List<MapleStatus.StatusType> innerTypes)
+    {
+        Dictionary<MapleStatus.StatusType, int> claimCount = new Dictionary<MapleStatus.StatusType, int>();
         foreach (sbyte[] claim in claims)
         {
             ClaimType ct = GetOptionBySlot(claim[0], claim[1]);
-            int c = claimCount.GetValueOrDefault(ct, 0) + 1;
-            if (!claimCount.TryAdd(ct, c)) claimCount[ct] = c;
+            MapleStatus.StatusType st = GetStatusTypeByClaimType(ct, innerTypes);
+            int c = claimCount.GetValueOrDefault(st, 0) + 1;
+            if (!claimCount.TryAdd(st, c)) claimCount[st] = c;
         }
         return claimCount;
     }
