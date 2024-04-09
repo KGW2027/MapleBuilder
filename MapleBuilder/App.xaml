@@ -59,6 +59,8 @@
         <Style TargetType="ComboBox">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="16, 0, 0, 0"/>
             <Setter Property="FontFamily" Value="{StaticResource Pretendard}"/>
             <Setter Property="FontWeight" Value="Light"/>
             <Setter Property="FontSize" Value="12"/>
@@ -81,7 +83,7 @@
                                     </ControlTemplate>
                                 </ToggleButton.Template>
                             </ToggleButton>
-                            <ContentPresenter Margin="16, 0, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{TemplateBinding Text}"
+                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" Content="{TemplateBinding Text}"
                                               ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                               ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
                             <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">

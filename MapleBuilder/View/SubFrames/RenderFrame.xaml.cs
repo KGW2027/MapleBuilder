@@ -21,7 +21,7 @@ public partial class RenderFrame : UserControl
         {
             {RenderScreenType.OVERVIEW_EQUIPMENT, new List<UIElement> {ctCharacterTop, ctFrameOverview}},
             {RenderScreenType.STAT_SYMBOL, new List<UIElement> {ctCharacterTop, ctStatSymbol}},
-            {RenderScreenType.SPECIAL_EQUIPS, new List<UIElement> {ctCharacterTop}},
+            {RenderScreenType.SPECIAL_EQUIPS, new List<UIElement> {ctCharacterTop, ctPetEquipment}},
             {RenderScreenType.CASH_EQUIPS, new List<UIElement> {ctCharacterTop}},
             {RenderScreenType.UNION, new List<UIElement> {ctUnionOverview}},
             {RenderScreenType.ETC, new List<UIElement> {}},

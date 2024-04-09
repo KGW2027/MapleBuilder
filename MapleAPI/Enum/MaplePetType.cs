@@ -22,4 +22,17 @@ public class MaplePetType
             _ => PetType.OTHER
         };
     }
+
+    public static string GetPetTypeString(PetType petType)
+    {
+        return petType switch
+        {
+            PetType.WONDER_BLACK => "원더 블랙",
+            PetType.LUNA_SWEET => "루나 스윗",
+            PetType.LUNA_DREAM => "루나 드림",
+            PetType.LUNA_PETIT => "루나 쁘띠",
+            PetType.OTHER => "세트 없음",
+            _ => throw new ArgumentOutOfRangeException(nameof(petType), petType, null)
+        };
+    }
 }

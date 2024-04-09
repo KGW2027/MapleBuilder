@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubFrames.PetEquips"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubFrames"
+             xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
+             mc:Ignorable="d"
+             d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
+    <Grid>
+        <!-- Pet 장비 -->
+        <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="417" Height="668" HorizontalAlignment="Left"/>
+        <subObjects:PetEquipSlot x:Name="ctPetEquip1" PetType="OTHER" PetOrder="1" PetSetNumber="1" Margin="8, 153, 0, 0" 
+                                 SetChanged="OnPetEquipSetChanged" TypeChanged="OnPetTypeChanged"/>
+        <subObjects:PetEquipSlot x:Name="ctPetEquip2" PetType="OTHER" PetOrder="2" PetSetNumber="2" Margin="8, 292, 0, 0" 
+                                 SetChanged="OnPetEquipSetChanged" TypeChanged="OnPetTypeChanged"/>
+        <subObjects:PetEquipSlot x:Name="ctPetEquip3" PetType="OTHER" PetOrder="3" PetSetNumber="3" Margin="8, 431, 0, 0" 
+                                 SetChanged="OnPetEquipSetChanged" TypeChanged="OnPetTypeChanged"/>
+        
+        
+        <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="547" Height="668" HorizontalAlignment="Left" Margin="421, 0, 0, 0"/>
+        
+    </Grid>
+</UserControl>

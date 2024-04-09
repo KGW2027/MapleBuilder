@@ -142,6 +142,7 @@ public class MapleStatContainer
             else
                 msc.statContainer[pair.Key] += pair.Value;
         }
+        
         return msc;
     }
     
@@ -153,6 +154,7 @@ public class MapleStatContainer
             subStatType = lhs.subStatType,
             subStat2Type = lhs.subStat2Type
         };
+        
         foreach (var pair in lhs.statContainer)
         {
             msc.statContainer.TryAdd(pair.Key, 0);
