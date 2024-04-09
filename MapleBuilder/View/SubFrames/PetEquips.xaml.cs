@@ -54,6 +54,7 @@ public partial class PetEquips : UserControl
         int delta = atkmag - beforePetEffect;
         BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.ATTACK_POWER] += delta;
         BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.MAGIC_POWER] += delta;
+        BuilderDataContainer.RefreshAll();
         ctPetSetEffectLabel.Content = $"세트효과 - 공/마 +{atkmag}";
         beforePetEffect = atkmag;
     }

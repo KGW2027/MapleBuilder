@@ -31,6 +31,9 @@
         <!-- Pet Equipment -->
         <local:PetEquips x:Name="ctPetEquipment" Margin="12, 12, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
         
+        <!-- Cash Equipment -->
+        <local:CashEquips x:Name="ctCashEquip" Margin="12, 12, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
+        
         <!-- Top bar -->
         <subObjects:OverviewTopbar x:Name="ctCharacterTop" Margin="12, 12, 0, 0" Padding="0,0,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
         

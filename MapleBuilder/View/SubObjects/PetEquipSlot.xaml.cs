@@ -33,7 +33,7 @@ public partial class PetEquipSlot : UserControl
                 control.ctSetName.Text = MaplePetType.GetPetTypeString(petType);
                 control.maxUpgrade = petType switch
                 {
-                    MaplePetType.PetType.WONDER_BLACK => 10,
+                    MaplePetType.PetType.LUNA_PETIT => 10,
                     MaplePetType.PetType.OTHER => 8,
                     _ => 9
                 };

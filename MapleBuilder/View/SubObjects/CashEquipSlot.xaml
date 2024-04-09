@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.CashEquipSlot"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="77" d:DesignWidth="378" Background="Transparent">
+    <Grid>
+        <Border Background="#222222" BorderBrush="Black" BorderThickness="1" CornerRadius="2" Margin="0, 0, 0, 0" 
+                Width="77" Height="77" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Label x:Name="ctEquipTypelabel" Content="모자" Margin="18, 25, 0, 0"/>
+        <ComboBox x:Name="ctCashLabelSelect" Text="무라벨" Width="94" Height="24" Margin="85, 0, 0, 0" SelectionChanged="OnLabelSelectChanged"
+                  Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 2, 8, 0"/>
+        <ComboBox x:Name="ctCashOptSelect1" Text="없음" Width="57" Height="24" Margin="187, 0, 0, 0" SelectionChanged="OnOptionSelectChanged"
+                  Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 2, 8, 0"/>
+        <ComboBox x:Name="ctCashOptSelect2" Text="없음" Width="57" Height="24" Margin="248, 0, 0, 0" SelectionChanged="OnOptionSelectChanged"
+                  Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 2, 8, 0"/>
+        <ComboBox x:Name="ctCashOptSelect3" Text="없음" Width="57" Height="24" Margin="309, 0, 0, 0" SelectionChanged="OnOptionSelectChanged"
+                  Foreground="#CCCCCC" HorizontalContentAlignment="Center" Padding="0, 2, 8, 0"/>
+        <Label x:Name="ctCashLabel1" Content="-" FontSize="16" Margin="80, 34, 0, 0"/>
+        <Slider x:Name="ctCashSlider1" Minimum="0" Maximum="0" Value="0" Width="90" Height="18" Margin="85, 59, 0, 0" ValueChanged="OnSliderValueChanged"
+                SmallChange="1"/>
+        <Label x:Name="ctCashLabel2" Content="-" FontSize="16" Margin="174, 34, 0, 0"/>
+        <Slider x:Name="ctCashSlider2" Minimum="0" Maximum="0" Value="0" Width="90" Height="18" Margin="179, 59, 0, 0" ValueChanged="OnSliderValueChanged"
+                SmallChange="1"/>
+        <Label x:Name="ctCashLabel3" Content="-" FontSize="16" Margin="268, 34, 0, 0"/>
+        <Slider x:Name="ctCashSlider3" Minimum="0" Maximum="0" Value="0" Width="90" Height="18" Margin="273, 59, 0, 0" ValueChanged="OnSliderValueChanged"
+                SmallChange="1"/>
+    </Grid>
+</UserControl>

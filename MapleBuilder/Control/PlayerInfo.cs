@@ -27,7 +27,7 @@ public class PlayerInfo
         lastAbilities = new Dictionary< MapleStatus.StatusType, int>();
     }
     
-    public MapleStatContainer PlayerStat { get; private set; }
+    public MapleStatContainer PlayerStat { get; protected internal set; }
     public SetEffect SetEffects { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> lastSymbols;
     public Dictionary< MapleStatus.StatusType, int> lastAbilities;
