@@ -69,6 +69,10 @@ public class MapleStatus
         HP_AND_MP       = 0x71,
         ATTACK_AND_MAGIC= 0x72,
         STR_DEX_LUK     = 0x73,
+        MAIN_STAT       = 0x74,
+        SUB_STAT        = 0x75,
+        FINAL_DAMAGE    = 0x76,
+        FINAL_DAMAGE_SUM= 0x77,
         
     }
 }

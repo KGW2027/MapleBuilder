@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Nodes;
 using MapleAPI.Enum;
 
-namespace MapleAPI.DataType;
+namespace MapleAPI.DataType.Item;
 
-public class MaplePetItem : MapleItem
+public class MaplePetItem : MapleItemBase
 {
-    public MaplePetItem(JsonObject data, MaplePetType.PetType petType)
+    public MaplePetItem(JsonObject data, MaplePetType.PetType petType) : base(data)
     {
-        this.data = data;
+        internalData = data;
         IsEmpty = data["item_name"] == null;
         if (IsEmpty) return;
 
@@ -17,8 +17,6 @@ public class MaplePetItem : MapleItem
         MaxUpgrade = upgradable + upgrade;
         if (upgrade > 0) DisplayName = $"{Name} (+{upgrade})";
 
-        Attack = 0;
-        Magic = 0;
         JsonArray options = data["item_option"]!.AsArray();
         foreach (var option in options)
         {
@@ -27,15 +25,12 @@ public class MaplePetItem : MapleItem
             int value = int.Parse(optionObject["option_value"]!.ToString());
             string optionType = optionObject["option_type"]!.ToString();
 
-            if (optionType == "공격력") Attack = value;
-            else if (optionType == "마력") Magic = value;
+            if (optionType == "공격력") Status[MapleStatus.StatusType.ATTACK_POWER] = value;
+            else if (optionType == "마력") Status[MapleStatus.StatusType.MAGIC_POWER] = value;
         }
 
         PetType = petType;
     }
     
-    public bool IsEmpty { get; private set; }
-    public int Attack { get; private set; }
-    public int Magic { get; private set; }
     public MaplePetType.PetType PetType { get; private set; }
 }

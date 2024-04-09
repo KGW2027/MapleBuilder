@@ -1,29 +1,28 @@
-﻿using System.Runtime.Intrinsics.Arm;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using MapleAPI.Enum;
 
-namespace MapleAPI.DataType;
+namespace MapleAPI.DataType.Item;
 
-public class MapleItem
+public class MapleCommonItem : MapleItemBase
 {
-    private protected MapleItem()
-    {
-        data = new JsonObject();
-        Name = "";
-        DisplayName = "";
-        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
-        CachedStarforce = new Dictionary<int, MapleOption>();
-    }
-
     /// <summary>
     /// Nexon API에서 가져온 JSON 객체를 토대로 구성한 MapleItem 객체
     /// </summary>
     /// <param name="data">NEXON API RESULT</param>
-    private MapleItem(JsonObject data)
+    public MapleCommonItem(JsonObject data) : base(data)
     {
-        this.data = data;
+        internalData = data;
+        IsEmpty = data["item_name"] == null;
+        
+        ExceptionalOption = new MapleStatContainer();
+        BaseOption = new MapleStatContainer();
+        AddOption = new MapleStatContainer();
+        EtcOption = new MapleStatContainer();
+        StarforceOption = new MapleStatContainer();
+        CachedStarforce = new Dictionary<int, MapleStatContainer>();
+        
+        if (IsEmpty) return;
+        
         Name = data["item_name"]!.ToString();
         DisplayName = $"{Name} (수정 가능)";
         MaxUpgrade =
@@ -33,17 +32,16 @@ public class MapleItem
                 : 0;
         EquipType = MapleEquipType.GetEquipType(data["item_equipment_slot"]!.ToString());
         SpecialRingLevel = int.TryParse(data["special_ring_level"]!.ToString(), out int val2) ? val2 : 0;
-        BaseOption = new MapleOption(data["item_base_option"]!.AsObject());
+        BaseOption = MapleStatContainer.LoadFromJson(data["item_base_option"]!.AsObject());
         ItemLevel = int.TryParse(data["item_base_option"]!.AsObject()["base_equipment_level"]!.ToString(),
             out int val3)
             ? val3
             : 0;
-        ExceptionalOption = new MapleOption(data["item_exceptional_option"]!.AsObject());
-        AddOption = new MapleOption(data["item_add_option"]!.AsObject());
-        EtcOption = new MapleOption(data["item_etc_option"]!.AsObject());
-        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
+        ExceptionalOption = MapleStatContainer.LoadFromJson(data["item_exceptional_option"]!.AsObject());
+        AddOption = MapleStatContainer.LoadFromJson(data["item_add_option"]!.AsObject());
+        EtcOption = MapleStatContainer.LoadFromJson(data["item_etc_option"]!.AsObject());
 
-        CachedStarforce = new Dictionary<int, MapleOption>();
+        CachedStarforce = new Dictionary<int, MapleStatContainer>();
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
 
         Potential = new MapleItemPotential(ItemLevel, EquipType,
@@ -62,70 +60,7 @@ public class MapleItem
         }
 
     }
-
-    /// <summary>
-    /// Nexon API에서 가져온 JSON 객체에서 TITLE(칭호) 부분을 토대로 구성한 MapleItem 객체
-    /// </summary>
-    /// <param name="name">NEXON API RESULT</param>
-    /// <param name="desc">NEXON API RESULT</param>
-    private MapleItem(string name, string desc)
-    {
-        Name = name;
-        DisplayName = Name;
-        SpecialRingLevel = 0;
-        MaxUpgrade = 0;
-        ItemLevel = 0;
-        EquipType = MapleEquipType.EquipType.TITLE;
-        data = new JsonObject
-        {
-            {"title", name},
-            {"description", desc}
-        };
-        AddOption = new MapleOption();
-        Specials = new List<KeyValuePair<MapleStatus.StatusType, int>>();
-        
-        CachedStarforce = new Dictionary<int, MapleOption>();
-        StarForce = 0;
-        
-        foreach (string lineText in desc.Split("\n"))
-        {
-            string line = lineText.Trim().Replace("- ", "");
-            foreach (string sep in line.Split(","))
-            {
-                var trim = sep.Trim();
-                int plusIndex = trim.IndexOf('+');
-                if (plusIndex < 0) continue;
-                string value = trim[plusIndex..].Trim();
-                string key = trim[..plusIndex];
-                foreach (string prefix in key.Split("/"))
-                {
-                    var pair = MaplePotentialOption.ParseOptionFromPotential($"{prefix.Trim()}{value}");
-                    if(pair.Key != MapleStatus.StatusType.OTHER) Specials.Add(pair);
-                }
-            }
-        }
-    }
     
-    private string? hash;
-    /// <summary>
-    /// MapleItem 객체간 비교를 위한 SHA256 Hash 데이터
-    /// </summary>
-    public string Hash
-    {
-        get
-        {
-            if (hash != null) return hash;
-            byte[] bytes = Encoding.UTF8.GetBytes(data.ToString());
-            byte[] hashBytes;
-            using SHA256 sha256 = SHA256.Create();
-            hashBytes = sha256.ComputeHash(bytes);
-            hash = "";
-            foreach (byte b in hashBytes)
-                hash += b.ToString("x2");
-            return hash;
-        }
-    }
-
     private int sfv; // star force value
     public int StarForce
     {
@@ -137,27 +72,19 @@ public class MapleItem
         }
     }
     
-
-    private protected JsonObject data;
-    public MapleEquipType.EquipType EquipType { get; private protected set; }
-    public string Name { get; private protected set; }
-    public string DisplayName { get; set; }
     public int ItemLevel { get; private set; }
     public int SpecialRingLevel { get; private set; }
-    public int MaxUpgrade { get; private protected set; }
-    public MapleOption? ExceptionalOption { get; private set; }
-    public MapleOption? BaseOption { get; private set; }
-    public MapleOption? AddOption { get; private set; }
-    public MapleOption? EtcOption { get; private set; }
-    public MapleOption? StarforceOption { get; private set; }
     public MapleItemPotential? Potential { get; private set; }
-    public List<KeyValuePair<MapleStatus.StatusType, int>> Specials { get; private set; }
-    private Dictionary<int, MapleOption> CachedStarforce { get; }
 
-    public static MapleItem Parse(JsonObject data)
-    {
-        return data.ContainsKey("title_name") ? new MapleItem(data["title_name"]!.ToString(), data["title_description"]!.ToString()) : new MapleItem(data);
-    }
+    private MapleStatContainer ExceptionalOption { get; set; }
+    private MapleStatContainer BaseOption { get; set; }
+    private MapleStatContainer AddOption { get; set; }
+    private MapleStatContainer EtcOption { get; set; }
+    private MapleStatContainer StarforceOption { get; set; }
+    private Dictionary<int, MapleStatContainer> CachedStarforce { get; }
+    
+    public new MapleStatContainer Status => ExceptionalOption + BaseOption + AddOption + EtcOption + StarforceOption;
+
 
     #region 스타포스 시뮬레이트
     private int GetStatIncreaseByStarforce(int starforce)
@@ -176,12 +103,12 @@ public class MapleItem
 
     private int GetWeaponAttackIncreaseByStarforce(int starforce, int increase)
     {
-        bool isMage = BaseOption!.AttackPower < BaseOption.MagicPower;
+        bool isMage = BaseOption![MapleStatus.StatusType.ATTACK_POWER] < BaseOption[MapleStatus.StatusType.MAGIC_POWER];
         if(starforce <= 15)
         {
-            int refValue = isMage
-                ? BaseOption.MagicPower + EtcOption!.MagicPower
-                : BaseOption.AttackPower + EtcOption!.MagicPower;
+            double refValue = isMage
+                ? BaseOption[MapleStatus.StatusType.MAGIC_POWER] + EtcOption![MapleStatus.StatusType.MAGIC_POWER]
+                : BaseOption[MapleStatus.StatusType.ATTACK_POWER] + EtcOption![MapleStatus.StatusType.MAGIC_POWER];
             refValue += increase;
             return (int) Math.Floor(refValue / 50.0) + 1;
         }
@@ -383,20 +310,20 @@ public class MapleItem
         return 0;
     }
     
-    public MapleOption ParseStarforceOption()
+    public MapleStatContainer ParseStarforceOption()
     {
         if (CachedStarforce.TryGetValue(sfv, out var opt)) return opt;
-        MapleOption option = new MapleOption();
+        MapleStatContainer option = new MapleStatContainer();
         if (sfv == 0) return option;
 
         for (int idx = 1; idx <= sfv; idx++)
         {
-            option.AllStatFlatInc = GetStatIncreaseByStarforce(idx);
+            option[MapleStatus.StatusType.ALL_STAT] = GetStatIncreaseByStarforce(idx);
             int apmp = EquipType == MapleEquipType.EquipType.WEAPON
-                ? GetWeaponAttackIncreaseByStarforce(idx, option.AttackPower)
+                ? GetWeaponAttackIncreaseByStarforce(idx, (int) option[MapleStatus.StatusType.ATTACK_POWER])
                 : GetArmorAttackIncreaseByStarforce(idx);
-            option.AttackPower += apmp;
-            option.MagicPower += apmp;
+            option[MapleStatus.StatusType.ATTACK_POWER] += apmp;
+            option[MapleStatus.StatusType.MAGIC_POWER] += apmp;
         }
         return option;
     }

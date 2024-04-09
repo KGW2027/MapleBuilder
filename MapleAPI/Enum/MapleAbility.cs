@@ -4,35 +4,6 @@ namespace MapleAPI.Enum;
 
 public class MapleAbility
 {
-    // public enum AbilityType
-    // {
-    //     STR,
-    //     DEX,
-    //     INT,
-    //     LUK,
-    //     HP,
-    //     MP,
-    //     ATTACK_POWER,
-    //     MAGIC_POWER,
-    //     CRITICAL_CHANCE,
-    //     ALL_STAT,
-    //     ATTACK_SPEED,
-    //     LEVEL_ATTACK_POWER,
-    //     LEVEL_MAGIC_POWER,
-    //     MAX_HP_RATE,
-    //     MAX_MP_RATE,
-    //     BOSS_DAMAGE,
-    //     COMMON_DAMAGE,
-    //     DEBUFF_DAMAGE,
-    //     COOLDOWN_IGNORE,
-    //     PASSIVE_SKILL_LEVEL,
-    //     MULTI_TARGET,
-    //     BUFF_DURATION_INCREASE,
-    //     ITEM_DROP,
-    //     MESO_DROP,
-    //     OTHER
-    // }
-
     private static readonly int[] ZeroToZero = {0, 0};
     private static readonly Dictionary<MapleStatus.StatusType, int[][]> MinMaxMap = new()
     {

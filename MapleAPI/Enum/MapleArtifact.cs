@@ -2,27 +2,6 @@
 
 public class MapleArtifact
 {
-    public enum ArtifactType
-    {
-        ALL_STAT,
-        HP_MP,
-        ATTACK_MAGIC_POWER,
-        DAMAGE,
-        BOSS_DAMAGE,
-        IGNORE_ARMOR,
-        BUFF_DURATION,
-        COOLDOWN_IGNORE,
-        MESO_DROP,
-        ITEM_DROP,
-        CRIT_CHANCE,
-        CRIT_DAMAGE,
-        EXP_UP,
-        IMMUNE,
-        SUMMON_DURATION,
-        FINAL_ATTACK,
-        UNKNOWN
-    }
-
     public static MapleStatus.StatusType GetArtifactType(string name)
     {
         return name switch

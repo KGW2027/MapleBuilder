@@ -1,17 +1,15 @@
-﻿using System.Reflection.Emit;
-using System.Text.Json.Nodes;
+﻿using System.Text.Json.Nodes;
 using MapleAPI.Enum;
 
-namespace MapleAPI.DataType;
+namespace MapleAPI.DataType.Item;
 
-public class MapleCashItem : MapleItem
+public class MapleCashItem : MapleItemBase
 { 
 
-    public MapleCashItem(JsonObject data)
+    public MapleCashItem(JsonObject data) : base(data)
     {
-        this.data = data;
+        internalData = data;
         IsEmpty = data["cash_item_name"] == null;
-        Option = new MapleOption();
         if (IsEmpty) return;
 
         Name = data["cash_item_name"]!.ToString();
@@ -28,17 +26,14 @@ public class MapleCashItem : MapleItem
             int value = int.Parse(optionObject["option_value"]!.ToString());
             string optionType = optionObject["option_type"]!.ToString();
 
-            if (optionType.Equals("STR")) Option.Str += value;
-            else if (optionType.Equals("DEX")) Option.Dex += value;
-            else if (optionType.Equals("INT")) Option.Int += value;
-            else if (optionType.Equals("LUK")) Option.Luk += value;
-            else if (optionType.Equals("공격력")) Option.AttackPower += value;
-            else if (optionType.Equals("마력")) Option.MagicPower += value;
+            if (optionType.Equals("STR")) Status[MapleStatus.StatusType.STR] += value;
+            else if (optionType.Equals("DEX")) Status[MapleStatus.StatusType.DEX] += value;
+            else if (optionType.Equals("INT")) Status[MapleStatus.StatusType.INT] += value;
+            else if (optionType.Equals("LUK")) Status[MapleStatus.StatusType.LUK] += value;
+            else if (optionType.Equals("공격력")) Status[MapleStatus.StatusType.ATTACK_POWER] += value;
+            else if (optionType.Equals("마력")) Status[MapleStatus.StatusType.MAGIC_POWER] += value;
         }
-
     }
     
-    public bool IsEmpty { get; private set; }
-    public MapleOption Option { get; private set; }
     public MapleCashEquip.LabelType LabelType { get; private set; }
 }

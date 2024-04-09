@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json.Nodes;
+using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 
 namespace MapleAPI.DataType;
@@ -37,13 +38,13 @@ public class CharacterInfo
             JsonArray itemList = JsonNode.Parse(preset!)!.AsArray();
             foreach (var id in itemList)
             {
-                MapleItem item = MapleItem.Parse(id!.AsObject());
+                MapleCommonItem item = new MapleCommonItem(id!.AsObject());
                 if (!itemHashes.Add(item.Hash)) continue;
                 cInfo.Items.Add(item);
             }
         }
 
-        cInfo.Items.Add(MapleItem.Parse(equipInfo.JsonData!["title"]!.AsObject()));
+        cInfo.Items.Add(new MapleTitleItem(equipInfo.JsonData!["title"]!.AsObject()));
 
         // 심볼 데이터 로드
         APIResponse symbolInfo = await APIRequest.RequestAsync(APIRequestType.SYMBOL, args);
@@ -226,7 +227,7 @@ public class CharacterInfo
 
     private CharacterInfo()
     {
-        Items = new List<MapleItem>();
+        Items = new List<MapleItemBase>();
         Level = 0;
         ClassString = "";
         GuildName = "";
@@ -257,7 +258,7 @@ public class CharacterInfo
     #endregion
     
     #region SpecData
-    public List<MapleItem> Items { get; private set; }
+    public List<MapleItemBase> Items { get; private set; }
     public List<MaplePetItem> PetInfo { get; private set; }
     public List<MapleCashItem> CashItems { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
