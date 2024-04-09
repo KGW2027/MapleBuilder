@@ -103,6 +103,8 @@ public partial class CashEquipSlot : UserControl
                 
                 if (Enum.TryParse(text, out MapleStatus.StatusType newStat))
                     BuilderDataContainer.PlayerStatus.PlayerStat[newStat] += sliderValue;
+                
+                BuilderDataContainer.RefreshAll();
             }
             
             break;
@@ -141,6 +143,8 @@ public partial class CashEquipSlot : UserControl
             {
                 BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
             }
+            
+            BuilderDataContainer.RefreshAll();
             break;
         }
     }
