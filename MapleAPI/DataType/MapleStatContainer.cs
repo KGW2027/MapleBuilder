@@ -61,35 +61,47 @@ public class MapleStatContainer
         statContainer.Remove(statusType);
         return value;
     }
+
+    private void SafeAdd(MapleStatus.StatusType type, double value)
+    {
+        statContainer.TryAdd(type, 0);
+        statContainer[type] += value;
+    }
+
+    private void SafeSubtract(MapleStatus.StatusType type, double value)
+    {
+        statContainer.TryAdd(type, 0);
+        statContainer[type] -= value;
+    }
     
     public void Flush()
     {
         if (mainStatType != MapleStatus.StatusType.OTHER)
-            statContainer[mainStatType] += ClearAndGet(MapleStatus.StatusType.MAIN_STAT);
+            SafeAdd(mainStatType, ClearAndGet(MapleStatus.StatusType.MAIN_STAT));
 
         if (subStatType != MapleStatus.StatusType.OTHER)
         {
             double subStatValue = ClearAndGet(MapleStatus.StatusType.SUB_STAT);
-            statContainer[subStatType] += subStatValue;
+            SafeAdd(subStatType, subStatValue);
             if (subStat2Type != MapleStatus.StatusType.OTHER)
-                statContainer[subStat2Type] += subStatValue;
+                SafeAdd(subStat2Type, subStatValue);
         }
 
         double allStatFlat = ClearAndGet(MapleStatus.StatusType.ALL_STAT);
-        statContainer[MapleStatus.StatusType.STR] += allStatFlat;
-        statContainer[MapleStatus.StatusType.DEX] += allStatFlat;
-        statContainer[MapleStatus.StatusType.INT] += allStatFlat;
-        statContainer[MapleStatus.StatusType.LUK] += allStatFlat;
+        SafeAdd(MapleStatus.StatusType.STR, allStatFlat);
+        SafeAdd(MapleStatus.StatusType.DEX, allStatFlat);
+        SafeAdd(MapleStatus.StatusType.INT, allStatFlat);
+        SafeAdd(MapleStatus.StatusType.LUK, allStatFlat);
 
         double allStatRate = ClearAndGet(MapleStatus.StatusType.ALL_STAT_RATE);
-        statContainer[MapleStatus.StatusType.STR_RATE] += allStatRate;
-        statContainer[MapleStatus.StatusType.DEX_RATE] += allStatRate;
-        statContainer[MapleStatus.StatusType.INT_RATE] += allStatRate;
-        statContainer[MapleStatus.StatusType.LUK_RATE] += allStatRate;
+        SafeAdd(MapleStatus.StatusType.STR_RATE, allStatRate);
+        SafeAdd(MapleStatus.StatusType.DEX_RATE, allStatRate);
+        SafeAdd(MapleStatus.StatusType.INT_RATE, allStatRate);
+        SafeAdd(MapleStatus.StatusType.LUK_RATE, allStatRate);
 
         double atkmag = ClearAndGet(MapleStatus.StatusType.ATTACK_AND_MAGIC);
-        statContainer[MapleStatus.StatusType.ATTACK_POWER] += atkmag;
-        statContainer[MapleStatus.StatusType.MAGIC_POWER] += atkmag;
+        SafeAdd(MapleStatus.StatusType.ATTACK_POWER, atkmag);
+        SafeAdd(MapleStatus.StatusType.MAGIC_POWER, atkmag);
 
     }
 
@@ -108,42 +120,72 @@ public class MapleStatContainer
     
     public static MapleStatContainer operator +(MapleStatContainer lhs, MapleStatContainer rhs)
     {
+        MapleStatContainer msc = new MapleStatContainer
+        {
+            mainStatType = lhs.mainStatType,
+            subStatType = lhs.subStatType,
+            subStat2Type = lhs.subStat2Type
+        };
+        foreach (var pair in lhs.statContainer)
+        {
+            msc.statContainer.TryAdd(pair.Key, 0);
+            if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], pair.Value);
+            else
+                msc.statContainer[pair.Key] += pair.Value;
+        }
         foreach (var pair in rhs.statContainer)
         {
-            lhs.statContainer.TryAdd(pair.Key, 0);
+            msc.statContainer.TryAdd(pair.Key, 0);
             if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
-            {
-                lhs.statContainer[pair.Key] =
-                    ApplyMultipleCalc(lhs.statContainer[pair.Key], rhs.statContainer[pair.Key]);
-            }
-            else lhs.statContainer[pair.Key] += rhs.statContainer[pair.Key];
+                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], pair.Value);
+            else
+                msc.statContainer[pair.Key] += pair.Value;
         }
-        return lhs;
+        return msc;
     }
     
     public static MapleStatContainer operator -(MapleStatContainer lhs, MapleStatContainer rhs)
     {
+        MapleStatContainer msc = new MapleStatContainer
+        {
+            mainStatType = lhs.mainStatType,
+            subStatType = lhs.subStatType,
+            subStat2Type = lhs.subStat2Type
+        };
+        foreach (var pair in lhs.statContainer)
+        {
+            msc.statContainer.TryAdd(pair.Key, 0);
+            if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], -pair.Value);
+            else
+                msc.statContainer[pair.Key] -= pair.Value;
+        }
         foreach (var pair in rhs.statContainer)
         {
-            lhs.statContainer.TryAdd(pair.Key, 0);
+            msc.statContainer.TryAdd(pair.Key, 0);
             if (pair.Key is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
-            {
-                lhs.statContainer[pair.Key] =
-                    ApplyMultipleCalc(lhs.statContainer[pair.Key], -rhs.statContainer[pair.Key]);
-            }
-            else lhs.statContainer[pair.Key] -= rhs.statContainer[pair.Key];
+                msc.statContainer[pair.Key] = ApplyMultipleCalc(msc.statContainer[pair.Key], -pair.Value);
+            else
+                msc.statContainer[pair.Key] -= pair.Value;
         }
-        return lhs;
+        return msc;
     }
 
     public static MapleStatContainer operator -(MapleStatContainer self)
     {
+        MapleStatContainer msc = new MapleStatContainer
+        {
+            mainStatType = self.mainStatType,
+            subStatType = self.subStatType,
+            subStat2Type = self.subStat2Type
+        };
         foreach (var pair in self.statContainer)
         {
-            self[pair.Key] = -pair.Value;
+            msc.statContainer.TryAdd(pair.Key, -pair.Value);
         }
 
-        return self;
+        return msc;
     }
     #endregion
 

@@ -42,6 +42,7 @@ public class MapleCommonItem : MapleItemBase
         EtcOption = MapleStatContainer.LoadFromJson(data["item_etc_option"]!.AsObject());
 
         CachedStarforce = new Dictionary<int, MapleStatContainer>();
+        Console.WriteLine($"{Name}의 Starforce Value : {data["starforce"]}");
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
 
         Potential = new MapleItemPotential(ItemLevel, EquipType,
@@ -82,8 +83,16 @@ public class MapleCommonItem : MapleItemBase
     private MapleStatContainer EtcOption { get; set; }
     private MapleStatContainer StarforceOption { get; set; }
     private Dictionary<int, MapleStatContainer> CachedStarforce { get; }
-    
+
     public new MapleStatContainer Status => ExceptionalOption + BaseOption + AddOption + EtcOption + StarforceOption;
+    // {
+    //     get
+    //     {
+    //         MapleStatContainer sum = ExceptionalOption + BaseOption + AddOption + EtcOption + StarforceOption;
+    //         Console.WriteLine($"{Name} | {BaseOption[MapleStatus.StatusType.INT]} + {AddOption[MapleStatus.StatusType.INT]} + {EtcOption[MapleStatus.StatusType.INT]} + {StarforceOption[MapleStatus.StatusType.INT]}");
+    //         return sum;
+    //     }
+    // }
 
 
     #region 스타포스 시뮬레이트
@@ -103,12 +112,12 @@ public class MapleCommonItem : MapleItemBase
 
     private int GetWeaponAttackIncreaseByStarforce(int starforce, int increase)
     {
-        bool isMage = BaseOption![MapleStatus.StatusType.ATTACK_POWER] < BaseOption[MapleStatus.StatusType.MAGIC_POWER];
+        bool isMage = BaseOption[MapleStatus.StatusType.ATTACK_POWER] < BaseOption[MapleStatus.StatusType.MAGIC_POWER];
         if(starforce <= 15)
         {
             double refValue = isMage
-                ? BaseOption[MapleStatus.StatusType.MAGIC_POWER] + EtcOption![MapleStatus.StatusType.MAGIC_POWER]
-                : BaseOption[MapleStatus.StatusType.ATTACK_POWER] + EtcOption![MapleStatus.StatusType.MAGIC_POWER];
+                ? BaseOption[MapleStatus.StatusType.MAGIC_POWER] + EtcOption[MapleStatus.StatusType.MAGIC_POWER]
+                : BaseOption[MapleStatus.StatusType.ATTACK_POWER] + EtcOption[MapleStatus.StatusType.MAGIC_POWER];
             refValue += increase;
             return (int) Math.Floor(refValue / 50.0) + 1;
         }
@@ -313,18 +322,20 @@ public class MapleCommonItem : MapleItemBase
     public MapleStatContainer ParseStarforceOption()
     {
         if (CachedStarforce.TryGetValue(sfv, out var opt)) return opt;
+        Console.Write($"{Name} 아이템 스타포스 {sfv}성 시뮬레이트 => ");
         MapleStatContainer option = new MapleStatContainer();
         if (sfv == 0) return option;
 
         for (int idx = 1; idx <= sfv; idx++)
         {
-            option[MapleStatus.StatusType.ALL_STAT] = GetStatIncreaseByStarforce(idx);
+            option[MapleStatus.StatusType.ALL_STAT] += GetStatIncreaseByStarforce(idx);
             int apmp = EquipType == MapleEquipType.EquipType.WEAPON
-                ? GetWeaponAttackIncreaseByStarforce(idx, (int) option[MapleStatus.StatusType.ATTACK_POWER])
+                ? GetWeaponAttackIncreaseByStarforce(idx, (int) option[MapleStatus.StatusType.ATTACK_AND_MAGIC])
                 : GetArmorAttackIncreaseByStarforce(idx);
-            option[MapleStatus.StatusType.ATTACK_POWER] += apmp;
-            option[MapleStatus.StatusType.MAGIC_POWER] += apmp;
+            option[MapleStatus.StatusType.ATTACK_AND_MAGIC] += apmp;
         }
+        Console.WriteLine($" 결과 : 스텟-{option[MapleStatus.StatusType.ALL_STAT]}, 공마-{option[MapleStatus.StatusType.ATTACK_AND_MAGIC]}");
+        option.Flush();
         return option;
     }
     #endregion
