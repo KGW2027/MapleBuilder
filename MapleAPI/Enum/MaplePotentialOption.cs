@@ -57,7 +57,7 @@ public class MaplePotentialOption
         else if (value.StartsWith("데미지"))            option = MapleStatus.StatusType.DAMAGE;
         else if (value.StartsWith("보스 몬스터"))         option = MapleStatus.StatusType.BOSS_DAMAGE;
         else if (value.StartsWith("크리티컬 데미지"))    option = MapleStatus.StatusType.CRITICAL_DAMAGE;
-        else if (value.StartsWith("몬스터 방어율"))      option = MapleStatus.StatusType.IGNORE_ARMOR;
+        else if (value.StartsWith("몬스터 방어율"))      option = MapleStatus.StatusType.IGNORE_DEF;
         else if (value.StartsWith("아이템"))            option = MapleStatus.StatusType.ITEM_DROP;
         else if (value.StartsWith("메소"))              option = MapleStatus.StatusType.MESO_DROP;
         else if (value.StartsWith("캐릭터 기준"))

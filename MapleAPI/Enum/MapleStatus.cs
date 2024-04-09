@@ -16,6 +16,8 @@ public class MapleStatus
         HP              = 0x08,
         MP              = 0x09,
         DF_TT_PP        = 0x0A,
+        HP_AND_MP       = 0x0B,
+        ATTACK_AND_MAGIC= 0x0C,
         
         STR_RATE        = 0x11,
         DEX_RATE        = 0x12,
@@ -45,10 +47,10 @@ public class MapleStatus
         BOSS_DAMAGE     = 0x44,
         COMMON_DAMAGE   = 0x45,
         DEBUFF_DAMAGE   = 0x46,
-        IGNORE_ARMOR    = 0x47,
+        IGNORE_DEF      = 0x47,
         WILD_HUNTER_DMG = 0x48,
         
-        TOLERANCE       = 0x51,
+        ABN_STATUS_RESIS= 0x51, // Abnormal Status Resistance : 상태 이상 내성
         IGNORE_IMMUNE   = 0x52,
         COOL_DEC_SECOND = 0x53,
         COOL_DEC_RATE   = 0x54,

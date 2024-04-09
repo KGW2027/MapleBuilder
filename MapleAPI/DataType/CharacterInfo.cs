@@ -151,7 +151,7 @@ public class CharacterInfo
                 int level = int.Parse(crystal["level"]!.ToString());
                 for (int idx = 1; idx < 3; idx++)
                 {
-                    MapleArtifact.ArtifactType artifactType =
+                    MapleStatus.StatusType artifactType =
                         MapleArtifact.GetArtifactType(crystal[$"crystal_option_name_{idx}"]!.ToString());
                     cInfo.ArtifactLevels.TryAdd(artifactType, 0);
                     cInfo.ArtifactLevels[artifactType] = Math.Min(cInfo.ArtifactLevels[artifactType] + level, 10);
@@ -229,7 +229,7 @@ public class CharacterInfo
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
-        ArtifactLevels = new Dictionary<MapleArtifact.ArtifactType, int>();
+        ArtifactLevels = new Dictionary<MapleStatus.StatusType, int>();
         PetInfo = new List<MaplePetItem>();
         CashItems = new List<MapleCashItem>();
     }
@@ -253,7 +253,7 @@ public class CharacterInfo
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
-    public Dictionary<MapleArtifact.ArtifactType, int> ArtifactLevels { get; private set; }
+    public Dictionary<MapleStatus.StatusType, int> ArtifactLevels { get; private set; }
     #endregion
     
 
