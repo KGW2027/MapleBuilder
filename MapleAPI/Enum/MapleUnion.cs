@@ -17,31 +17,6 @@ public class MapleUnion
             blockPositions = Array.Empty<sbyte[]>();
         }
     }
-    
-    public enum RaiderEffectType
-    {
-        INT,
-        STR,
-        LUK,
-        DEX,
-        MAX_HP,
-        BOSS_DAMAGE,
-        MAX_HP_RATE,
-        IGNORE_ARMOR,
-        IMMUNE,
-        STR_DEX_LUK,
-        MAX_MP_RATE,
-        ATTACK_MAGIC_POWER,
-        MESO_DROP,
-        EXP_UP,
-        CRIT_CHANCE,
-        BUFF_DURATION,
-        SUMMON_DURATION,
-        CRIT_DAMAGE,
-        CHANCE_DAMAGE,
-        COOLDOWN_DECREASE_RATE,
-        OTHER
-    }
 
     public static string GetRaiderEffectString(MapleStatus.StatusType effectType)
     {
@@ -383,10 +358,10 @@ public class MapleUnion
     {
         return field switch
         {
-            "유니온 STR" => MapleStatus.StatusType.STR_FLAT,
-            "유니온 DEX" => MapleStatus.StatusType.DEX_FLAT,
-            "유니온 INT" => MapleStatus.StatusType.INT_FLAT,
-            "유니온 LUK" => MapleStatus.StatusType.LUK_FLAT,
+            "유니온 STR" => MapleStatus.StatusType.STR,
+            "유니온 DEX" => MapleStatus.StatusType.DEX,
+            "유니온 INT" => MapleStatus.StatusType.INT,
+            "유니온 LUK" => MapleStatus.StatusType.LUK,
             "유니온 최대 HP" => MapleStatus.StatusType.HP,
             "유니온 최대 MP" => MapleStatus.StatusType.MP,
             "유니온 공격력" => MapleStatus.StatusType.ATTACK_POWER,
