@@ -104,8 +104,8 @@ public class CharacterInfo
             foreach (var stat in hyperStats)
             {
                 if (stat is not JsonObject statObject) continue;
-                MapleHyperStat.StatType statType = MapleHyperStat.GetStatType(statObject["stat_type"]!.ToString());
-                if (statType == MapleHyperStat.StatType.UNKNOWN) continue;
+                MapleStatus.StatusType statType = MapleHyperStat.GetStatType(statObject["stat_type"]!.ToString());
+                if (statType == MapleStatus.StatusType.OTHER) continue;
                 if (!int.TryParse(statObject["stat_level"]!.ToString(), out int statLevel)) continue;
                 if (!cInfo.HyperStatLevels.TryAdd(statType, statLevel)) cInfo.HyperStatLevels[statType] = statLevel;
             }
@@ -227,7 +227,7 @@ public class CharacterInfo
         
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
-        HyperStatLevels = new Dictionary<MapleHyperStat.StatType, int>();
+        HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
         ArtifactLevels = new Dictionary<MapleArtifact.ArtifactType, int>();
         PetInfo = new List<MaplePetItem>();
@@ -251,7 +251,7 @@ public class CharacterInfo
     public List<MapleCashItem> CashItems { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
     public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
-    public Dictionary<MapleHyperStat.StatType, int> HyperStatLevels { get; private set; }
+    public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public Dictionary<MapleArtifact.ArtifactType, int> ArtifactLevels { get; private set; }
     #endregion
