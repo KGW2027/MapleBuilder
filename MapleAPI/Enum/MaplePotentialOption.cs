@@ -63,13 +63,15 @@ public class MaplePotentialOption
         else if (value.StartsWith("캐릭터 기준"))
         {
             int colonIndex = value.IndexOf(':');
-            string statName = value.Substring(colonIndex - 4, 3);
+            string statName = value.Substring(colonIndex - 4, 3).Trim();
             option = statName switch
             {
                 "STR" => MapleStatus.StatusType.STR_PER_LEVEL,
                 "DEX" => MapleStatus.StatusType.DEX_PER_LEVEL,
                 "INT" => MapleStatus.StatusType.INT_PER_LEVEL,
                 "LUK" => MapleStatus.StatusType.LUK_PER_LEVEL,
+                "공격력" => MapleStatus.StatusType.ATK_PER_LEVEL,
+                "마력" => MapleStatus.StatusType.MAG_PER_LEVEL,
                 _ => MapleStatus.StatusType.OTHER
             };
             optionValue = int.Parse(value.Substring(value.IndexOf('+') + 1, 1));

@@ -74,7 +74,7 @@ public class CharacterInfo
             foreach (var value in abilityData)
             {
                 string abValue = value!["ability_value"]!.ToString();
-                MapleAbility.AbilityType abType = MapleAbility.TryParse(abValue);
+                MapleStatus.StatusType abType = MapleAbility.TryParse(abValue);
                 string abStr = MapleAbility.GetAbilityString(abType);
                 int valueIndex = abStr.IndexOf("%d", StringComparison.CurrentCulture);
                 string parse = valueIndex >= 0 ? abValue.Substring(valueIndex, 2).Replace("%", "").Trim() : "";
@@ -226,7 +226,7 @@ public class CharacterInfo
         SkillData = new Dictionary<string, int>();
         
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
-        AbilityValues = new Dictionary<MapleAbility.AbilityType, int>();
+        AbilityValues = new Dictionary<MapleStatus.StatusType, int>();
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
         ArtifactLevels = new Dictionary<MapleStatus.StatusType, int>();
@@ -250,7 +250,7 @@ public class CharacterInfo
     public List<MaplePetItem> PetInfo { get; private set; }
     public List<MapleCashItem> CashItems { get; private set; }
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
-    public Dictionary<MapleAbility.AbilityType, int> AbilityValues { get; private set; }
+    public Dictionary<MapleStatus.StatusType, int> AbilityValues { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> ArtifactLevels { get; private set; }
