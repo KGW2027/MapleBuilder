@@ -3,19 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
     <Grid>
         
+        <Button Height="32" Width="120" Content="유니온 공격대" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="0,8,0,0"/>
+        <Button Height="32" Width="120" Content="유니온 아티팩트" HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="124,8,0,0"/>
+        
         <!-- 유니온 공격대 -->
         <Grid x:Name="ctRaider">
             <!-- 유니온 캐릭터 -->
-            <Border Width="368" Height="664" Margin="600, 0, 0, 0"
+            <Border Width="368" Height="664" Margin="604, 0, 0, 0"
                     HorizontalAlignment="Left" VerticalAlignment="Top" Background="#313131" BorderBrush="#CCCCCC" BorderThickness="1"/>
-            <Label Content="유니온 캐릭터" Margin="608, 8, 0, 0"/>
-            <ScrollViewer Height="616" Width="360" Margin="604, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalScrollBarVisibility="Hidden">
+            <Label Content="유니온 캐릭터" Margin="616, 8, 0, 0"/>
+            <ScrollViewer Height="616" Width="360" Margin="608, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" VerticalScrollBarVisibility="Hidden">
                 <StackPanel x:Name="ctUnionChars" Orientation="Vertical"/>
             </ScrollViewer>
+            
+            <!-- 유니온 공격대 배치 -->
+            <subObjects:UnionRaiderMap HorizontalAlignment="Left" VerticalAlignment="Top"
+                                       Margin="0, 44, 0, 0"/>
+            
         </Grid>
     </Grid>
 </UserControl>
