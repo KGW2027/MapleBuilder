@@ -5,17 +5,38 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="600" Background="Transparent">
-    <Grid>
+    <Grid x:Name="ctMainGrid">
         
-        <Grid Name="ctArealines" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="36, 0, 0, 0" Width="528" Height="480">
+        <Grid Name="ctArealines" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0, 0, 0, 0" Width="528" Height="480">
             <Border Width="528" Height="480" Background="#333333" BorderBrush="#CCCCCC" BorderThickness="1"
                    VerticalAlignment="Top" HorizontalAlignment="Left"/>
         </Grid>
         
-        <Grid Name="ctUnionBlocks" Margin="36, 0, 0, 0" Width="528" Height="480"
+        <Grid Name="ctUnionBlocks" Margin="0, 0, 0, 0" Width="528" Height="480"
               HorizontalAlignment="Left" VerticalAlignment="Top"/>
-        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="36, 0, 0, 0" Background="Transparent"
+        <Border VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0, 0, 0, 0" Background="Transparent"
               Width="528" Height="480" MouseDown="OnUnionAreaClicked"/>
+        
+        <Label Content="크리티컬 데미지" FontSize="14" Foreground="#77FFFFFF" Margin="14, 144, 0, 0" IsHitTestVisible="False"/>
+        <Label Content="방어율무시" FontSize="14" Foreground="#77FFFFFF" Margin="24, 312, 0, 0" IsHitTestVisible="False"/>
+        <Label Content="크리티컬 확률" FontSize="14" Foreground="#77FFFFFF" Margin="0, 144, 76, 0" HorizontalAlignment="Right" IsHitTestVisible="False"/>
+        <Label Content="보스데미지" FontSize="14" Foreground="#77FFFFFF" Margin="0, 312, 84, 0" HorizontalAlignment="Right" IsHitTestVisible="False"/>
+        <Label Content="상태이상내성" FontSize="14" Foreground="#77FFFFFF" Margin="136, 44, 0, 0" IsHitTestVisible="False"/>
+        <Label Content="획득경험치" FontSize="14" Foreground="#77FFFFFF" Margin="324, 44, 0, 0" IsHitTestVisible="False"/>
+        <Label Content="버프지속시간" FontSize="14" Foreground="#77FFFFFF" Margin="136, 412, 0, 0" IsHitTestVisible="False"/>
+        <Label Content="일반데미지" FontSize="14" Foreground="#77FFFFFF" Margin="324, 412, 0, 0" IsHitTestVisible="False"/>
+        
+        <Label x:Name="ctSelectOpt1" Content="STR" FontSize="12" Foreground="#77FFFFFF" Margin="284, 170, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt2"  Content="DEX" FontSize="12" Foreground="#77FFFFFF" Margin="344, 200, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt3"  Content="INT" FontSize="12" Foreground="#77FFFFFF" Margin="344, 260, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt4"  Content="LUK" FontSize="12" Foreground="#77FFFFFF" Margin="284, 290, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt8"  Content="HP" FontSize="12" Foreground="#77FFFFFF" Margin="214, 170, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt7"  Content="MP" FontSize="12" Foreground="#77FFFFFF" Margin="164, 200, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt6"  Content="공격력" FontSize="12" Foreground="#77FFFFFF" Margin="164, 260, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt5"  Content="마력" FontSize="12" Foreground="#77FFFFFF" Margin="214, 290, 0, 0" IsHitTestVisible="False"/>
+        
+        <Border Width="64" Height="480" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="532, 0, 0, 0"
+                Background="#333333" BorderBrush="White" BorderThickness="1"/>
         
         </Grid>
 </UserControl>

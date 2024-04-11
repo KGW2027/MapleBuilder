@@ -305,14 +305,14 @@ public class MapleUnion
 
     public enum ClaimType : byte
     {
-        INNER_0 = 1,
-        INNER_1 = 2,
-        INNER_2 = 3,
-        INNER_3 = 4,
-        INNER_4 = 5,
-        INNER_5 = 6,
-        INNER_6 = 7,
-        INNER_7 = 8,
+        INNER_7 = 1,
+        INNER_0 = 2,
+        INNER_1 = 3,
+        INNER_2 = 4,
+        INNER_3 = 5,
+        INNER_4 = 6,
+        INNER_5 = 7,
+        INNER_6 = 8,
         
         IMMUNE = 11,
         EXP_UP = 12,
@@ -370,7 +370,7 @@ public class MapleUnion
         };
     }
 
-    private static MapleStatus.StatusType GetStatusTypeByClaimType(ClaimType claimType, List<MapleStatus.StatusType> innerTypes)
+    public static MapleStatus.StatusType GetStatusTypeByClaimType(ClaimType claimType, List<MapleStatus.StatusType> innerTypes)
     {
         return claimType switch
         {

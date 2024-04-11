@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -15,20 +17,42 @@ public partial class UnionRaiderMap : UserControl
     private static readonly SolidColorBrush STROKE_BRUSH = new(Color.FromRgb(0x44, 0x44, 0x44));
     private static readonly SolidColorBrush BORDER_BRUSH = new(Colors.White);
     private static readonly SolidColorBrush CLAIM_BRUSH = new(Color.FromArgb(0xF0, 170, 136, 102));
-    private static Stopwatch doubleClickTester = new();
-    private UIElement?[,] claims;
+    private static Stopwatch _doubleClickTester = new();
+    
+    private readonly UIElement?[,] claims;
+    private List<ComboBox> innerSelections;
+    private List<Label> displaysInner;
+    private bool lockCombobox;
+
+    private Dictionary<MapleStatus.StatusType, int> StatClaimed;
     
     public UnionRaiderMap()
     {
         claims = new UIElement?[20, 22];
+        innerSelections = new List<ComboBox>();
+        StatClaimed = new Dictionary<MapleStatus.StatusType, int>();
             
         InitializeComponent();
         // 유니온 블럭 X,Y 선
         DrawBlockBorderLines();
         // 영역 분리선
         DrawUnionAreaBorderLines();
+        
+        displaysInner = new List<Label>
+        {
+            ctSelectOpt1, ctSelectOpt2, ctSelectOpt3, ctSelectOpt4,
+            ctSelectOpt5, ctSelectOpt6, ctSelectOpt7, ctSelectOpt8,
+        };
+        // 유니온 스텟 선택
+        DrawUnionInnerSelection();
     }
 
+    private void ApplyStatusChange(MapleStatus.StatusType statusType, double delta)
+    {
+
+        if (BuilderDataContainer.PlayerStatus == null) return;
+        BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
+    }
     
     #region Draw
 
@@ -110,10 +134,44 @@ public partial class UnionRaiderMap : UserControl
         bool visible = claims[y, x] == null || claims[y, x]!.Visibility == Visibility.Collapsed;
         SafeToggleClaimBlock(x, y, visible);
     }
+
+    private List<MapleStatus.StatusType> GetInnerStatus()
+    {
+        return displaysInner.Select(label => label.Content switch
+            {
+                "STR" => MapleStatus.StatusType.STR_FLAT,
+                "DEX" => MapleStatus.StatusType.DEX_FLAT,
+                "INT" => MapleStatus.StatusType.INT_FLAT,
+                "LUK" => MapleStatus.StatusType.LUK_FLAT,
+                "HP" => MapleStatus.StatusType.HP,
+                "MP" => MapleStatus.StatusType.MP,
+                "공격력" => MapleStatus.StatusType.ATTACK_POWER,
+                "마력" => MapleStatus.StatusType.MAGIC_POWER,
+                _ => MapleStatus.StatusType.OTHER
+            })
+            .ToList();
+    }
+
+    private double GetStatMultiplier(MapleStatus.StatusType statusType)
+    {
+        return statusType switch
+        {
+            MapleStatus.StatusType.STR_FLAT => 5,
+            MapleStatus.StatusType.DEX_FLAT => 5,
+            MapleStatus.StatusType.INT_FLAT => 5,
+            MapleStatus.StatusType.LUK_FLAT => 5,
+            MapleStatus.StatusType.MP => 250,
+            MapleStatus.StatusType.HP => 250,
+            MapleStatus.StatusType.EXP_INCREASE => 0.25,
+            MapleStatus.StatusType.CRITICAL_DAMAGE => 0.5,
+            _ => 1
+        };
+    }
     
     private void SafeToggleClaimBlock(int x, int y, bool beVisible)
     {
-        if (claims[y, x] == null)
+        bool isNull = claims[y, x] == null;
+        if (isNull)
         {
             double unit = ctArealines.Width / 22.0;
             claims[y, x] = new Border
@@ -131,7 +189,21 @@ public partial class UnionRaiderMap : UserControl
             ctUnionBlocks.Children.Add(claims[y, x]!);
         }
 
-        claims[y, x]!.Visibility = beVisible ? Visibility.Visible : Visibility.Collapsed;
+        MapleStatus.StatusType claimStatusType =
+            MapleUnion.GetStatusTypeByClaimType(MapleUnion.GetOptionBySlot(x-11, y+10), GetInnerStatus());
+        if (beVisible)
+        {
+            claims[y, x]!.Visibility = Visibility.Visible;
+            StatClaimed.TryAdd(claimStatusType, 0);
+            StatClaimed[claimStatusType]++;
+            ApplyStatusChange(claimStatusType, GetStatMultiplier(claimStatusType));
+        }
+        else
+        {
+            claims[y, x]!.Visibility = Visibility.Collapsed;
+            StatClaimed[claimStatusType] = Math.Max(StatClaimed[claimStatusType]-1, 0);
+            ApplyStatusChange(claimStatusType, -GetStatMultiplier(claimStatusType));
+        }
     }
 
     private void SafeToggleClaimBlockBulk(int x, int y, bool beVisible, MapleUnion.ClaimType targetType)
@@ -174,8 +246,8 @@ public partial class UnionRaiderMap : UserControl
         int x = (int) Math.Floor(mousePos.X / gap);
         int y = (int) Math.Floor(mousePos.Y / gap);
         
-        doubleClickTester.Stop();
-        var ms = doubleClickTester.ElapsedMilliseconds;
+        _doubleClickTester.Stop();
+        var ms = _doubleClickTester.ElapsedMilliseconds;
         if (ms is > 50 and < 150)
         {
             // Double Click Action
@@ -184,14 +256,97 @@ public partial class UnionRaiderMap : UserControl
             MapleUnion.ClaimType claimType = MapleUnion.GetOptionBySlot(x-11, y+10);
             SafeToggleClaimBlockBulk(x, y, beVisible, claimType);
             
-            doubleClickTester.Reset();
+            _doubleClickTester.Reset();
             return;
         }
-        doubleClickTester = Stopwatch.StartNew();
+        _doubleClickTester = Stopwatch.StartNew();
         
         // One Click Action
         SafeToggleClaimBlock(x, y);
     }
     
+    #endregion
+    
+    #region Union Inner Selection
+
+    private void DrawUnionInnerSelection()
+    {
+        List<string> items = new List<string>
+        {
+            "STR", "DEX", "INT", "LUK", "HP", "MP", "공격력", "마력"
+        };
+
+        for (int idx = 0; idx < 8; idx++)
+        {
+            Label label = new Label
+            {
+                Content = $"선택 스텟 {idx + 1}",
+                Margin = new Thickness(532, 4 + 44 * idx, 0, 0),
+                FontSize = 12,
+                FontWeight = FontWeights.Thin
+            };
+
+            ComboBox comboBox = new ComboBox
+            {
+                Text = items[idx],
+                Width = 56,
+                Height = 24,
+                Margin = new Thickness(536, 26 + 44 * idx, 0, 0),
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Top,
+                Items = { "STR", "DEX", "INT", "LUK", "HP", "MP", "공격력", "마력" },
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                Padding = new Thickness(0, 0, 4, 0),
+            };
+            comboBox.SelectionChanged += OnInnerSelectionChanged;
+
+            displaysInner[idx].Content = items[idx];
+
+            ctMainGrid.Children.Add(label);
+            ctMainGrid.Children.Add(comboBox);
+            innerSelections.Add(comboBox);
+        }
+    }
+
+    private void OnInnerSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (lockCombobox || e.AddedItems.Count == 0) return;
+        lockCombobox = true;
+        
+        ComboBox comboBox = (ComboBox) sender;
+        int selfIdx = -1, targetIdx = -1;
+        string target = e.AddedItems[0]!.ToString()!;
+        for (int idx = 0; idx < innerSelections.Count; idx++)
+        {
+            if (comboBox == innerSelections[idx])
+            {
+                selfIdx = idx;
+            }
+            else if (innerSelections[idx].Text == target)
+            {
+                targetIdx = idx;
+            }
+        }
+
+        List<MapleStatus.StatusType> innerStatus = GetInnerStatus();
+        innerSelections[targetIdx].Text = comboBox.Text;
+        displaysInner[targetIdx].Content = comboBox.Text;
+        
+        innerSelections[selfIdx].Text = target;
+        displaysInner[selfIdx].Content = target;
+
+        MapleStatus.StatusType targetStatusType = innerStatus[targetIdx];
+        MapleStatus.StatusType selfStatusType = innerStatus[selfIdx];
+        int targetClaim = StatClaimed.GetValueOrDefault(targetStatusType, 0);
+        int selfClaim = StatClaimed.GetValueOrDefault(selfStatusType, 0);
+        double targetMul = GetStatMultiplier(targetStatusType);
+        double selfMul = GetStatMultiplier(selfStatusType);
+        
+        ApplyStatusChange(targetStatusType, (selfClaim-targetClaim) * targetMul);
+        ApplyStatusChange(selfStatusType, (targetClaim-selfClaim) * selfMul);
+
+        lockCombobox = false;
+    }
+
     #endregion
 }
