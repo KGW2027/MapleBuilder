@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.UnionArtifactControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects"
+             mc:Ignorable="d"
+             d:DesignHeight="180" d:DesignWidth="160" Background="Transparent">
+    <Grid>
+        <Border Background="#333333" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="4"/>
+        <ComboBox x:Name="ctLevelSelector" Text="LV 0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="65" Height="24" Margin="86,8,0,0"
+                  HorizontalContentAlignment="Center" Padding="0, 0, 4, 0" SelectionChanged="OnSelectionChanged"/>
+        
+        <ComboBox x:Name="ctOptionSelector1" Text="재사용 대기시간 미적용" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136" Height="24"
+                  Margin="12, 84, 0, 0" FontSize="10" HorizontalContentAlignment="Center" Padding="0, 0, 4, 0" SelectionChanged="OnSelectionChanged"/>
+        <ComboBox x:Name="ctOptionSelector2" Text="재사용 대기시간 미적용" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136" Height="24"
+                  Margin="12, 116, 0, 0" FontSize="10" HorizontalContentAlignment="Center" Padding="0, 0, 4, 0" SelectionChanged="OnSelectionChanged"/>
+        <ComboBox x:Name="ctOptionSelector3" Text="재사용 대기시간 미적용" VerticalAlignment="Top" HorizontalAlignment="Left" Width="136" Height="24"
+                  Margin="12, 148, 0, 0" FontSize="10" HorizontalContentAlignment="Center" Padding="0, 0, 4, 0" SelectionChanged="OnSelectionChanged"/>
+        
+        
+    </Grid>
+</UserControl>

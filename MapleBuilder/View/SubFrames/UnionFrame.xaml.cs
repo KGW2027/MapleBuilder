@@ -37,4 +37,20 @@ public partial class UnionFrame : UserControl
             UnionSlots.Add(ct, unionSlot);
         }
     }
+
+    #region Event Handle
+    
+    private void OnDisplayUnionRaider(object sender, RoutedEventArgs e)
+    {
+        ctArtifact.Visibility = Visibility.Collapsed;
+        ctRaider.Visibility = Visibility.Visible;
+    }
+
+    private void OnDisplayUnionArtifact(object sender, RoutedEventArgs e)
+    {
+        ctRaider.Visibility = Visibility.Collapsed;
+        ctArtifact.Visibility = Visibility.Visible;
+    }
+    
+    #endregion
 }

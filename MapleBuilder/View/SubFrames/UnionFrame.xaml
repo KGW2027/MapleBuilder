@@ -9,12 +9,12 @@
     <Grid>
         
         <Button Height="32" Width="120" Content="유니온 공격대" HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="0,8,0,0"/>
+                Margin="0,8,0,0" Click="OnDisplayUnionRaider"/>
         <Button Height="32" Width="120" Content="유니온 아티팩트" HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="124,8,0,0"/>
+                Margin="124,8,0,0" Click="OnDisplayUnionArtifact"/>
         
         <!-- 유니온 공격대 -->
-        <Grid x:Name="ctRaider">
+        <Grid x:Name="ctRaider" Visibility="Collapsed">
             <!-- 유니온 캐릭터 -->
             <Border Width="368" Height="664" Margin="604, 0, 0, 0"
                     HorizontalAlignment="Left" VerticalAlignment="Top" Background="#313131" BorderBrush="#CCCCCC" BorderThickness="1"/>
@@ -26,7 +26,11 @@
             <!-- 유니온 공격대 배치 -->
             <subObjects:UnionRaiderMap HorizontalAlignment="Left" VerticalAlignment="Top"
                                        Margin="0, 44, 0, 0"/>
-            
+        </Grid>
+        
+        <!-- 유니온 아티팩트 -->
+        <Grid x:Name="ctArtifact">
+            <subObjects:UnionArtifactPanel Margin="8, 48, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Grid>
     </Grid>
 </UserControl>

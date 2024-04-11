@@ -2,6 +2,18 @@
 
 public class MapleArtifact
 {
+    private static List<string> _optionList = new()
+    {
+        "올스탯", "최대 HP/MP", "공격력/마력", "데미지", "보스 몬스터 공격 시 데미지", "몬스터 방어율 무시",
+        "버프 지속시간", "재사용 대기시간 미적용", "메소 획득량", "아이템 드롭률", "크리티컬 확률",
+        "크리티컬 데미지", "추가 경험치 획득", "상태 이상 내성", "소환수 지속시간", "파이널 어택"
+    };
+
+    public static List<string> GetOptionList()
+    {
+        return _optionList;
+    }
+    
     public static MapleStatus.StatusType GetArtifactType(string name)
     {
         return name switch
