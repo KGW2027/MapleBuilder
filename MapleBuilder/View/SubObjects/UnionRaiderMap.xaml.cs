@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 
@@ -18,19 +19,67 @@ public partial class UnionRaiderMap : UserControl
     private static readonly SolidColorBrush BORDER_BRUSH = new(Colors.White);
     private static readonly SolidColorBrush CLAIM_BRUSH = new(Color.FromArgb(0xF0, 170, 136, 102));
     private static Stopwatch _doubleClickTester = new();
+    private static UnionRaiderMap? selfInstance;
     
     private readonly UIElement?[,] claims;
+    private readonly Dictionary<MapleStatus.StatusType, int> statClaimed;
     private List<ComboBox> innerSelections;
     private List<Label> displaysInner;
     private bool lockCombobox;
 
-    private Dictionary<MapleStatus.StatusType, int> StatClaimed;
+    public static void UpdateUnionRaider(List<MapleUnion.UnionBlock> unionBlocks, List<MapleStatus.StatusType> innerTypes)
+    {
+        selfInstance!.Dispatcher.BeginInvoke(() =>
+        {
+            // Clear Array
+            selfInstance.statClaimed.Clear();
+            for(int y = 0 ; y < selfInstance.claims.GetLength(0) ; y++)
+                for(int x = 0 ; x < selfInstance.claims.GetLength(1) ; x++)
+                    if (selfInstance.claims[y, x] != null)
+                    {
+                        selfInstance.claims[y, x]!.Visibility = Visibility.Collapsed;
+                        selfInstance.claims[y, x] = null;
+                    }
+            
+            // Set Inner Stats
+            selfInstance.lockCombobox = true;
+            for (int idx = 0; idx < 8; idx++)
+            {
+                string label = innerTypes[idx] switch
+                {
+                    MapleStatus.StatusType.STR_FLAT => "STR",
+                    MapleStatus.StatusType.DEX_FLAT => "DEX",
+                    MapleStatus.StatusType.INT_FLAT => "INT",
+                    MapleStatus.StatusType.LUK_FLAT => "LUK",
+                    MapleStatus.StatusType.HP => "HP",
+                    MapleStatus.StatusType.MP => "MP",
+                    MapleStatus.StatusType.ATTACK_POWER => "공격력",
+                    MapleStatus.StatusType.MAGIC_POWER => "마력",
+                    _ => throw new Exception($"Expected StatusType from UnionRaider sync sequence. {innerTypes[idx]}")
+                };
+
+                selfInstance.innerSelections[idx].Text = label;
+                selfInstance.displaysInner[idx].Content = label;
+            }
+            selfInstance.lockCombobox = false;
+            
+            // Fill Union Raider Claims
+            foreach (var unionBlock in unionBlocks)
+            {
+                foreach(sbyte[] pos in unionBlock.blockPositions)
+                    selfInstance.SafeToggleClaimBlock(pos[0], pos[1]);
+            }
+            // BuilderDataContainer.RefreshAll();
+        });
+        
+    }
     
     public UnionRaiderMap()
     {
         claims = new UIElement?[20, 22];
         innerSelections = new List<ComboBox>();
-        StatClaimed = new Dictionary<MapleStatus.StatusType, int>();
+        statClaimed = new Dictionary<MapleStatus.StatusType, int>();
+        selfInstance = this;
             
         InitializeComponent();
         // 유니온 블럭 X,Y 선
@@ -49,9 +98,9 @@ public partial class UnionRaiderMap : UserControl
 
     private void ApplyStatusChange(MapleStatus.StatusType statusType, double delta)
     {
-
         if (BuilderDataContainer.PlayerStatus == null) return;
         BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
+        BuilderDataContainer.RefreshAll();
     }
     
     #region Draw
@@ -167,6 +216,11 @@ public partial class UnionRaiderMap : UserControl
             _ => 1
         };
     }
+
+    private void SafeToggleClaimBlock(sbyte x, sbyte y)
+    {
+        SafeToggleClaimBlock(x+11, Math.Abs(y-10), true);
+    }
     
     private void SafeToggleClaimBlock(int x, int y, bool beVisible)
     {
@@ -194,15 +248,15 @@ public partial class UnionRaiderMap : UserControl
         if (beVisible)
         {
             claims[y, x]!.Visibility = Visibility.Visible;
-            StatClaimed.TryAdd(claimStatusType, 0);
-            StatClaimed[claimStatusType]++;
+            statClaimed.TryAdd(claimStatusType, 0);
+            statClaimed[claimStatusType]++;
             ApplyStatusChange(claimStatusType, GetStatMultiplier(claimStatusType));
         }
         else
         {
             claims[y, x]!.Visibility = Visibility.Collapsed;
-            StatClaimed[claimStatusType] = Math.Max(StatClaimed[claimStatusType]-1, 0);
-            ApplyStatusChange(claimStatusType, -GetStatMultiplier(claimStatusType));
+            statClaimed[claimStatusType] = Math.Max(statClaimed[claimStatusType]-1, 0);
+            if(!isNull) ApplyStatusChange(claimStatusType, -GetStatMultiplier(claimStatusType));
         }
     }
 
@@ -337,8 +391,8 @@ public partial class UnionRaiderMap : UserControl
 
         MapleStatus.StatusType targetStatusType = innerStatus[targetIdx];
         MapleStatus.StatusType selfStatusType = innerStatus[selfIdx];
-        int targetClaim = StatClaimed.GetValueOrDefault(targetStatusType, 0);
-        int selfClaim = StatClaimed.GetValueOrDefault(selfStatusType, 0);
+        int targetClaim = statClaimed.GetValueOrDefault(targetStatusType, 0);
+        int selfClaim = statClaimed.GetValueOrDefault(selfStatusType, 0);
         double targetMul = GetStatMultiplier(targetStatusType);
         double selfMul = GetStatMultiplier(selfStatusType);
         

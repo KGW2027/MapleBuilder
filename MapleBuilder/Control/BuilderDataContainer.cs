@@ -62,6 +62,7 @@ public class BuilderDataContainer
         RenderOverview.Update(charInfo);
         foreach (var unionInfo in charInfo.UnionInfo)
             UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
+        UnionRaiderMap.UpdateUnionRaider(charInfo.UnionInfo, charInfo.UnionInner);
         RefreshAll();
     }
 

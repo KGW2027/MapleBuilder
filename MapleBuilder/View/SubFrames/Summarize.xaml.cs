@@ -103,7 +103,7 @@ public partial class Summarize : UserControl
             selfInstance.ctDebuffDmg.Content = $"{pInfo[MapleStatus.StatusType.DEBUFF_DAMAGE]}%";
             selfInstance.ctCooldownDecrease.Content = $"{pInfo[MapleStatus.StatusType.COOL_DEC_SECOND]}초, {pInfo[MapleStatus.StatusType.COOL_DEC_RATE]}%";
             selfInstance.ctCooldownIgnore.Content = $"{pInfo[MapleStatus.StatusType.COOL_IGNORE]:F2}%";
-            selfInstance.ctTolerance.Content = $"{pInfo[MapleStatus.StatusType.ABN_STATUS_RESIS]}%";
+            selfInstance.ctTolerance.Content = $"{pInfo[MapleStatus.StatusType.ABN_STATUS_RESIS]}";
             selfInstance.ctIgnoreImmune.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
 
             selfInstance.ctAtkVal.Content = $"{pInfo[atkFlat]:N0}";
