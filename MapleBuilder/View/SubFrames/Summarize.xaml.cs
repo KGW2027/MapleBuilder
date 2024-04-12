@@ -39,17 +39,17 @@ public partial class Summarize : UserControl
         {
             MapleStatContainer pInfo = BuilderDataContainer.PlayerStatus!.PlayerStat;
             pInfo.Flush();
-            MapleStatus.StatusType atkFlat = pInfo.mainStatType == MapleStatus.StatusType.INT
+            MapleStatus.StatusType atkFlat = pInfo.MainStatType == MapleStatus.StatusType.INT
                 ? MapleStatus.StatusType.MAGIC_POWER
                 : MapleStatus.StatusType.ATTACK_POWER;
-            MapleStatus.StatusType atkRate = pInfo.mainStatType == MapleStatus.StatusType.INT
+            MapleStatus.StatusType atkRate = pInfo.MainStatType == MapleStatus.StatusType.INT
                 ? MapleStatus.StatusType.MAGIC_RATE
                 : MapleStatus.StatusType.ATTACK_RATE;
             
-            int mainStat = (int) Math.Floor(pInfo[pInfo.mainStatType] * (1 + pInfo[pInfo.mainStatType+0x10] / 100.0) + pInfo[pInfo.mainStatType+0x20]);
-            int subStat  = (int) Math.Floor(pInfo[pInfo.subStatType ] * (1 + pInfo[pInfo.subStatType +0x10] / 100.0) + pInfo[pInfo.subStatType +0x20]);
-            int subStat2 = pInfo.subStat2Type == MapleStatus.StatusType.OTHER ? 0 
-                : (int) Math.Floor(pInfo[pInfo.subStat2Type] * (1 +pInfo[pInfo.subStat2Type + 0x10] / 100.0) + pInfo[pInfo.subStat2Type + 0x20]);
+            int mainStat = (int) Math.Floor(pInfo[pInfo.MainStatType] * (1 + pInfo[pInfo.MainStatType+0x10] / 100.0) + pInfo[pInfo.MainStatType+0x20]);
+            int subStat  = (int) Math.Floor(pInfo[pInfo.SubStatType ] * (1 + pInfo[pInfo.SubStatType +0x10] / 100.0) + pInfo[pInfo.SubStatType +0x20]);
+            int subStat2 = pInfo.SubStat2Type == MapleStatus.StatusType.OTHER ? 0 
+                : (int) Math.Floor(pInfo[pInfo.SubStat2Type] * (1 +pInfo[pInfo.SubStat2Type + 0x10] / 100.0) + pInfo[pInfo.SubStat2Type + 0x20]);
             double attackRate = 1 + pInfo[atkRate] / 100.0;
             double dmg = 1 + (pInfo[MapleStatus.StatusType.DAMAGE] + pInfo[MapleStatus.StatusType.BOSS_DAMAGE]) / 100.0;
             double critDmg = 1.35 + pInfo[MapleStatus.StatusType.CRITICAL_DAMAGE] / 100.0;
@@ -64,29 +64,29 @@ public partial class Summarize : UserControl
             else selfInstance.ctDisplayPower.Content = $"{tho:0000}";
 
             selfInstance.ctMainStatType.Content =
-                $"주스탯 [{pInfo.mainStatType.ToString()}]";
-            selfInstance.ctMainStatFlat.Content = pInfo[pInfo.mainStatType];
-            selfInstance.ctMainStatRate.Content = pInfo[pInfo.mainStatType + 0x10];
-            selfInstance.ctMainStatNonRateFlat.Content = pInfo[pInfo.mainStatType + 0x20];
+                $"주스탯 [{pInfo.MainStatType.ToString()}]";
+            selfInstance.ctMainStatFlat.Content = pInfo[pInfo.MainStatType];
+            selfInstance.ctMainStatRate.Content = pInfo[pInfo.MainStatType + 0x10];
+            selfInstance.ctMainStatNonRateFlat.Content = pInfo[pInfo.MainStatType + 0x20];
 
             selfInstance.ctSymbolArcane.Content = $"{pInfo[MapleStatus.StatusType.ARCANE_FORCE]:N0}";
             selfInstance.ctSymbolAuthentic.Content = $"{pInfo[MapleStatus.StatusType.AUTHENTIC_FORCE]:N0}";
 
             selfInstance.ctSubStatType.Content =
-                $"부스탯 [{pInfo.subStatType.ToString()}]";
-            selfInstance.ctSubStatFlat.Content = pInfo[pInfo.subStatType];
-            selfInstance.ctSubStatRate.Content = pInfo[pInfo.subStatType + 0x10];
-            selfInstance.ctSubStatNonRateFlat.Content = pInfo[pInfo.subStatType + 0x20];
+                $"부스탯 [{pInfo.SubStatType.ToString()}]";
+            selfInstance.ctSubStatFlat.Content = pInfo[pInfo.SubStatType];
+            selfInstance.ctSubStatRate.Content = pInfo[pInfo.SubStatType + 0x10];
+            selfInstance.ctSubStatNonRateFlat.Content = pInfo[pInfo.SubStatType + 0x20];
 
             selfInstance.ctSubStat2Grid.Visibility =
-                pInfo.subStat2Type == MapleStatus.StatusType.OTHER
+                pInfo.SubStat2Type == MapleStatus.StatusType.OTHER
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             selfInstance.ctSubStat2Type.Content =
-                $"부스탯 [{pInfo.subStat2Type.ToString()}]";
-            selfInstance.ctSubStat2Flat.Content = pInfo[pInfo.subStat2Type];
-            selfInstance.ctSubStat2Rate.Content = pInfo[pInfo.subStat2Type + 0x10];
-            selfInstance.ctSubStat2NonRateFlat.Content = pInfo[pInfo.subStat2Type + 0x20];
+                $"부스탯 [{pInfo.SubStat2Type.ToString()}]";
+            selfInstance.ctSubStat2Flat.Content = pInfo[pInfo.SubStat2Type];
+            selfInstance.ctSubStat2Rate.Content = pInfo[pInfo.SubStat2Type + 0x10];
+            selfInstance.ctSubStat2NonRateFlat.Content = pInfo[pInfo.SubStat2Type + 0x20];
 
             selfInstance.ctBossDmg.Content = $"{pInfo[MapleStatus.StatusType.BOSS_DAMAGE]}%";
             selfInstance.ctIgnoreArmor.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_DEF]:F2}%";

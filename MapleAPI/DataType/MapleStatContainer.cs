@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.Diagnostics;
+using System.Text.Json.Nodes;
 using MapleAPI.Enum;
 
 namespace MapleAPI.DataType;
@@ -10,9 +11,13 @@ public class MapleStatContainer
     public MapleStatContainer()
     {
         statContainer = new Dictionary<MapleStatus.StatusType, double>();
-        mainStatType = MapleStatus.StatusType.OTHER;
-        subStatType = MapleStatus.StatusType.OTHER;
-        subStat2Type = MapleStatus.StatusType.OTHER;
+        MainStatType = MapleStatus.StatusType.OTHER;
+        SubStatType = MapleStatus.StatusType.OTHER;
+        SubStat2Type = MapleStatus.StatusType.OTHER;
+
+        #if DEBUG
+            SourceTrace = new Dictionary<string, MapleStatContainer>();
+        #endif
     }
 
     protected internal static MapleStatContainer LoadFromJson(JsonObject itemJson)
@@ -38,16 +43,40 @@ public class MapleStatContainer
     #endregion
     
     private Dictionary<MapleStatus.StatusType, double> statContainer;
-    public MapleStatus.StatusType mainStatType;
-    public MapleStatus.StatusType subStatType;
-    public MapleStatus.StatusType subStat2Type;
+    public MapleStatus.StatusType MainStatType;
+    public MapleStatus.StatusType SubStatType;
+    public MapleStatus.StatusType SubStat2Type;
 
+    #if DEBUG
+        public Dictionary<string, MapleStatContainer> SourceTrace;
+    #endif
+    
     public double this[MapleStatus.StatusType type]
     {
         get => statContainer.GetValueOrDefault(type, 0);
         set
         {
             statContainer.TryAdd(type, 0);
+            #if DEBUG
+                StackTrace st = new StackTrace();
+                StackFrame? stackFrame = st.GetFrame(1);
+                if (stackFrame != null)
+                {
+                    if (!stackFrame.GetMethod()!.DeclaringType!.FullName!.Equals("MapleAPI.DataType.MapleStatContainer")
+                        && !stackFrame.GetMethod()!.Name.Equals("set_item"))
+                    {
+                        string trace = $"{stackFrame.GetMethod()!.DeclaringType!.FullName}::{stackFrame.GetMethod()!.Name}";
+                        // Console.WriteLine(trace);
+                        SourceTrace.TryAdd(trace, new MapleStatContainer());
+
+                        if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                            SourceTrace[trace][type] =
+                                ApplyMultipleCalc(SourceTrace[trace][type], value - statContainer[type]);
+                        else SourceTrace[trace][type] += value - statContainer[type];
+                    }
+                }
+            #endif
+            
             if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
                 statContainer[type] = ApplyMultipleCalc(statContainer[type], value - statContainer[type]);
             else statContainer[type] = value;
@@ -78,15 +107,15 @@ public class MapleStatContainer
     
     public void Flush()
     {
-        if (mainStatType != MapleStatus.StatusType.OTHER)
-            SafeAdd(mainStatType, ClearAndGet(MapleStatus.StatusType.MAIN_STAT));
+        if (MainStatType != MapleStatus.StatusType.OTHER)
+            SafeAdd(MainStatType, ClearAndGet(MapleStatus.StatusType.MAIN_STAT));
 
-        if (subStatType != MapleStatus.StatusType.OTHER)
+        if (SubStatType != MapleStatus.StatusType.OTHER)
         {
             double subStatValue = ClearAndGet(MapleStatus.StatusType.SUB_STAT);
-            SafeAdd(subStatType, subStatValue);
-            if (subStat2Type != MapleStatus.StatusType.OTHER)
-                SafeAdd(subStat2Type, subStatValue);
+            SafeAdd(SubStatType, subStatValue);
+            if (SubStat2Type != MapleStatus.StatusType.OTHER)
+                SafeAdd(SubStat2Type, subStatValue);
         }
 
         double allStatFlat = ClearAndGet(MapleStatus.StatusType.ALL_STAT);
@@ -124,9 +153,10 @@ public class MapleStatContainer
     {
         MapleStatContainer msc = new MapleStatContainer
         {
-            mainStatType = lhs.mainStatType,
-            subStatType = lhs.subStatType,
-            subStat2Type = lhs.subStat2Type
+            MainStatType = lhs.MainStatType,
+            SubStatType = lhs.SubStatType,
+            SubStat2Type = lhs.SubStat2Type,
+            SourceTrace = lhs.SourceTrace,
         };
 
         foreach (var pair in lhs.statContainer)
@@ -142,6 +172,24 @@ public class MapleStatContainer
                 msc.statContainer[pair.Key] += pair.Value;
         }
         
+#if DEBUG
+        StackTrace st = new StackTrace();
+        StackFrame? stackFrame = st.GetFrame(1);
+        if (stackFrame != null)
+        {
+            foreach (var pair in rhs.statContainer)
+            {
+                string trace = $"{stackFrame.GetMethod()!.DeclaringType!.FullName}::{stackFrame.GetMethod()!.Name}";
+                msc.SourceTrace.TryAdd(trace, new MapleStatContainer());
+
+                MapleStatus.StatusType type = pair.Key;
+                if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                    msc.SourceTrace[trace][type] = ApplyMultipleCalc(msc.SourceTrace[trace][type], pair.Value);
+                else msc.SourceTrace[trace][type] += pair.Value;
+            }
+        }
+#endif
+        
         return msc;
     }
     
@@ -149,9 +197,9 @@ public class MapleStatContainer
     {
         MapleStatContainer msc = new MapleStatContainer
         {
-            mainStatType = lhs.mainStatType,
-            subStatType = lhs.subStatType,
-            subStat2Type = lhs.subStat2Type
+            MainStatType = lhs.MainStatType,
+            SubStatType = lhs.SubStatType,
+            SubStat2Type = lhs.SubStat2Type
         };
         
         foreach (var pair in lhs.statContainer)
@@ -166,6 +214,24 @@ public class MapleStatContainer
             else
                 msc.statContainer[pair.Key] -= pair.Value;
         }
+        
+#if DEBUG
+        StackTrace st = new StackTrace();
+        StackFrame? stackFrame = st.GetFrame(1);
+        if (stackFrame != null)
+        {
+            foreach (var pair in rhs.statContainer)
+            {
+                string trace = $"{stackFrame.GetMethod()!.DeclaringType!.FullName}::{stackFrame.GetMethod()!.Name}";
+                msc.SourceTrace.TryAdd(trace, new MapleStatContainer());
+
+                MapleStatus.StatusType type = pair.Key;
+                if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
+                    msc.SourceTrace[trace][type] = ApplyMultipleCalc(msc.SourceTrace[trace][type], -pair.Value);
+                else msc.SourceTrace[trace][type] -= pair.Value;
+            }
+        }
+#endif
         return msc;
     }
 
@@ -173,9 +239,9 @@ public class MapleStatContainer
     {
         MapleStatContainer msc = new MapleStatContainer
         {
-            mainStatType = self.mainStatType,
-            subStatType = self.subStatType,
-            subStat2Type = self.subStat2Type
+            MainStatType = self.MainStatType,
+            SubStatType = self.SubStatType,
+            SubStat2Type = self.SubStat2Type
         };
         foreach (var pair in self.statContainer)
         {

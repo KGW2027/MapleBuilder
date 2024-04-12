@@ -68,12 +68,12 @@ public partial class StatSymbol : UserControl
             selfInstnace.ctArcaneForceDisplay.Content = $"ARC +{arcane:N0}";
             selfInstnace.ctArcaneStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{arcaneStat:N0}" :
                 isAvenger ? $"MAX HP +{arcaneStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.mainStatType} +{arcaneStat:N0}";
+                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.MainStatType} +{arcaneStat:N0}";
             
             selfInstnace.ctAuthenticForceDisplay.Content = $"AUT +{authentic:N0}";
             selfInstnace.ctAuthenticStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{authenticStat:N0}" :
                 isAvenger ? $"MAX HP +{authenticStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.mainStatType} +{authenticStat:N0}";
+                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.MainStatType} +{authenticStat:N0}";
         });
     }
 

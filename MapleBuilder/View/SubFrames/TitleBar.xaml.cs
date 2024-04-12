@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MapleAPI.DataType;
+using MapleAPI.Enum;
 using MapleBuilder.Control;
 using Microsoft.Win32;
 
@@ -37,6 +39,11 @@ public partial class TitleBar : UserControl
         
         if(File.Exists("./CharacterExtractorResult.json") && File.Exists("./ItemExtractorResult.json") && File.Exists("SkillExtractorResult.json"))
             CompleteSetWzPath();
+        
+        #if DEBUG
+            Console.WriteLine("DEBUG BUTTON VISIBLE");
+            ctDebugStatusTrace.Visibility = Visibility.Visible;
+        #endif
     }
 
     private void ApplyApiKey(object sender, RoutedEventArgs e)
@@ -76,4 +83,23 @@ public partial class TitleBar : UserControl
     {
         ctWzPathButton.Visibility = Visibility.Collapsed;
     }
+
+    #if DEBUG
+    private void OnDebugStatusTrace(object sender, RoutedEventArgs e)
+    {
+        if (BuilderDataContainer.PlayerStatus == null) return;
+        var sourceTrace = BuilderDataContainer.PlayerStatus.PlayerStat.SourceTrace;
+
+        foreach (var pair in sourceTrace)
+        {
+            Console.WriteLine($"== ===== [ STATUS SOURCE TRACE :: {pair.Key} ] ===== ==");
+
+            foreach (MapleStatus.StatusType statusType in Enum.GetValues<MapleStatus.StatusType>())
+            {
+                if(pair.Value[statusType] == 0) continue;
+                Console.WriteLine($"\t{statusType} : {pair.Value[statusType]}");
+            }
+        }
+    }
+    #endif
 }

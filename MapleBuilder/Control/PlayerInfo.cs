@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
@@ -9,19 +8,19 @@ namespace MapleBuilder.Control;
 
 public class PlayerInfo
 {
-    
     public PlayerInfo(uint level, MapleStatus.StatusType mainStat, 
         MapleStatus.StatusType subStat, MapleStatus.StatusType subStat2 = 0)
     {
         PlayerStat = new MapleStatContainer
         {
-            mainStatType = mainStat,
-            subStatType = subStat,
-            subStat2Type = subStat2
+            MainStatType = mainStat,
+            SubStatType = subStat,
+            SubStat2Type = subStat2
         };
         PlayerStat[mainStat] += (mainStat == MapleStatus.StatusType.HP ? 90 * level + 545 : 5 * level + 18);
         PlayerStat[subStat] += 4;
         PlayerStat[subStat2] += 4;
+        PlayerStat[MapleStatus.StatusType.CRITICAL_CHANCE] += 5;
         SetEffects = new SetEffect();
         lastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
         lastAbilities = new Dictionary< MapleStatus.StatusType, int>();
@@ -134,11 +133,11 @@ public class PlayerInfo
         int[] prev = GetSymbolStats(lastSymbols);
         int[] now = GetSymbolStats(symbolData);
         int[] delta = {now[0] - prev[0], now[1] - prev[1], now[2] - prev[2]};
-        PlayerStat[PlayerStat.mainStatType + 0x20] += delta[0];
+        PlayerStat[PlayerStat.MainStatType + 0x20] += delta[0];
         if (BuilderDataContainer.CharacterInfo!.Class == MapleClass.ClassType.XENON)
         {
-            PlayerStat[PlayerStat.subStatType + 0x20] += delta[0];
-            PlayerStat[PlayerStat.subStat2Type + 0x20] += delta[0];
+            PlayerStat[PlayerStat.SubStatType + 0x20] += delta[0];
+            PlayerStat[PlayerStat.SubStat2Type + 0x20] += delta[0];
         }
 
         PlayerStat[MapleStatus.StatusType.ARCANE_FORCE] += delta[1];
@@ -185,7 +184,7 @@ public class PlayerInfo
     
     #endregion
     
-    #region
+    #region 펫 장비 효과 적용
 
     public void ApplyPetItem(List<MaplePetItem> petItems)
     {
