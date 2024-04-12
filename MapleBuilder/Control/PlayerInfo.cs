@@ -16,7 +16,8 @@ public class PlayerInfo
         {
             MainStatType = mainStat,
             SubStatType = subStat,
-            SubStat2Type = subStat2
+            SubStat2Type = subStat2,
+            Level = level
         };
         PlayerStat[mainStat] += (mainStat == MapleStatus.StatusType.HP ? 90 * level + 545 : 5 * level + 18);
         PlayerStat[subStat] += 4;

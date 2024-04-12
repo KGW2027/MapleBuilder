@@ -14,6 +14,7 @@ public class MapleStatContainer
         MainStatType = MapleStatus.StatusType.OTHER;
         SubStatType = MapleStatus.StatusType.OTHER;
         SubStat2Type = MapleStatus.StatusType.OTHER;
+        Level = 0;
 
         #if DEBUG
             SourceTrace = new Dictionary<string, MapleStatContainer>();
@@ -46,6 +47,7 @@ public class MapleStatContainer
     public MapleStatus.StatusType MainStatType;
     public MapleStatus.StatusType SubStatType;
     public MapleStatus.StatusType SubStat2Type;
+    public uint Level;
 
     #if DEBUG
         public Dictionary<string, MapleStatContainer> SourceTrace;
@@ -119,26 +121,52 @@ public class MapleStatContainer
         }
 
         double strdexluk = ClearAndGet(MapleStatus.StatusType.STR_DEX_LUK);
-        SafeAdd(MapleStatus.StatusType.STR_FLAT, strdexluk);
-        SafeAdd(MapleStatus.StatusType.DEX_FLAT, strdexluk);
-        SafeAdd(MapleStatus.StatusType.LUK_FLAT, strdexluk);
+        if (strdexluk != 0.0)
+        {
+            SafeAdd(MapleStatus.StatusType.STR_FLAT, strdexluk);
+            SafeAdd(MapleStatus.StatusType.DEX_FLAT, strdexluk);
+            SafeAdd(MapleStatus.StatusType.LUK_FLAT, strdexluk);
+        }
 
         double allStatFlat = ClearAndGet(MapleStatus.StatusType.ALL_STAT);
-        SafeAdd(MapleStatus.StatusType.STR, allStatFlat);
-        SafeAdd(MapleStatus.StatusType.DEX, allStatFlat);
-        SafeAdd(MapleStatus.StatusType.INT, allStatFlat);
-        SafeAdd(MapleStatus.StatusType.LUK, allStatFlat);
+        if (allStatFlat != 0.0)
+        {
+            SafeAdd(MapleStatus.StatusType.STR, allStatFlat);
+            SafeAdd(MapleStatus.StatusType.DEX, allStatFlat);
+            SafeAdd(MapleStatus.StatusType.INT, allStatFlat);
+            SafeAdd(MapleStatus.StatusType.LUK, allStatFlat);
+        }
 
         double allStatRate = ClearAndGet(MapleStatus.StatusType.ALL_STAT_RATE);
-        SafeAdd(MapleStatus.StatusType.STR_RATE, allStatRate);
-        SafeAdd(MapleStatus.StatusType.DEX_RATE, allStatRate);
-        SafeAdd(MapleStatus.StatusType.INT_RATE, allStatRate);
-        SafeAdd(MapleStatus.StatusType.LUK_RATE, allStatRate);
+        if (allStatRate != 0.0)
+        {
+            SafeAdd(MapleStatus.StatusType.STR_RATE, allStatRate);
+            SafeAdd(MapleStatus.StatusType.DEX_RATE, allStatRate);
+            SafeAdd(MapleStatus.StatusType.INT_RATE, allStatRate);
+            SafeAdd(MapleStatus.StatusType.LUK_RATE, allStatRate);
+        }
 
         double atkmag = ClearAndGet(MapleStatus.StatusType.ATTACK_AND_MAGIC);
-        SafeAdd(MapleStatus.StatusType.ATTACK_POWER, atkmag);
-        SafeAdd(MapleStatus.StatusType.MAGIC_POWER, atkmag);
+        if (atkmag != 0.0)
+        {
+            SafeAdd(MapleStatus.StatusType.ATTACK_POWER, atkmag);
+            SafeAdd(MapleStatus.StatusType.MAGIC_POWER, atkmag);
+        }
 
+        if (Level > 0)
+        {
+            MapleStatus.StatusType[] perLevels = {
+                MapleStatus.StatusType.STR_PER_LEVEL, MapleStatus.StatusType.DEX_PER_LEVEL,
+                MapleStatus.StatusType.INT_PER_LEVEL, MapleStatus.StatusType.LUK_PER_LEVEL,
+            };
+            foreach (MapleStatus.StatusType perLvType in perLevels)
+            {
+                double perValue = ClearAndGet(perLvType);
+                if(perValue == 0.0) continue;
+                Console.WriteLine($"{perLvType} => {perValue}");
+                SafeAdd(perLvType - 0x30, Math.Floor(perValue * (Level / 9.0)));
+            }
+        }
     }
 
     #region Operator Related
@@ -162,6 +190,7 @@ public class MapleStatContainer
             SubStatType = lhs.SubStatType,
             SubStat2Type = lhs.SubStat2Type,
             SourceTrace = lhs.SourceTrace,
+            Level = lhs.Level
         };
 
         foreach (var pair in lhs.statContainer)
@@ -204,7 +233,8 @@ public class MapleStatContainer
         {
             MainStatType = lhs.MainStatType,
             SubStatType = lhs.SubStatType,
-            SubStat2Type = lhs.SubStat2Type
+            SubStat2Type = lhs.SubStat2Type,
+            Level = lhs.Level
         };
         
         foreach (var pair in lhs.statContainer)
@@ -246,7 +276,8 @@ public class MapleStatContainer
         {
             MainStatType = self.MainStatType,
             SubStatType = self.SubStatType,
-            SubStat2Type = self.SubStat2Type
+            SubStat2Type = self.SubStat2Type,
+            Level = self.Level
         };
         foreach (var pair in self.statContainer)
         {
