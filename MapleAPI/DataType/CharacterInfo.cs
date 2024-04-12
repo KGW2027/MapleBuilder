@@ -218,6 +218,19 @@ public class CharacterInfo
                 if(!cashItem.IsEmpty) cInfo.CashItems.Add(cashItem);
             }
         }
+        
+        // 성향 정보 로드
+        APIResponse propensityInfo = await APIRequest.RequestAsync(APIRequestType.PROPENSITY, args);
+        if(propensityInfo.IsError) throw new WebException("API Request Failed !" + propensityInfo.ResponseType);
+        
+        cInfo.PropensityLevels.Clear();
+        foreach (MaplePropensity.PropensityType propensityType in
+                 System.Enum.GetValues<MaplePropensity.PropensityType>())
+        {
+            string jsonKey = $"{propensityType.ToString().ToLower()}_level";
+            if (!propensityInfo.JsonData!.TryGetPropertyValue(jsonKey, out var propNode) || propNode == null) continue;
+            cInfo.PropensityLevels[propensityType] = int.Parse(propNode.ToString());
+        }
             
         return cInfo;
     }
@@ -236,6 +249,7 @@ public class CharacterInfo
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleStatus.StatusType, int>();
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
+        PropensityLevels = new Dictionary<MaplePropensity.PropensityType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
         UnionInner = new List<MapleStatus.StatusType>();
         ArtifactPanels = new List<MapleArtifact.ArtifactPanel>();
@@ -264,6 +278,7 @@ public class CharacterInfo
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public List<MapleStatus.StatusType> UnionInner { get; private set; }
     public List<MapleArtifact.ArtifactPanel> ArtifactPanels { get; private set; }
+    public Dictionary<MaplePropensity.PropensityType, int> PropensityLevels { get; private set; }
     #endregion
     
 

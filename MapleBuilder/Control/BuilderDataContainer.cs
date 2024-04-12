@@ -58,6 +58,19 @@ public class BuilderDataContainer
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         PlayerStatus.ApplyPetItem(charInfo.PetInfo);
+        // 임시 성향 로드 코드
+        foreach (var pair in charInfo.PropensityLevels)
+        {
+            MapleStatus.StatusType[] propStatTypes = MaplePropensity.GetStatusByPropensity(pair.Key);
+            double[] args = MaplePropensity.GetStatusValueByPropensity(pair.Key);
+
+            for (int idx = 0; idx < propStatTypes.Length; idx++)
+            {
+                double delta = args[idx + 1] * Math.Floor(pair.Value / args[0]);
+                PlayerStatus.PlayerStat[propStatTypes[idx]] += delta;
+            }
+        }
+        
         StatSymbol.InitAbility(charInfo.AbilityValues);
         StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
         RenderOverview.Update(charInfo);
