@@ -94,8 +94,8 @@ public partial class UnionArtifactPanel : UserControl
         artifactLevels[type] = prevLevel + deltaLevel;
 
         if (BuilderDataContainer.PlayerStatus == null) return;
-        BuilderDataContainer.PlayerStatus.PlayerStat[type] +=
-            GetDeltaStatus(type, artifactLevels[type]) - GetDeltaStatus(type, prevLevel);
+        BuilderDataContainer.PlayerStatus.PlayerStat[type] -= GetDeltaStatus(type, prevLevel);
+        BuilderDataContainer.PlayerStatus.PlayerStat[type] += GetDeltaStatus(type, artifactLevels[type]);
     }
 
     private void OnArtifactSettingChanged(object sender, RoutedEventArgs e)

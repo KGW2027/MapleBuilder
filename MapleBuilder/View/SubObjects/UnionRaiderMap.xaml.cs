@@ -99,7 +99,13 @@ public partial class UnionRaiderMap : UserControl
     private void ApplyStatusChange(MapleStatus.StatusType statusType, double delta)
     {
         if (BuilderDataContainer.PlayerStatus == null) return;
-        BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
+        if (statusType == MapleStatus.StatusType.IGNORE_DEF)
+        {
+            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] -= statClaimed[statusType] - delta;
+            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += statClaimed[statusType];
+        } else 
+            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
+
         BuilderDataContainer.RefreshAll();
     }
     

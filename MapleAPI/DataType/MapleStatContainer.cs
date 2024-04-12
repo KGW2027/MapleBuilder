@@ -163,7 +163,7 @@ public class MapleStatContainer
             {
                 double perValue = ClearAndGet(perLvType);
                 if(perValue == 0.0) continue;
-                Console.WriteLine($"{perLvType} => {perValue}");
+                // Console.WriteLine($"{perLvType} => {perValue}");
                 SafeAdd(perLvType - 0x30, Math.Floor(perValue * (Level / 9.0)));
             }
         }
