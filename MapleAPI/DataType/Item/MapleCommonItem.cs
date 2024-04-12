@@ -13,6 +13,7 @@ public class MapleCommonItem : MapleItemBase
     {
         internalData = data;
         IsEmpty = data["item_name"] == null;
+        SoulName = "";
         
         ExceptionalOption = new MapleStatContainer();
         BaseOption = new MapleStatContainer();
@@ -59,7 +60,6 @@ public class MapleCommonItem : MapleItemBase
                     MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
         }
 
-        SoulName = "";
         if (data["soul_name"] != null && data["soul_option"] != null)
         {
             SoulName = data["soul_name"]!.ToString().Replace("의 소울 적용", "");
@@ -120,7 +120,7 @@ public class MapleCommonItem : MapleItemBase
     //     get
     //     {
     //         MapleStatContainer sum = ExceptionalOption + BaseOption + AddOption + EtcOption + StarforceOption;
-    //         Console.WriteLine($"{Name} | {BaseOption[MapleStatus.StatusType.INT]} + {AddOption[MapleStatus.StatusType.INT]} + {EtcOption[MapleStatus.StatusType.INT]} + {StarforceOption[MapleStatus.StatusType.INT]}");
+    //         Console.WriteLine($"{Name} | {BaseOption[MapleStatus.StatusType.MAGIC_POWER]} + {AddOption[MapleStatus.StatusType.MAGIC_POWER]} + {EtcOption[MapleStatus.StatusType.MAGIC_POWER]} + {StarforceOption[MapleStatus.StatusType.MAGIC_POWER]}");
     //         return sum;
     //     }
     // }
@@ -243,7 +243,11 @@ public class MapleCommonItem : MapleItemBase
 
     private int GetArmorAttackIncreaseByStarforce(int starforce)
     {
-        if (starforce <= 15) return 0;
+        if (starforce <= 15)
+        {
+            if (EquipType != MapleEquipType.EquipType.GLOVE) return 0;
+            return starforce is 5 or 7 or 9 or 11 or 13 or 14 or 15 ? 1 : 0;
+        }
 
         if (ItemLevel >= 248)
         {
