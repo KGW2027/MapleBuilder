@@ -70,21 +70,42 @@ public class PlayerInfo
             SetEffects.Sub(item);
         PlayerStat += SetEffects.GetSetOptions() - setEffectPrev;
     }
+
+    private void ApplyAddSub(MapleTitleItem item, bool isAdd)
+    {
+        if (isAdd) PlayerStat += item.Status;
+        else       PlayerStat -= item.Status;
+    }
     
     ///<summary>
     ///    아이템을 장착합니다.
     ///</summary>
-    public void AddCommonItem(MapleCommonItem item)
+    public void AddCommonItem(MapleItemBase item)
     {
-        ApplyAddSub(item, true);
+        switch (item)
+        {
+            case MapleCommonItem commonItem:
+                ApplyAddSub(commonItem, true);
+                break;
+            case MapleTitleItem titleItem:
+                ApplyAddSub(titleItem, true);
+                break;
+        }
     }
-    
     ///<summary>
     ///    아이템을 해제합니다.
     ///</summary>
-    public void SubCommonItem(MapleCommonItem item)
+    public void SubCommonItem(MapleItemBase item)
     {
-        ApplyAddSub(item, false);
+        switch (item)
+        {
+            case MapleCommonItem commonItem:
+                ApplyAddSub(commonItem, false);
+                break;
+            case MapleTitleItem titleItem:
+                ApplyAddSub(titleItem, false);
+                break;
+        }
     }
     #endregion
     
