@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
@@ -22,14 +23,14 @@ public class PlayerInfo
         PlayerStat[subStat2] += 4;
         PlayerStat[MapleStatus.StatusType.CRITICAL_CHANCE] += 5;
         SetEffects = new SetEffect();
-        lastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
-        lastAbilities = new Dictionary< MapleStatus.StatusType, int>();
+        LastSymbols = new Dictionary<MapleSymbol.SymbolType, int>();
+        LastAbilities = new Dictionary< MapleStatus.StatusType, int>();
     }
     
     public MapleStatContainer PlayerStat { get; protected internal set; }
     public SetEffect SetEffects { get; private set; }
-    public Dictionary<MapleSymbol.SymbolType, int> lastSymbols;
-    public Dictionary< MapleStatus.StatusType, int> lastAbilities;
+    public Dictionary<MapleSymbol.SymbolType, int> LastSymbols;
+    public Dictionary< MapleStatus.StatusType, int> LastAbilities;
     
     #region 장비 아이템 효과 적용
     
@@ -100,6 +101,7 @@ public class PlayerInfo
             };
         foreach (var pair in symbolData)
         {
+            if (pair.Value == 0) continue;
             switch (pair.Key)
             {
                 case MapleSymbol.SymbolType.YEORO:
@@ -130,7 +132,7 @@ public class PlayerInfo
     
     public void ApplySymbolData(Dictionary<MapleSymbol.SymbolType, int> symbolData)
     {
-        int[] prev = GetSymbolStats(lastSymbols);
+        int[] prev = GetSymbolStats(LastSymbols);
         int[] now = GetSymbolStats(symbolData);
         int[] delta = {now[0] - prev[0], now[1] - prev[1], now[2] - prev[2]};
         PlayerStat[PlayerStat.MainStatType + 0x20] += delta[0];
@@ -143,7 +145,7 @@ public class PlayerInfo
         PlayerStat[MapleStatus.StatusType.ARCANE_FORCE] += delta[1];
         PlayerStat[MapleStatus.StatusType.AUTHENTIC_FORCE] += delta[2];
 
-        lastSymbols = symbolData;
+        LastSymbols = symbolData;
         BuilderDataContainer.RefreshAll();
     }
     
@@ -153,11 +155,11 @@ public class PlayerInfo
 
     public void ApplyAbility(Dictionary<MapleStatus.StatusType, int> abilities)
     {
-        foreach (var pair in lastAbilities)
+        foreach (var pair in LastAbilities)
             PlayerStat[pair.Key] += pair.Value * -1;
         foreach (var pair in abilities)
             PlayerStat[pair.Key] += pair.Value;
-        lastAbilities = abilities;
+        LastAbilities = abilities;
         
         BuilderDataContainer.RefreshAll();
     }

@@ -34,7 +34,7 @@ public partial class StatSymbol : UserControl
             bool isAvenger = BuilderDataContainer.CharacterInfo.Class == MapleClass.ClassType.DEMON_AVENGER;
             foreach (var pair in selfInstnace.symbolLevels)
             {
-                int level = BuilderDataContainer.PlayerStatus!.lastSymbols.TryGetValue(pair.Key, out int val) ? val : 0;
+                int level = BuilderDataContainer.PlayerStatus!.LastSymbols.TryGetValue(pair.Key, out int val) ? val : 0;
                 ((TextBox) pair.Value).Text = level.ToString();
 
                 if (level == 0) continue;

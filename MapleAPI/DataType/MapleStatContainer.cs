@@ -31,8 +31,8 @@ public class MapleStatContainer
         msc[MapleStatus.StatusType.MP] = ReadNumericData(itemJson, "max_mp");
         msc[MapleStatus.StatusType.ATTACK_POWER] = ReadNumericData(itemJson, "attack_power");
         msc[MapleStatus.StatusType.MAGIC_POWER] = ReadNumericData(itemJson, "magic_power");
-        msc[MapleStatus.StatusType.DAMAGE] = ReadNumericData(itemJson, "boss_damage");
-        msc[MapleStatus.StatusType.BOSS_DAMAGE] = ReadNumericData(itemJson, "damage");
+        msc[MapleStatus.StatusType.BOSS_DAMAGE] = ReadNumericData(itemJson, "boss_damage");
+        msc[MapleStatus.StatusType.DAMAGE] = ReadNumericData(itemJson, "damage");
         msc[MapleStatus.StatusType.IGNORE_DEF] = ReadNumericData(itemJson, "ignore_monster_armor");
         msc[MapleStatus.StatusType.ALL_STAT_RATE] = ReadNumericData(itemJson, "all_stat");
         msc[MapleStatus.StatusType.HP_RATE] = ReadNumericData(itemJson, "max_hp_rate");
