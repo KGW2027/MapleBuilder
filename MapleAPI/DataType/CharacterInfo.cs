@@ -152,21 +152,18 @@ public class CharacterInfo
         APIResponse unionArtifactInfo = await APIRequest.RequestAsync(APIRequestType.UNION_ARTIFACT, args);
         if (unionArtifactInfo.IsError) throw new WebException("API Request Failed !" + unionArtifactInfo.ResponseType);
         
-        cInfo.ArtifactLevels.Clear();
+        cInfo.ArtifactPanels.Clear();
         if (unionArtifactInfo.JsonData!["union_artifact_crystal"] is JsonArray crystals)
         {
             foreach (var artifactCrystal in crystals)
             {
                 if (artifactCrystal is not JsonObject crystal) continue;
-
+                
                 int level = int.Parse(crystal["level"]!.ToString());
-                for (int idx = 1; idx < 3; idx++)
-                {
-                    MapleStatus.StatusType artifactType =
-                        MapleArtifact.GetArtifactType(crystal[$"crystal_option_name_{idx}"]!.ToString());
-                    cInfo.ArtifactLevels.TryAdd(artifactType, 0);
-                    cInfo.ArtifactLevels[artifactType] = Math.Min(cInfo.ArtifactLevels[artifactType] + level, 10);
-                }
+                MapleArtifact.ArtifactPanel panel = new MapleArtifact.ArtifactPanel(level);
+                for (int idx = 1; idx <= 3; idx++)
+                    panel.StatusTypes[idx-1] = MapleArtifact.GetArtifactType(crystal[$"crystal_option_name_{idx}"]!.ToString());
+                cInfo.ArtifactPanels.Add(panel);
             }
         }
         
@@ -241,7 +238,7 @@ public class CharacterInfo
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
         UnionInner = new List<MapleStatus.StatusType>();
-        ArtifactLevels = new Dictionary<MapleStatus.StatusType, int>();
+        ArtifactPanels = new List<MapleArtifact.ArtifactPanel>();
         PetInfo = new List<MaplePetItem>();
         CashItems = new List<MapleCashItem>();
     }
@@ -266,7 +263,7 @@ public class CharacterInfo
     public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public List<MapleStatus.StatusType> UnionInner { get; private set; }
-    public Dictionary<MapleStatus.StatusType, int> ArtifactLevels { get; private set; }
+    public List<MapleArtifact.ArtifactPanel> ArtifactPanels { get; private set; }
     #endregion
     
 

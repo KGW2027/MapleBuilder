@@ -6,17 +6,17 @@
              xmlns:local="clr-namespace:MapleBuilder.View.SubObjects"
              mc:Ignorable="d"
              d:DesignHeight="620" d:DesignWidth="952" Background="Transparent">
-    <Grid>
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 0, 0, 0"  SettingChanged="OnArtifactSettingChanged"/>
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 0, 0, 0"/>
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 0, 0, 0"/>
+    <Grid x:Name="ctMainGrid">
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 0, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 0, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 0, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
         
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 188, 0, 0"  />
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 188, 0, 0"/>
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 188, 0, 0"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 188, 0, 0" SettingChanged="OnArtifactSettingChanged"  />
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 188, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 188, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
         
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 376, 0, 0"  />
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 376, 0, 0"/>
-        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 376, 0, 0"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0, 376, 0, 0" SettingChanged="OnArtifactSettingChanged" />
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="168, 376, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
+        <local:UnionArtifactControl Width="160" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="336, 376, 0, 0" SettingChanged="OnArtifactSettingChanged"/>
     </Grid>
 </UserControl>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
@@ -15,6 +14,7 @@ public partial class UnionArtifactControl : UserControl
         public bool IsChangedLevel;
         public int BeforeLevel;
         public MapleStatus.StatusType BeforeType;
+        public MapleStatus.StatusType NewType;
 
         public ArtifactSettingChangedEventArgs(RoutedEvent levelChangedEvent) : base(levelChangedEvent)
         {
@@ -23,11 +23,12 @@ public partial class UnionArtifactControl : UserControl
             IsChangedLevel = false;
             BeforeLevel = 0;
             BeforeType = MapleStatus.StatusType.OTHER;
+            NewType = MapleStatus.StatusType.OTHER;
         }
     }
 
 
-    private List<ComboBox> optionSelectors;
+    private readonly List<ComboBox> optionSelectors;
     
     public UnionArtifactControl()
     {
@@ -73,22 +74,21 @@ public partial class UnionArtifactControl : UserControl
         ComboBox self = (ComboBox) sender;
         eventArgs.Level = (self == ctLevelSelector ? e.AddedItems[0]!.ToString()![^1] : ctLevelSelector.Text[^1]) - '0';
 
-        MapleStatus.StatusType beforeType = MapleStatus.StatusType.OTHER;
         foreach (ComboBox comboBox in optionSelectors)
         {
             string query = (self == comboBox ? e.AddedItems[0]!.ToString()! : comboBox.Text) + " 증가";
             MapleStatus.StatusType statusType = MapleArtifact.GetArtifactType(query);
             eventArgs.StatusTypes.Add(statusType);
 
-            if (self == comboBox) beforeType = MapleArtifact.GetArtifactType($"{comboBox.Text} 증가");
+            if (self == comboBox)
+            {
+                eventArgs.BeforeType = MapleArtifact.GetArtifactType($"{comboBox.Text} 증가");
+                eventArgs.NewType = statusType;
+            }
         }
 
         eventArgs.IsChangedLevel = self == ctLevelSelector;
-        if (eventArgs.IsChangedLevel)
-            eventArgs.BeforeLevel = self.Text[^1] - '0';
-        else
-            eventArgs.BeforeType = beforeType;
-        
+        eventArgs.BeforeLevel = self.Text[^1] - '0';
         RaiseEvent(eventArgs);
     }
 }

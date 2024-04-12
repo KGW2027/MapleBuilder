@@ -7,7 +7,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 
@@ -19,38 +18,39 @@ public partial class UnionRaiderMap : UserControl
     private static readonly SolidColorBrush BORDER_BRUSH = new(Colors.White);
     private static readonly SolidColorBrush CLAIM_BRUSH = new(Color.FromArgb(0xF0, 170, 136, 102));
     private static Stopwatch _doubleClickTester = new();
-    private static UnionRaiderMap? selfInstance;
+    private static UnionRaiderMap? _selfInstance;
     
     private readonly UIElement?[,] claims;
     private readonly Dictionary<MapleStatus.StatusType, int> statClaimed;
-    private List<ComboBox> innerSelections;
-    private List<Label> displaysInner;
+    private readonly List<ComboBox> innerSelections;
+    private readonly List<Label> displaysInner;
     private bool lockCombobox;
 
     public static void UpdateUnionRaider(List<MapleUnion.UnionBlock> unionBlocks, List<MapleStatus.StatusType> innerTypes)
     {
-        selfInstance!.Dispatcher.BeginInvoke(() =>
+        _selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             // Clear Array
-            selfInstance.statClaimed.Clear();
-            for(int y = 0 ; y < selfInstance.claims.GetLength(0) ; y++)
-                for(int x = 0 ; x < selfInstance.claims.GetLength(1) ; x++)
-                    if (selfInstance.claims[y, x] != null)
+            _selfInstance.statClaimed.Clear();
+            for(int y = 0 ; y < _selfInstance.claims.GetLength(0) ; y++)
+                for(int x = 0 ; x < _selfInstance.claims.GetLength(1) ; x++)
+                    if (_selfInstance.claims[y, x] != null)
                     {
-                        selfInstance.claims[y, x]!.Visibility = Visibility.Collapsed;
-                        selfInstance.claims[y, x] = null;
+                        _selfInstance.claims[y, x]!.Visibility = Visibility.Collapsed;
+                        _selfInstance.claims[y, x] = null;
                     }
             
             // Set Inner Stats
-            selfInstance.lockCombobox = true;
+            _selfInstance.lockCombobox = true;
             for (int idx = 0; idx < 8; idx++)
             {
+                int ridx = (idx + 7) % 8;
                 string label = innerTypes[idx] switch
                 {
-                    MapleStatus.StatusType.STR_FLAT => "STR",
-                    MapleStatus.StatusType.DEX_FLAT => "DEX",
-                    MapleStatus.StatusType.INT_FLAT => "INT",
-                    MapleStatus.StatusType.LUK_FLAT => "LUK",
+                    MapleStatus.StatusType.STR => "STR",
+                    MapleStatus.StatusType.DEX => "DEX",
+                    MapleStatus.StatusType.INT => "INT",
+                    MapleStatus.StatusType.LUK => "LUK",
                     MapleStatus.StatusType.HP => "HP",
                     MapleStatus.StatusType.MP => "MP",
                     MapleStatus.StatusType.ATTACK_POWER => "공격력",
@@ -58,16 +58,16 @@ public partial class UnionRaiderMap : UserControl
                     _ => throw new Exception($"Expected StatusType from UnionRaider sync sequence. {innerTypes[idx]}")
                 };
 
-                selfInstance.innerSelections[idx].Text = label;
-                selfInstance.displaysInner[idx].Content = label;
+                _selfInstance.innerSelections[ridx].Text = label;
+                _selfInstance.displaysInner[ridx].Content = label;
             }
-            selfInstance.lockCombobox = false;
+            _selfInstance.lockCombobox = false;
             
             // Fill Union Raider Claims
             foreach (var unionBlock in unionBlocks)
             {
                 foreach(sbyte[] pos in unionBlock.blockPositions)
-                    selfInstance.SafeToggleClaimBlock(pos[0], pos[1]);
+                    _selfInstance.SafeToggleClaimBlock(pos[0], pos[1]);
             }
             // BuilderDataContainer.RefreshAll();
         });
@@ -79,7 +79,7 @@ public partial class UnionRaiderMap : UserControl
         claims = new UIElement?[20, 22];
         innerSelections = new List<ComboBox>();
         statClaimed = new Dictionary<MapleStatus.StatusType, int>();
-        selfInstance = this;
+        _selfInstance = this;
             
         InitializeComponent();
         // 유니온 블럭 X,Y 선
@@ -188,10 +188,10 @@ public partial class UnionRaiderMap : UserControl
     {
         return displaysInner.Select(label => label.Content switch
             {
-                "STR" => MapleStatus.StatusType.STR_FLAT,
-                "DEX" => MapleStatus.StatusType.DEX_FLAT,
-                "INT" => MapleStatus.StatusType.INT_FLAT,
-                "LUK" => MapleStatus.StatusType.LUK_FLAT,
+                "STR" => MapleStatus.StatusType.STR,
+                "DEX" => MapleStatus.StatusType.DEX,
+                "INT" => MapleStatus.StatusType.INT,
+                "LUK" => MapleStatus.StatusType.LUK,
                 "HP" => MapleStatus.StatusType.HP,
                 "MP" => MapleStatus.StatusType.MP,
                 "공격력" => MapleStatus.StatusType.ATTACK_POWER,
@@ -205,10 +205,10 @@ public partial class UnionRaiderMap : UserControl
     {
         return statusType switch
         {
-            MapleStatus.StatusType.STR_FLAT => 5,
-            MapleStatus.StatusType.DEX_FLAT => 5,
-            MapleStatus.StatusType.INT_FLAT => 5,
-            MapleStatus.StatusType.LUK_FLAT => 5,
+            MapleStatus.StatusType.STR => 5,
+            MapleStatus.StatusType.DEX => 5,
+            MapleStatus.StatusType.INT => 5,
+            MapleStatus.StatusType.LUK => 5,
             MapleStatus.StatusType.MP => 250,
             MapleStatus.StatusType.HP => 250,
             MapleStatus.StatusType.EXP_INCREASE => 0.25,

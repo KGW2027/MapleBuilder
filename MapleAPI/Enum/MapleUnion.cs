@@ -358,10 +358,10 @@ public class MapleUnion
     {
         return field switch
         {
-            "유니온 STR" => MapleStatus.StatusType.STR_FLAT,
-            "유니온 DEX" => MapleStatus.StatusType.DEX_FLAT,
-            "유니온 INT" => MapleStatus.StatusType.INT_FLAT,
-            "유니온 LUK" => MapleStatus.StatusType.LUK_FLAT,
+            "유니온 STR" => MapleStatus.StatusType.STR,
+            "유니온 DEX" => MapleStatus.StatusType.DEX,
+            "유니온 INT" => MapleStatus.StatusType.INT,
+            "유니온 LUK" => MapleStatus.StatusType.LUK,
             "유니온 최대 HP" => MapleStatus.StatusType.HP,
             "유니온 최대 MP" => MapleStatus.StatusType.MP,
             "유니온 공격력" => MapleStatus.StatusType.ATTACK_POWER,

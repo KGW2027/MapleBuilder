@@ -30,10 +30,10 @@
         <Label x:Name="ctSelectOpt2"  Content="DEX" FontSize="12" Foreground="#77FFFFFF" Margin="344, 200, 0, 0" IsHitTestVisible="False"/>
         <Label x:Name="ctSelectOpt3"  Content="INT" FontSize="12" Foreground="#77FFFFFF" Margin="344, 260, 0, 0" IsHitTestVisible="False"/>
         <Label x:Name="ctSelectOpt4"  Content="LUK" FontSize="12" Foreground="#77FFFFFF" Margin="284, 290, 0, 0" IsHitTestVisible="False"/>
-        <Label x:Name="ctSelectOpt8"  Content="HP" FontSize="12" Foreground="#77FFFFFF" Margin="214, 170, 0, 0" IsHitTestVisible="False"/>
-        <Label x:Name="ctSelectOpt7"  Content="MP" FontSize="12" Foreground="#77FFFFFF" Margin="164, 200, 0, 0" IsHitTestVisible="False"/>
-        <Label x:Name="ctSelectOpt6"  Content="공격력" FontSize="12" Foreground="#77FFFFFF" Margin="164, 260, 0, 0" IsHitTestVisible="False"/>
         <Label x:Name="ctSelectOpt5"  Content="마력" FontSize="12" Foreground="#77FFFFFF" Margin="214, 290, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt6"  Content="공격력" FontSize="12" Foreground="#77FFFFFF" Margin="164, 260, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt7"  Content="MP" FontSize="12" Foreground="#77FFFFFF" Margin="164, 200, 0, 0" IsHitTestVisible="False"/>
+        <Label x:Name="ctSelectOpt8"  Content="HP" FontSize="12" Foreground="#77FFFFFF" Margin="214, 170, 0, 0" IsHitTestVisible="False"/>
         
         <Border Width="64" Height="480" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="532, 0, 0, 0"
                 Background="#333333" BorderBrush="White" BorderThickness="1"/>
