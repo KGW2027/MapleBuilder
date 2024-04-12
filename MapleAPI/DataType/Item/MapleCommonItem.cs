@@ -59,6 +59,37 @@ public class MapleCommonItem : MapleItemBase
                     MaplePotentialOption.ParseOptionFromPotential(data[index]!.ToString()));
         }
 
+        SoulName = "";
+        if (data["soul_name"] != null && data["soul_option"] != null)
+        {
+            SoulName = data["soul_name"]!.ToString().Replace("의 소울 적용", "");
+            string option = data["soul_option"]!.ToString();
+            int colon = option.IndexOf(':');
+
+            string optionName = option[..(colon-1)].Trim();
+            string optionValue = option[(colon + 1)..].Replace("+", "").Replace("%", "");
+            int optionValueInt = int.Parse(optionValue);
+
+            MapleStatus.StatusType soulStatusType = optionName switch
+            {
+                "STR" => MapleStatus.StatusType.STR,
+                "DEX" => MapleStatus.StatusType.DEX,
+                "INT" => MapleStatus.StatusType.INT,
+                "LUK" => MapleStatus.StatusType.LUK,
+                "올스탯" => option[^1] == '%' ? MapleStatus.StatusType.ALL_STAT_RATE : MapleStatus.StatusType.ALL_STAT,
+                "공격력" => option[^1] == '%' ? MapleStatus.StatusType.ATTACK_RATE : MapleStatus.StatusType.ATTACK_POWER,
+                "마력" => option[^1] == '%' ? MapleStatus.StatusType.MAGIC_RATE : MapleStatus.StatusType.MAGIC_POWER,
+                "최대 HP" => MapleStatus.StatusType.HP,
+                "최대 MP" => MapleStatus.StatusType.MP,
+                "몬스터 방어율 무시" => MapleStatus.StatusType.IGNORE_DEF,
+                "보스 몬스터 공격 시 데미지" => MapleStatus.StatusType.BOSS_DAMAGE,
+                "크리티컬 확률" => MapleStatus.StatusType.CRITICAL_CHANCE,
+                _ => MapleStatus.StatusType.OTHER,
+            };
+
+            EtcOption[soulStatusType] += optionValueInt;
+        }
+
     }
     
     private int sfv; // star force value
@@ -74,6 +105,7 @@ public class MapleCommonItem : MapleItemBase
     
     public int ItemLevel { get; private set; }
     public int SpecialRingLevel { get; private set; }
+    public string SoulName { get; private set; }
     public MapleItemPotential? Potential { get; private set; }
 
     private MapleStatContainer ExceptionalOption { get; set; }
