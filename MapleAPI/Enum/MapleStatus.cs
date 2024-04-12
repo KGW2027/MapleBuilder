@@ -73,9 +73,11 @@ public class MapleStatus
         ATTACK_AND_MAGIC= 0x73,
         STR_DEX_LUK     = 0x74,
         MAIN_STAT       = 0x75,
-        SUB_STAT        = 0x76,
-        FINAL_DAMAGE    = 0x77,
-        FINAL_DAMAGE_SUM= 0x78,
+        MAIN_STAT_FLAT  = 0x76,
+        SUB_STAT        = 0x77,
+        FINAL_DAMAGE    = 0x78,
+        FINAL_DAMAGE_SUM= 0x79,
+        
         
     }
 }

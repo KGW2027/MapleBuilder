@@ -85,6 +85,30 @@ public class MapleStatContainer
         }
     }
 
+    public MapleStatus.StatusType AttackFlatType => MainStatType == MapleStatus.StatusType.INT
+        ? MapleStatus.StatusType.MAGIC_POWER
+        : MapleStatus.StatusType.ATTACK_POWER;
+    public MapleStatus.StatusType AttackRateType => MainStatType == MapleStatus.StatusType.INT
+        ? MapleStatus.StatusType.MAGIC_RATE
+        : MapleStatus.StatusType.ATTACK_RATE;
+
+    public ulong GetPower(int correctAtk, bool isGenesis)
+    {
+        // Stat const
+        double mainStatVar = Math.Floor(this[MainStatType] * (100 + this[MainStatType + 0x10]) / 100) + this[MainStatType + 0x20];
+        double subStatVar = Math.Floor(this[SubStatType] * (100 + this[SubStatType + 0x10]) / 100) + this[SubStatType + 0x20];
+        if (SubStat2Type != MapleStatus.StatusType.OTHER)
+            subStatVar += Math.Floor(this[SubStat2Type] * (100 + this[SubStat2Type + 0x10]) / 100) + this[SubStat2Type + 0x20];
+
+        double stat = (mainStatVar * 4.0 + subStatVar) / 100;
+        double atk = Math.Floor((this[AttackFlatType] + correctAtk + 30) * (100 + this[AttackRateType]) / 100); // TODO : 30 = 여축/정축 미리 입력(스킬 기능 추가 시 제거)
+        double dam = (100 + this[MapleStatus.StatusType.DAMAGE] + this[MapleStatus.StatusType.BOSS_DAMAGE]) / 100;
+        double cdam = (135 + this[MapleStatus.StatusType.CRITICAL_DAMAGE]) / 100;
+        double fdam = isGenesis ? 1.1 : 1.0;
+
+        return (ulong) Math.Floor(stat * atk * dam * cdam * fdam);
+    }
+
     private double ClearAndGet(MapleStatus.StatusType statusType)
     {
         double value = 0;
@@ -100,17 +124,22 @@ public class MapleStatContainer
         statContainer.TryAdd(type, 0);
         statContainer[type] += value;
     }
-
-    private void SafeSubtract(MapleStatus.StatusType type, double value)
-    {
-        statContainer.TryAdd(type, 0);
-        statContainer[type] -= value;
-    }
     
     public void Flush()
     {
         if (MainStatType != MapleStatus.StatusType.OTHER)
+        {
             SafeAdd(MainStatType, ClearAndGet(MapleStatus.StatusType.MAIN_STAT));
+
+            double mainStatFlat = ClearAndGet(MapleStatus.StatusType.MAIN_STAT_FLAT);
+            if(MainStatType == MapleStatus.StatusType.HP)
+                SafeAdd(MapleStatus.StatusType.HP, mainStatFlat);
+            else if (false)
+            {
+            } // TODO: 제논의 경우 메인스텟을 반영하는 기타 로직이 필요 
+            else
+                SafeAdd(MainStatType+0x20, mainStatFlat);
+        }
 
         if (SubStatType != MapleStatus.StatusType.OTHER)
         {

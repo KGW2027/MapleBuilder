@@ -231,7 +231,37 @@ public class CharacterInfo
             if (!propensityInfo.JsonData!.TryGetPropertyValue(jsonKey, out var propNode) || propNode == null) continue;
             cInfo.PropensityLevels[propensityType] = int.Parse(propNode.ToString());
         }
-            
+        
+        // 헥사 스텟 로드
+        APIResponse hexaStatInfo = await APIRequest.RequestAsync(APIRequestType.HEXA_STAT, args);
+        if(hexaStatInfo.IsError) throw new WebException("API Request Failed !" + hexaStatInfo.ResponseType);
+
+        if (hexaStatInfo.JsonData!["character_hexa_stat_core"] is JsonArray {Count: > 0} array)
+        {
+            if (array[0] is JsonObject obj)
+            {
+                string[] keys = {"main_stat_name", "sub_stat_name_1", "sub_stat_name_2"};
+                string[] values = {"main_stat_level", "sub_stat_level_1", "sub_stat_level_2"};
+                KeyValuePair<MapleStatus.StatusType, int>[] newPairs = new KeyValuePair<MapleStatus.StatusType, int>[3];
+                for (int idx = 0; idx <= 2; idx++)
+                {
+                    MapleStatus.StatusType statusType =
+                        MapleHexaStatus.GetStatusTypeFromHexaStatus(obj[keys[idx]]!.ToString());
+                    if (statusType == MapleStatus.StatusType.OTHER ||
+                        !int.TryParse(obj[values[idx]]!.ToString(), out int statLevel)) continue;
+                    newPairs[idx] = KeyValuePair.Create(statusType, statLevel);
+                }
+
+                cInfo.HexaStatLevels = new MapleHexaStatus.HexaStatus
+                {
+                    MainStat = newPairs[0],
+                    SubStat1 = newPairs[1],
+                    SubStat2 = newPairs[2]
+                };
+            }
+        }
+        
+        
         return cInfo;
     }
 
@@ -249,6 +279,7 @@ public class CharacterInfo
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleStatus.StatusType, int>();
         HyperStatLevels = new Dictionary<MapleStatus.StatusType, int>();
+        HexaStatLevels = new MapleHexaStatus.HexaStatus();
         PropensityLevels = new Dictionary<MaplePropensity.PropensityType, int>();
         UnionInfo = new List<MapleUnion.UnionBlock>();
         UnionInner = new List<MapleStatus.StatusType>();
@@ -275,6 +306,7 @@ public class CharacterInfo
     public Dictionary<MapleSymbol.SymbolType, int> SymbolLevels { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> AbilityValues { get; private set; }
     public Dictionary<MapleStatus.StatusType, int> HyperStatLevels { get; private set; }
+    public MapleHexaStatus.HexaStatus HexaStatLevels { get; private set; }
     public List<MapleUnion.UnionBlock> UnionInfo { get; private set; }
     public List<MapleStatus.StatusType> UnionInner { get; private set; }
     public List<MapleArtifact.ArtifactPanel> ArtifactPanels { get; private set; }

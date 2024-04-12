@@ -39,22 +39,8 @@ public partial class Summarize : UserControl
         {
             MapleStatContainer pInfo = BuilderDataContainer.PlayerStatus!.PlayerStat;
             pInfo.Flush();
-            MapleStatus.StatusType atkFlat = pInfo.MainStatType == MapleStatus.StatusType.INT
-                ? MapleStatus.StatusType.MAGIC_POWER
-                : MapleStatus.StatusType.ATTACK_POWER;
-            MapleStatus.StatusType atkRate = pInfo.MainStatType == MapleStatus.StatusType.INT
-                ? MapleStatus.StatusType.MAGIC_RATE
-                : MapleStatus.StatusType.ATTACK_RATE;
-            
-            int mainStat = (int) Math.Floor(pInfo[pInfo.MainStatType] * (1 + pInfo[pInfo.MainStatType+0x10] / 100.0) + pInfo[pInfo.MainStatType+0x20]);
-            int subStat  = (int) Math.Floor(pInfo[pInfo.SubStatType ] * (1 + pInfo[pInfo.SubStatType +0x10] / 100.0) + pInfo[pInfo.SubStatType +0x20]);
-            int subStat2 = pInfo.SubStat2Type == MapleStatus.StatusType.OTHER ? 0 
-                : (int) Math.Floor(pInfo[pInfo.SubStat2Type] * (1 +pInfo[pInfo.SubStat2Type + 0x10] / 100.0) + pInfo[pInfo.SubStat2Type + 0x20]);
-            double attackRate = 1 + pInfo[atkRate] / 100.0;
-            double dmg = 1 + (pInfo[MapleStatus.StatusType.DAMAGE] + pInfo[MapleStatus.StatusType.BOSS_DAMAGE]) / 100.0;
-            double critDmg = 1.35 + pInfo[MapleStatus.StatusType.CRITICAL_DAMAGE] / 100.0;
-            
-            var totalDmg = (long) Math.Round((mainStat * 4 + subStat + subStat2) * 0.01 * (pInfo[atkFlat] * attackRate) * dmg * critDmg, 0);
+
+            var totalDmg = pInfo.GetPower(-140, false);
             var hMil = totalDmg / 100000000;
             var hTho = totalDmg % 100000000 / 10000;
             var tho = totalDmg % 10000;
@@ -106,8 +92,8 @@ public partial class Summarize : UserControl
             selfInstance.ctTolerance.Content = $"{pInfo[MapleStatus.StatusType.ABN_STATUS_RESIS]}";
             selfInstance.ctIgnoreImmune.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
 
-            selfInstance.ctAtkVal.Content = $"{pInfo[atkFlat]:N0}";
-            selfInstance.ctAtkRate.Content = $"{pInfo[atkRate]}%";
+            selfInstance.ctAtkVal.Content = $"{pInfo[pInfo.AttackFlatType]:N0}";
+            selfInstance.ctAtkRate.Content = $"{pInfo[pInfo.AttackRateType]}%";
         });
     }
     

@@ -70,6 +70,17 @@ public class BuilderDataContainer
                 PlayerStatus.PlayerStat[propStatTypes[idx]] += delta;
             }
         }
+        // 임시 헥사 스텟 로드 코드
+        MapleHexaStatus.HexaStatus hexaStatus = charInfo.HexaStatLevels;
+        if (hexaStatus.MainStat.Key != MapleStatus.StatusType.OTHER)
+        {
+            PlayerStatus.PlayerStat[hexaStatus.MainStat.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.MainStat.Key,
+                hexaStatus.MainStat.Value, true, charInfo.Class);
+            PlayerStatus.PlayerStat[hexaStatus.SubStat1.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat1.Key,
+                hexaStatus.SubStat1.Value, false, charInfo.Class);
+            PlayerStatus.PlayerStat[hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
+                hexaStatus.SubStat2.Value, false, charInfo.Class);
+        }
         
         StatSymbol.InitAbility(charInfo.AbilityValues);
         StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
