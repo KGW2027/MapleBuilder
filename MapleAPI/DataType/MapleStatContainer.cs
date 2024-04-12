@@ -118,6 +118,11 @@ public class MapleStatContainer
                 SafeAdd(SubStat2Type, subStatValue);
         }
 
+        double strdexluk = ClearAndGet(MapleStatus.StatusType.STR_DEX_LUK);
+        SafeAdd(MapleStatus.StatusType.STR_FLAT, strdexluk);
+        SafeAdd(MapleStatus.StatusType.DEX_FLAT, strdexluk);
+        SafeAdd(MapleStatus.StatusType.LUK_FLAT, strdexluk);
+
         double allStatFlat = ClearAndGet(MapleStatus.StatusType.ALL_STAT);
         SafeAdd(MapleStatus.StatusType.STR, allStatFlat);
         SafeAdd(MapleStatus.StatusType.DEX, allStatFlat);

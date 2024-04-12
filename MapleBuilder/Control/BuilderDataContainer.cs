@@ -35,6 +35,7 @@ public class BuilderDataContainer
     /// </summary>
     public static void RefreshAll()
     {
+        PlayerStatus?.PlayerStat.Flush();
         RenderFrame.UpdateCharacterTop();
         StatSymbol.Update();
         Summarize.DispatchSummary();
