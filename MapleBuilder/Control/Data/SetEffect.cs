@@ -5,7 +5,7 @@ using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 
-namespace MapleBuilder.MapleData;
+namespace MapleBuilder.Control.Data;
 
 public class SetEffect
 {
