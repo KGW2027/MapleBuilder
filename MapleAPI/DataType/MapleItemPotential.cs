@@ -6,20 +6,9 @@ public class MapleItemPotential
 {
     public KeyValuePair<MapleStatus.StatusType, int>[] Potentials { get; private set; }
     public KeyValuePair<MapleStatus.StatusType, int>[] Additionals { get; private set; }
-    public MaplePotentialGrade.GradeType TopGrade { get; private set; }
-    public MaplePotentialGrade.GradeType BottomGrade { get; private set; }
-    private int level;
-    private MapleEquipType.EquipType equipType;
     
-    public MapleItemPotential(int itemLevel, 
-        MapleEquipType.EquipType equipType, 
-        MaplePotentialGrade.GradeType potentialGrade = MaplePotentialGrade.GradeType.NONE, 
-        MaplePotentialGrade.GradeType additionalGrade = MaplePotentialGrade.GradeType.NONE)
+    public MapleItemPotential()
     {
-        TopGrade = potentialGrade;
-        BottomGrade = potentialGrade;
-        level = itemLevel;
-        this.equipType = equipType;
         Potentials = new[]
         {
             KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 

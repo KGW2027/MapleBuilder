@@ -16,6 +16,7 @@ public class MapleItemBase
         DisplayName = "";
         Status = new MapleStatContainer();
         MaxUpgrade = 0;
+        UpgradeCount = 0;
         CanHasAdditional = true;
         CanHasPotential = true;
     }
@@ -43,6 +44,7 @@ public class MapleItemBase
     
     public string Name { get; private protected set; }
     public int MaxUpgrade { get; private protected set; }
+    public int UpgradeCount { get; private protected set; }
     public MapleStatContainer Status { get; private protected set; }
     public MapleEquipType.EquipType EquipType { get; private protected set; }
     public bool CanHasPotential { get; private protected set; }
