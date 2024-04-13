@@ -64,16 +64,20 @@ public class CharacterInfo
         cInfo.hexaStatInfo.OnFinishParseInfo += () => finishedParseInfos += 1 << 9;
         await cInfo.hexaStatInfo.RequestInfo();
         
-        // 유니온 공격대 로드
+        // 유니온 공격대
         cInfo.unionRaiderInfo = new MapleRaiderInfo(ocid, cInfo);
         cInfo.unionRaiderInfo.OnFinishParseInfo += () => finishedParseInfos += 1 << 10;
         await cInfo.unionRaiderInfo.RequestInfo();
         
-        // 유니온 아티팩트 로드
+        // 유니온 아티팩트
         cInfo.unionArtifactInfo = new MapleArtifactInfo(ocid, cInfo);
         cInfo.unionArtifactInfo.OnFinishParseInfo += () => finishedParseInfos += 1 << 11;
         await cInfo.unionArtifactInfo.RequestInfo();
-
+        
+        // 기본 스텟
+        cInfo.apStatInfo = new MapleDefaultStatInfo(ocid, cInfo);
+        await cInfo.apStatInfo.RequestInfo();
+        
         return cInfo;
     }
 
@@ -91,6 +95,7 @@ public class CharacterInfo
     private MapleHexaStatInfo? hexaStatInfo;
     private MapleRaiderInfo? unionRaiderInfo;
     private MapleArtifactInfo? unionArtifactInfo;
+    private MapleDefaultStatInfo? apStatInfo;
     
     
     #region PlayerData
@@ -102,6 +107,7 @@ public class CharacterInfo
     public string GuildName => basicInfo!.GuildName!;
     public byte[] PlayerImage => basicInfo!.PlayerThumbnail!;
     public Dictionary<string, Dictionary<string, int>> SkillData => skillInfo!.Skills;
+    public int[] ApStats => apStatInfo!.ApStats;
     #endregion
     
     #region SpecData
