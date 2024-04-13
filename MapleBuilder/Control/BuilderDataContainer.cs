@@ -57,7 +57,7 @@ public class BuilderDataContainer
         MapleStatus.StatusType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
         PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
-        PlayerStatus.ApplyPetItem(charInfo.PetInfo);
+        PlayerStatus.ApplyPetItem(charInfo.PetEquips);
         // 임시 성향 로드 코드
         foreach (var pair in charInfo.PropensityLevels)
         {

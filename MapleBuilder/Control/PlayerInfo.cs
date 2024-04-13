@@ -9,7 +9,7 @@ namespace MapleBuilder.Control;
 
 public class PlayerInfo
 {
-    public PlayerInfo(uint level, MapleStatus.StatusType mainStat, 
+    public PlayerInfo(int level, MapleStatus.StatusType mainStat, 
         MapleStatus.StatusType subStat, MapleStatus.StatusType subStat2 = 0)
     {
         PlayerStat = new MapleStatContainer

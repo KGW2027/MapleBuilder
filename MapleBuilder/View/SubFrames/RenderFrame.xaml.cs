@@ -116,9 +116,10 @@ public partial class RenderFrame : UserControl
         {
             var charTop = selfInstance.ctCharacterTop;
             charTop.UpdateProfileImage();
-            charTop.ctCharacterName.Content = BuilderDataContainer.CharacterInfo!.UserName;
+            charTop.ctCharacterName.Content = BuilderDataContainer.CharacterInfo!.PlayerName;
             charTop.ctCharacterGuild.Content = $"길드 {BuilderDataContainer.CharacterInfo.GuildName}";
-            charTop.ctCharacterLevelAndClass.Content = $"Lv. {BuilderDataContainer.CharacterInfo.Level} {BuilderDataContainer.CharacterInfo.ClassString}";
+            string classString = MapleClass.GetMapleClassString(BuilderDataContainer.CharacterInfo.Class);
+            charTop.ctCharacterLevelAndClass.Content = $"Lv. {BuilderDataContainer.CharacterInfo.Level} {classString}";
 
             Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
             int arcane = 0, authentic = 0;

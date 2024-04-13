@@ -8,6 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using MapleAPI;
 using MapleAPI.DataType;
+using MapleAPI.Web;
 using MapleAPI.WzLoader;
 using MapleBuilder.View;
 using MapleBuilder.View.SubFrames;
