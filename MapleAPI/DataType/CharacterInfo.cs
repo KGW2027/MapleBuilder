@@ -184,7 +184,7 @@ public class CharacterInfo
         }
         
         // 스킬 정보 로드
-        string[] skillGrade = {"1", "1.5", "2", "2.5", "3", "4", "hyperpassive", "hyperactive", "5", "6"};
+        string[] skillGrade = {"0", "1", "1.5", "2", "2.5", "3", "4", "hyperpassive", "hyperactive", "5", "6"};
         cInfo.SkillData.Clear();
         foreach (string grade in skillGrade)
         {
@@ -195,13 +195,16 @@ public class CharacterInfo
 
             if (skillInfo.JsonData!["character_skill"] is not JsonArray skillList) continue;
 
+            Dictionary<string, int> inSkillData = new Dictionary<string, int>();
             foreach (var skillNode in skillList)
             {
                 if (skillNode is not JsonObject skillData || skillData["skill_name"] == null) continue;
                 string skillName = skillData["skill_name"]!.ToString();
                 int skillLevel = int.Parse(skillData["skill_level"]!.ToString());
-                cInfo.SkillData.TryAdd(skillName, skillLevel);
+                inSkillData.TryAdd(skillName, skillLevel);
             }
+
+            cInfo.SkillData.TryAdd(grade, inSkillData);
         }
         
         // 캐시 착용 정보 로드
@@ -274,7 +277,7 @@ public class CharacterInfo
         UserName = "";
         WorldName = "";
         PlayerImage = Array.Empty<byte>();
-        SkillData = new Dictionary<string, int>();
+        SkillData = new Dictionary<string, Dictionary<string, int>>();
         
         SymbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         AbilityValues = new Dictionary<MapleStatus.StatusType, int>();
@@ -296,7 +299,7 @@ public class CharacterInfo
     public string WorldName { get; private set; }
     public string GuildName { get; private set; }
     public byte[] PlayerImage { get; private set; }
-    public Dictionary<string, int> SkillData { get; private set; }
+    public Dictionary<string, Dictionary<string, int>> SkillData { get; private set; }
     #endregion
     
     #region SpecData
