@@ -89,6 +89,9 @@ public class BuilderDataContainer
             UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
         UnionRaiderMap.UpdateUnionRaider(charInfo.UnionInfo, charInfo.UnionInner);
         UnionArtifactPanel.UpdateArtifactPanel(charInfo.ArtifactPanels);
+        
+        foreach(var pair in charInfo.SkillData)
+            Console.WriteLine($"{pair.Key} : {pair.Value}");
         RefreshAll();
     }
 

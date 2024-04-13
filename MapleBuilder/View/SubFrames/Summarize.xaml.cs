@@ -33,6 +33,37 @@ public partial class Summarize : UserControl
         });
     }
 
+    public static void StartProgressBar()
+    {
+        selfInstance!.Dispatcher.Invoke(() =>
+        {
+            selfInstance.ctProgress.Visibility = Visibility.Visible;
+            selfInstance.ctProgressLabel.Visibility = Visibility.Visible;
+            selfInstance.ctProgress.Value = 0;
+        });
+    }
+
+    public static void UpdateProgressBar(int current, int max)
+    {
+        if (selfInstance is not {IsInitialized: true}) return;
+        selfInstance!.Dispatcher.Invoke(() =>
+        {
+            selfInstance.ctProgress.Value = current * 100.0 / max;
+            selfInstance.ctProgressLabel.Content = $"( {current:N0} / {max:N0} )";
+
+        });
+    }
+
+    public static void FinishProgressBar()
+    {
+        if (selfInstance is not {IsInitialized: true}) return;
+        selfInstance!.Dispatcher.Invoke(() =>
+        {
+            selfInstance.ctProgress.Visibility = Visibility.Collapsed;
+            selfInstance.ctProgressLabel.Visibility = Visibility.Collapsed;
+        });
+    }
+
     public static void DispatchSummary()
     {   
         selfInstance!.Dispatcher.BeginInvoke(() =>
@@ -103,6 +134,7 @@ public partial class Summarize : UserControl
         
         InitializeComponent();
         ctLoadBtn.Visibility = Visibility.Collapsed;
+        FinishProgressBar();
     }
 
     public static bool IsLoadComplete {get; private set;}

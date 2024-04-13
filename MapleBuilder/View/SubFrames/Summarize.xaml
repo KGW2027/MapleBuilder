@@ -6,8 +6,12 @@
              mc:Ignorable="d"
              d:DesignHeight="688" d:DesignWidth="288" Background="#313131" BorderBrush="#707070" BorderThickness="1">
     <Grid>
+        <!-- Progress Bar --> 
+        <ProgressBar x:Name="ctProgress" Width="272" Height="10" Margin="8, 8, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+        <Label x:Name="ctProgressLabel" FontSize="10" FontWeight="Thin" Margin="200, 16, 0, 0" Content="(99,999 / 99,999)"/>
+        
         <!-- Searching by Nickname -->
-        <Label Content="닉네임으로 불러오기" Margin="8, 12, 0, 0"/>
+        <Label Content="닉네임으로 불러오기" Margin="8, 16, 0, 0"/>
         <TextBox Text="닉네임을입력" Width="111" Height="24" HorizontalAlignment="Left" Margin="12, 44, 0, 0"
                  IsReadOnly="True" Focusable="False" Name="ctInputNickname"/>
         <Button Content="검색" Width="56" Height="24" Margin="135, 44, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="TrySearch"/>

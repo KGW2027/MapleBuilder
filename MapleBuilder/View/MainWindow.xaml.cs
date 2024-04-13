@@ -9,7 +9,6 @@ namespace MapleBuilder.View
     {
         public static Window? Window { get; private set; }
 
-        // TODO[Priority High] : MVC 패턴에 대해 공부하기
         public MainWindow()
         {
             Window = this;

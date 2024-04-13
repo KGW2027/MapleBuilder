@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using MapleAPI;
 using MapleAPI.DataType;
 using MapleAPI.WzLoader;
@@ -49,10 +50,13 @@ public static class ResourceManager
         string jsonContent = reader.ReadToEnd();
         JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
 
-        // int id = 0;
+        int id = 0;
+        Summarize.StartProgressBar();
         foreach (var pair in json)
         {
-            // Console.WriteLine($"{++id}/{json.Count}");
+            // MainWindow.Window!.Dispatcher.Invoke(() =>
+            Summarize.UpdateProgressBar(++id, json.Count);
+            
             if (pair.Value is not JsonObject childObject) continue;
 
             if (!childObject.TryGetPropertyValue("name", out var nameNode)
@@ -68,8 +72,12 @@ public static class ResourceManager
             string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
 
             MainWindow.Window!.Dispatcher.Invoke(
-                () => { itemIcons.Add(name, new WzItem(name, iconRawPath, desc)); });
+                () =>
+                {
+                    itemIcons.Add(name, new WzItem(name, iconRawPath, desc)); 
+                });
         }
+        Summarize.FinishProgressBar();
     }
 
     public static WzItem? GetItemIcon(string itemName)
