@@ -4,24 +4,17 @@ namespace MapleAPI.DataType;
 
 public class MapleItemPotential
 {
-    public KeyValuePair<MapleStatus.StatusType, int>[] Potentials { get; private set; }
-    public KeyValuePair<MapleStatus.StatusType, int>[] Additionals { get; private set; }
-    
-    public MapleItemPotential()
-    {
-        Potentials = new[]
-        {
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1)
-        };
-        Additionals = new[]
-        {
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
-            KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1)
-        };
-    }
+    public KeyValuePair<MapleStatus.StatusType, int>[] Potentials { get; private set; } = {
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1)
+    };
+
+    public KeyValuePair<MapleStatus.StatusType, int>[] Additionals { get; private set; } = {
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
+        KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1)
+    };
 
     public void SetPotential(int slot, KeyValuePair<MapleStatus.StatusType, int> value)
     {

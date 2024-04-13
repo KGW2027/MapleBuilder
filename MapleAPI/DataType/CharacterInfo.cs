@@ -74,16 +74,6 @@ public class CharacterInfo
         cInfo.unionArtifactInfo.OnFinishParseInfo += () => finishedParseInfos += 1 << 11;
         await cInfo.unionArtifactInfo.RequestInfo();
 
-        // long complete = (1 << 12) - 1;
-        // while (finishedParseInfos < complete)
-        // {
-        //     #if DEBUG
-        //     string binaryStr = Convert.ToString(finishedParseInfos, 2);
-        //     binaryStr = binaryStr.PadLeft(11, '0');
-        //     Console.WriteLine($"[Delay 100ms] Current : {binaryStr}");
-        //     #endif
-        //     await Task.Delay(100);
-        // }
         return cInfo;
     }
 

@@ -14,6 +14,7 @@ public class MaplePetItem : MapleItemBase
         Name = data["item_name"]!.ToString();
         int upgrade = int.Parse(data["scroll_upgrade"]!.ToString());
         int upgradable = int.Parse(data["scroll_upgradable"]!.ToString());
+        UpgradeCount = upgrade;
         MaxUpgrade = upgradable + upgrade;
         if (upgrade > 0) DisplayName = $"{Name} (+{upgrade})";
 
