@@ -47,7 +47,7 @@ public class MapleStatContainer
     public MapleStatus.StatusType MainStatType;
     public MapleStatus.StatusType SubStatType;
     public MapleStatus.StatusType SubStat2Type;
-    public uint Level;
+    public int Level;
 
     #if DEBUG
         public Dictionary<string, MapleStatContainer> SourceTrace;

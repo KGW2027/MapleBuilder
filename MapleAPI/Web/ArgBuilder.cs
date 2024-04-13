@@ -1,4 +1,4 @@
-﻿namespace MapleAPI;
+﻿namespace MapleAPI.Web;
 
 public class ArgBuilder : Dictionary<string, string>
 {
@@ -23,6 +23,13 @@ public class ArgBuilder : Dictionary<string, string>
     {
         Clear();
         return AddArg(key, val);
+    }
+
+    public override string ToString()
+    {
+        string context = "{";
+        foreach (var pair in this) context += $"{pair.Key}: {pair.Value},";
+        return context[..^1] + "}";
     }
     
 }

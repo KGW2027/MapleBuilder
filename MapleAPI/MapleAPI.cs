@@ -1,4 +1,6 @@
-﻿namespace MapleAPI;
+﻿using MapleAPI.Web;
+
+namespace MapleAPI;
 
 public class MapleAPI
 {

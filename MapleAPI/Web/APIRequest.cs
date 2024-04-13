@@ -1,4 +1,4 @@
-﻿namespace MapleAPI;
+﻿namespace MapleAPI.Web;
 
 public class APIRequest
 {

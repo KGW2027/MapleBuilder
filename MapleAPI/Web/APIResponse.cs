@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 
-namespace MapleAPI;
+namespace MapleAPI.Web;
 
 public class APIResponse
 {
