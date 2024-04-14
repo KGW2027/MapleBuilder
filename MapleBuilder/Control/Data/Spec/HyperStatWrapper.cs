@@ -7,7 +7,7 @@ namespace MapleBuilder.Control.Data.Spec;
 public class HyperStatWrapper : StatWrapper
 {
 
-    protected override void CallStatusChanged(MapleStatus.StatusType statusType, int prev, int next)
+    protected override void CallStatusChanged(MapleStatus.StatusType statusType, double prev, double next)
     {
         double pValue = GetValue(statusType, prev);
         double nValue = GetValue(statusType, next);
@@ -39,11 +39,12 @@ public class HyperStatWrapper : StatWrapper
         };
     }
 
-    private double GetValue(MapleStatus.StatusType statusType, int level)
+    private double GetValue(MapleStatus.StatusType statusType, double level)
     {
         double v = 0.0;
-        for (int i = 1; i <= level; i++)
-            v += GetIncrease(statusType, level);
+        int lv = (int) level;
+        for (int i = 1; i <= lv; i++)
+            v += GetIncrease(statusType, lv);
         return v;
     }
 

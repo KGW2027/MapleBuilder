@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MapleBuilder.View;
@@ -24,5 +25,10 @@ public static class StaticFunctions
                 yield return descendant;
             }
         }
+    }
+    
+    public static void CheckTextNumberOnly(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = e.Text.Length < 1 || e.Text[0] < '0' || e.Text[0] > '9';
     }
 }

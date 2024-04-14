@@ -1,12 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
-using MapleBuilder.Control;
+using MapleBuilder.Control.Data.Item;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -30,18 +27,18 @@ public partial class EquipmentSlot : UserControl
 
     private void Update()
     {
-        if(itemInfo == null) return;
-        wzItemInfo = ResourceManager.GetItemIcon(itemInfo.Name);
-        if (wzItemInfo == null)
-        {
-            Console.WriteLine($"Not found {itemInfo.Name}");
-            return;
-        }
-        
-        Dispatcher.BeginInvoke(() =>
-        {
-            ctItemRenderer.Source = wzItemInfo.IconRaw;
-        });
+        // if(itemInfo == null) return;
+        // wzItemInfo = ResourceManager.GetItemIcon(itemInfo.Name);
+        // if (wzItemInfo == null)
+        // {
+        //     Console.WriteLine($"Not found {itemInfo.Name}");
+        //     return;
+        // }
+        //
+        // Dispatcher.BeginInvoke(() =>
+        // {
+        //     ctItemRenderer.Source = wzItemInfo.IconRaw;
+        // });
     }
     
     public bool SetItemIfNull(MapleItemBase commonItem)

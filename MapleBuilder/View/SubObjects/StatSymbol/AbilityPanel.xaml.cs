@@ -41,7 +41,7 @@ public partial class AbilityPanel : UserControl
         if (isInitialized) return;
         isInitialized = true;
         
-        Dictionary<MaplePotentialGrade.GradeType, List<KeyValuePair<MapleStatus.StatusType, int>>> parseGrade = new();
+        Dictionary<MaplePotentialGrade.GradeType, List<KeyValuePair<MapleStatus.StatusType, double>>> parseGrade = new();
         MaplePotentialGrade.GradeType topGrade = MaplePotentialGrade.GradeType.EPIC;
         foreach (var pair in pdata.Ability)
         {
@@ -53,7 +53,7 @@ public partial class AbilityPanel : UserControl
                 int[] options = MapleAbility.GetMinMax(pair.Key, gradeType);
                 if (options[0] <= pair.Value && pair.Value <= options[1])
                 {
-                    parseGrade.TryAdd(gradeType, new List<KeyValuePair<MapleStatus.StatusType, int>>());
+                    parseGrade.TryAdd(gradeType, new List<KeyValuePair<MapleStatus.StatusType, double>>());
                     parseGrade[gradeType].Add(pair);
                     topGrade = (MaplePotentialGrade.GradeType) Math.Max((int) topGrade, (int) gradeType);
                     found = true;
@@ -63,7 +63,7 @@ public partial class AbilityPanel : UserControl
 
             if (found) continue;
             parseGrade.TryAdd(MaplePotentialGrade.GradeType.RARE,
-                new List<KeyValuePair<MapleStatus.StatusType, int>>());
+                new List<KeyValuePair<MapleStatus.StatusType, double>>());
             parseGrade[MaplePotentialGrade.GradeType.RARE].Add(pair);
         }
 

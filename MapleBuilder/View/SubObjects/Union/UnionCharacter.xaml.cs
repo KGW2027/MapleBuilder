@@ -21,15 +21,15 @@ public partial class UnionCharacter : UserControl
     
     #region XAML Property
     
-    public static readonly DependencyProperty CLASS_TYPE_PROPERTY =
+    public static readonly DependencyProperty ClassTypeProperty =
         DependencyProperty.Register("TargetClass", typeof(MapleClass.ClassType), typeof(UnionCharacter),
             new PropertyMetadata(MapleClass.ClassType.NONE, OnClassTypeChanged));
 
     
     public MapleClass.ClassType TargetClass
     {
-        get => (MapleClass.ClassType) GetValue(CLASS_TYPE_PROPERTY);
-        set => SetValue(CLASS_TYPE_PROPERTY, value);
+        get => (MapleClass.ClassType) GetValue(ClassTypeProperty);
+        set => SetValue(ClassTypeProperty, value);
     }
     
     private static void OnClassTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -57,10 +57,14 @@ public partial class UnionCharacter : UserControl
         int value = MapleUnion.GetRaiderEffectValue(raiderEffect, (MapleUnion.RaiderRank) ctRaiderRankBox.SelectedItem);
         ctRaiderEffect.Content = MapleUnion.GetRaiderEffectString(raiderEffect).Replace("%d", value.ToString());
 
-        if (BuilderDataContainer.PlayerStatus == null) return;
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
         MapleUnion.RaiderRank prevRank = e.RemovedItems.Count > 0
             ? (MapleUnion.RaiderRank) e.RemovedItems[0]!
             : MapleUnion.RaiderRank.NONE;
+        
+        // GlobalDataController.Instance.PlayerInstance.
+
+        if (BuilderDataContainer.PlayerStatus == null) return;
         int delta = value - MapleUnion.GetRaiderEffectValue(raiderEffect, prevRank);
         BuilderDataContainer.PlayerStatus.ApplyUnionRaider(raiderEffect, delta);
     }

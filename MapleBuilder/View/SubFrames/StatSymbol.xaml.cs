@@ -78,7 +78,7 @@ public partial class StatSymbol : UserControl
             // 하이퍼스텟 레벨 바인딩
             foreach (var pair in pdata.HyperStat)
                 foreach (var hSlot in hyperStatSlots.Where(hSlot => hSlot.StatType == pair.Key))
-                    hSlot.Level = pair.Value;
+                    hSlot.Level = (int) pair.Value;
         });
     }
 

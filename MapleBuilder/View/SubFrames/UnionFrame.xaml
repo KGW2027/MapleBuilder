@@ -14,7 +14,7 @@
                 Margin="124,8,0,0" Click="OnDisplayUnionArtifact"/>
         
         <!-- 유니온 공격대 -->
-        <Grid x:Name="ctRaider" Visibility="Collapsed">
+        <Grid x:Name="ctRaider" Visibility="Visible">
             <!-- 유니온 캐릭터 -->
             <Border Width="368" Height="664" Margin="604, 0, 0, 0"
                     HorizontalAlignment="Left" VerticalAlignment="Top" Background="#313131" BorderBrush="#CCCCCC" BorderThickness="1"/>
@@ -29,7 +29,7 @@
         </Grid>
         
         <!-- 유니온 아티팩트 -->
-        <Grid x:Name="ctArtifact">
+        <Grid x:Name="ctArtifact" Visibility="Collapsed">
             <subObjects:UnionArtifactPanel Margin="8, 48, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Grid>
     </Grid>

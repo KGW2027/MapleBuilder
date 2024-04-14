@@ -7,11 +7,11 @@
              d:DesignHeight="20" d:DesignWidth="180" Background="Transparent">
     <Grid>
         <Border Width="180" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top"/> <!-- Shape Maker -->
-        <Label x:Name="ctDmgIncrease" Content="99.99%" FontSize="12" FontWeight="Light" 
+        <Label x:Name="DisplayDamageInc" Content="99.99%" FontSize="12" FontWeight="Light" 
                VerticalAlignment="Center" HorizontalAlignment="Right" Padding="0, 0, 2, 0"/>
-        <TextBox x:Name="ctLevelInput" Text="15" Width="34" Height="20" Margin="0, 0, 46, 0" HorizontalAlignment="Right"
-                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0, 0, 0, 2" PreviewTextInput="CheckTextIsNumber" TextChanged="OnLevelTextChanged"/>
-        <Label x:Name="ctLabel" Content="크리티컬 확률" FontSize="16" FontWeight="Regular"
+        <TextBox x:Name="InputLevel" Text="15" Width="34" Height="20" Margin="0, 0, 46, 0" HorizontalAlignment="Right"
+                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0, 0, 0, 2" TextChanged="OnLevelTextChanged"/>
+        <Label x:Name="DisplayLabel" Content="크리티컬 확률" FontSize="16" FontWeight="Regular"
                VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="0, 1, 82, 0" Padding="0, 0, 2, 0"/>
     </Grid>
 </UserControl>

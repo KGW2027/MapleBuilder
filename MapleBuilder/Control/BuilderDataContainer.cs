@@ -56,7 +56,7 @@ public class BuilderDataContainer
         
         MapleStatus.StatusType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
-        PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
+        // PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         PlayerStatus.ApplyPetItem(charInfo.PetEquips);
         // 임시 성향 로드 코드
         foreach (var pair in charInfo.PropensityLevels)
@@ -81,9 +81,6 @@ public class BuilderDataContainer
             PlayerStatus.PlayerStat[hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
                 hexaStatus.SubStat2.Value, false, charInfo.Class);
         }
-        
-        StatSymbol.InitAbility(charInfo.AbilityValues);
-        StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
         RenderOverview.Update(charInfo);
         foreach (var unionInfo in charInfo.UnionInfo)
             UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);

@@ -5,39 +5,48 @@ using MapleAPI.Enum;
 
 namespace MapleBuilder.Control.Data.Spec;
 
-public abstract class StatWrapper : IEnumerable<KeyValuePair<MapleStatus.StatusType, int>>
+public abstract class StatWrapper : IEnumerable<KeyValuePair<MapleStatus.StatusType, double>>
 {
-    protected readonly Dictionary<MapleStatus.StatusType, int> wrappedDict;
+    protected readonly Dictionary<MapleStatus.StatusType, double> WrappedDict;
 
     public delegate void StatusChanged(PlayerData.StatSources source, MapleStatus.StatusType type, double prev, double next);
-    public StatusChanged? OnStatusChanged;
+    protected readonly StatusChanged? OnStatusChanged;
 
-    protected StatWrapper(Dictionary<MapleStatus.StatusType, int> dict, StatusChanged onStatusChanged)
+    protected StatWrapper(Dictionary<MapleStatus.StatusType, double> dict, StatusChanged onStatusChanged)
     {
         OnStatusChanged += onStatusChanged;
-        wrappedDict = new Dictionary<MapleStatus.StatusType, int>();
+        WrappedDict = new Dictionary<MapleStatus.StatusType, double>();
 
         foreach (var pair in dict)
             this[pair.Key] = pair.Value;
     }
 
-    protected abstract void CallStatusChanged(MapleStatus.StatusType statusType, int prev, int next);
-
-    public int this[MapleStatus.StatusType type]
+    protected StatWrapper(Dictionary<MapleStatus.StatusType, int> dict, StatusChanged onStatusChanged)
     {
-        get => wrappedDict.GetValueOrDefault(type, 0);
+        OnStatusChanged += onStatusChanged;
+        WrappedDict = new Dictionary<MapleStatus.StatusType, double>();
+
+        foreach (var pair in dict)
+            this[pair.Key] = pair.Value;
+    }
+
+    protected abstract void CallStatusChanged(MapleStatus.StatusType statusType, double prev, double next);
+
+    public double this[MapleStatus.StatusType type]
+    {
+        get => WrappedDict.GetValueOrDefault(type, 0.0);
         set
         {
-            wrappedDict.TryAdd(type, 0);
-            int prev = wrappedDict[type];
-            wrappedDict[type] = value;
+            WrappedDict.TryAdd(type, 0);
+            double prev = WrappedDict[type];
+            WrappedDict[type] = value;
             CallStatusChanged(type, prev, value);
         }
     }
 
-    public IEnumerator<KeyValuePair<MapleStatus.StatusType, int>> GetEnumerator()
+    public IEnumerator<KeyValuePair<MapleStatus.StatusType, double>> GetEnumerator()
     {
-        return ((IEnumerable<KeyValuePair<MapleStatus.StatusType, int>>) wrappedDict).GetEnumerator();
+        return ((IEnumerable<KeyValuePair<MapleStatus.StatusType, double>>) WrappedDict).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

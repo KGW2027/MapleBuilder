@@ -7,7 +7,7 @@ namespace MapleBuilder.Control.Data.Spec;
 
 public class AbilityWrapper : StatWrapper
 {
-    protected override void CallStatusChanged(MapleStatus.StatusType statusType, int prev, int next)
+    protected override void CallStatusChanged(MapleStatus.StatusType statusType, double prev, double next)
     {
         OnStatusChanged!.Invoke(PlayerData.StatSources.ABILITY, statusType, prev, next);
     }
@@ -16,8 +16,8 @@ public class AbilityWrapper : StatWrapper
     {
     }
 
-    public KeyValuePair<MapleStatus.StatusType, int>[] GetAbilities()
+    public KeyValuePair<MapleStatus.StatusType, double>[] GetAbilities()
     {
-        return wrappedDict.ToArray();
+        return WrappedDict.ToArray();
     }
 }
