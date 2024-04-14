@@ -46,6 +46,7 @@ public class PlayerData
         Ability = new AbilityWrapper(cInfo.AbilityValues, OnStatusChanged);
         Artifact = new ArtifactWrapper(cInfo.ArtifactPanels, OnStatusChanged);
         UnionClaim = new UnionClaimWrapper(cInfo.UnionInfo, cInfo.UnionInner, OnStatusChanged);
+        Raider = new UnionRaiderWrapper(cInfo.UnionInfo, OnStatusChanged);
         
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
@@ -149,6 +150,7 @@ public class PlayerData
     public readonly AbilityWrapper Ability;
     public readonly UnionClaimWrapper UnionClaim;
     public readonly ArtifactWrapper Artifact;
+    public readonly UnionRaiderWrapper Raider;
     
     
 

@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
-using MapleBuilder.View.SubFrames;
+using MapleBuilder.Control.Data;
 
-namespace MapleBuilder.View.SubObjects;
+namespace MapleBuilder.View.SubObjects.Union;
 
 public partial class UnionCharacter : UserControl
 {
@@ -17,8 +18,25 @@ public partial class UnionCharacter : UserControl
         ctRaiderRankBox.Items.Clear();
         foreach (MapleUnion.RaiderRank rank in Enum.GetValues<MapleUnion.RaiderRank>())
             ctRaiderRankBox.Items.Add(rank);
+        
+        GlobalDataController.OnDataUpdated += OnDataUpdated;
     }
-    
+
+    private void OnDataUpdated(PlayerData pdata)
+    {
+        GlobalDataController.OnDataUpdated -= OnDataUpdated;
+        Dispatcher.BeginInvoke(() =>
+        {
+            MapleUnion.RaiderRank rank =
+                pdata.Raider.InitRanks.GetValueOrDefault(TargetClass, MapleUnion.RaiderRank.NONE);
+            ctRaiderRankBox.Text = rank.ToString();
+            
+            // MapleStatus.StatusType raiderEffect = MapleUnion.GetRaiderEffectByClass(TargetClass);
+            // int value = MapleUnion.GetRaiderEffectValue(raiderEffect, rank);
+            // ctRaiderEffect.Content = MapleUnion.GetRaiderEffectString(raiderEffect).Replace("%d", value.ToString());
+        });
+    }
+
     #region XAML Property
     
     public static readonly DependencyProperty ClassTypeProperty =
@@ -58,14 +76,6 @@ public partial class UnionCharacter : UserControl
         ctRaiderEffect.Content = MapleUnion.GetRaiderEffectString(raiderEffect).Replace("%d", value.ToString());
 
         if (GlobalDataController.Instance.PlayerInstance == null) return;
-        MapleUnion.RaiderRank prevRank = e.RemovedItems.Count > 0
-            ? (MapleUnion.RaiderRank) e.RemovedItems[0]!
-            : MapleUnion.RaiderRank.NONE;
-        
-        // GlobalDataController.Instance.PlayerInstance.
-
-        if (BuilderDataContainer.PlayerStatus == null) return;
-        int delta = value - MapleUnion.GetRaiderEffectValue(raiderEffect, prevRank);
-        BuilderDataContainer.PlayerStatus.ApplyUnionRaider(raiderEffect, delta);
+        GlobalDataController.Instance.PlayerInstance.Raider[TargetClass] = (MapleUnion.RaiderRank) ctRaiderRankBox.SelectedItem;
     }
 }

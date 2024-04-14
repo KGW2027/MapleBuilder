@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
 using MapleBuilder.View.SubObjects;
+using MapleBuilder.View.SubObjects.Union;
 
 namespace MapleBuilder.View.SubFrames;
 
