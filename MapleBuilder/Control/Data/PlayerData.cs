@@ -45,7 +45,7 @@ public class PlayerData
         HyperStat = new HyperStatWrapper(cInfo.HyperStatLevels, OnStatusChanged);
         Ability = new AbilityWrapper(cInfo.AbilityValues, OnStatusChanged);
         Artifact = new ArtifactWrapper(cInfo.ArtifactPanels, OnStatusChanged);
-        Raider = new RaiderWrapper(cInfo.UnionInfo, cInfo.UnionInner, OnStatusChanged);
+        UnionClaim = new UnionClaimWrapper(cInfo.UnionInfo, cInfo.UnionInner, OnStatusChanged);
         
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
@@ -147,7 +147,7 @@ public class PlayerData
 
     public readonly HyperStatWrapper HyperStat;
     public readonly AbilityWrapper Ability;
-    public readonly RaiderWrapper Raider;
+    public readonly UnionClaimWrapper UnionClaim;
     public readonly ArtifactWrapper Artifact;
     
     

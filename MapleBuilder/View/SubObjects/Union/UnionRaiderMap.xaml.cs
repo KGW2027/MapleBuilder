@@ -56,7 +56,7 @@ public partial class UnionRaiderMap : UserControl
         {
             // Set Inner Stats
             lockCombobox = true;
-            var innerTypes = GlobalDataController.Instance.PlayerInstance!.Raider.InnerStatus;
+            var innerTypes = GlobalDataController.Instance.PlayerInstance!.UnionClaim.InnerStatus;
             for (int idx = 0; idx < 8; idx++)
             {
                 string label = innerTypes[idx] switch
@@ -77,7 +77,7 @@ public partial class UnionRaiderMap : UserControl
             }
             lockCombobox = false;
             
-            var poses = pdata.Raider.InitClaimPoses;
+            var poses = pdata.UnionClaim.InitClaimPoses;
             for(int idx = 0 ; idx < poses.GetLength(0) ; idx++)
                 SafeToggleClaimBlock(poses[idx, 0], poses[idx, 1]);
         });
@@ -207,7 +207,7 @@ public partial class UnionRaiderMap : UserControl
         claims[y, x]!.Visibility = beVisible ? Visibility.Visible : Visibility.Collapsed;
 
         if (GlobalDataController.Instance.PlayerInstance == null) return;
-        GlobalDataController.Instance.PlayerInstance.Raider[slotClaimType] += delta;
+        GlobalDataController.Instance.PlayerInstance.UnionClaim[slotClaimType] += delta;
     }
 
     private void SafeToggleClaimBlockBulk(int x, int y, bool beVisible, MapleUnion.ClaimType targetType)
@@ -343,7 +343,7 @@ public partial class UnionRaiderMap : UserControl
         lockCombobox = false;
         
         if (GlobalDataController.Instance.PlayerInstance == null) return;
-        GlobalDataController.Instance.PlayerInstance.Raider.SwapInners(targetIdx, selfIdx);
+        GlobalDataController.Instance.PlayerInstance.UnionClaim.SwapInners(targetIdx, selfIdx);
     }
 
     #endregion

@@ -4,9 +4,9 @@ using MapleAPI.Enum;
 
 namespace MapleBuilder.Control.Data.Spec;
 
-public class RaiderWrapper : StatWrapper
+public class UnionClaimWrapper : StatWrapper
 {
-    public RaiderWrapper(List<MapleUnion.UnionBlock> blocks, List<MapleStatus.StatusType> inners, StatusChanged onStatusChanged) : base(new Dictionary<MapleStatus.StatusType, int>(), onStatusChanged)
+    public UnionClaimWrapper(List<MapleUnion.UnionBlock> blocks, List<MapleStatus.StatusType> inners, StatusChanged onStatusChanged) : base(new Dictionary<MapleStatus.StatusType, int>(), onStatusChanged)
     {
         claims = new Dictionary<MapleUnion.ClaimType, int>();
 
