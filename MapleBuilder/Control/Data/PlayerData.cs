@@ -55,12 +55,36 @@ public class PlayerData
         // Init Symbol Data
         foreach (var pair in cInfo.SymbolLevels) this[pair.Key] += pair.Value;
 
+        // 임시 성향 로드 코드
+        foreach (var pair in cInfo.PropensityLevels)
+        {
+            MapleStatus.StatusType[] propStatTypes = MaplePropensity.GetStatusByPropensity(pair.Key);
+            double[] args = MaplePropensity.GetStatusValueByPropensity(pair.Key);
+
+            for (int idx = 0; idx < propStatTypes.Length; idx++)
+            {
+                double delta = args[idx + 1] * Math.Floor(pair.Value / args[0]);
+                this[StatSources.PROPENSITY, propStatTypes[idx]] += delta;
+            }
+        }
+        // 임시 헥사 스텟 로드 코드
+        MapleHexaStatus.HexaStatus hexaStatus = cInfo.HexaStatLevels;
+        if (hexaStatus.MainStat.Key != MapleStatus.StatusType.OTHER)
+        {
+            this[StatSources.HEXA, hexaStatus.MainStat.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.MainStat.Key,
+                hexaStatus.MainStat.Value, true, playerClass);
+            this[StatSources.HEXA, hexaStatus.SubStat1.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat1.Key,
+                hexaStatus.SubStat1.Value, false, playerClass);
+            this[StatSources.HEXA, hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
+                hexaStatus.SubStat2.Value, false, playerClass);
+        }
+        
         isInitialized = true;
     }
 
-    private bool isInitialized;
-    private int level;
-    private MapleClass.ClassType playerClass;
+    private readonly bool isInitialized;
+    private readonly int level;
+    private readonly MapleClass.ClassType playerClass;
     private readonly Dictionary<StatSources, MapleStatContainer> statContainers;
     private readonly Dictionary<MapleEquipType.EquipType, ItemBase?> equipData;
     private readonly Dictionary<MapleSymbol.SymbolType, int> symbolLevels;
