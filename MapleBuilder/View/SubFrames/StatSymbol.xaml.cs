@@ -7,8 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;
@@ -174,54 +176,36 @@ public partial class StatSymbol : UserControl
         foreach(var child in ParentGrid.GetChildren<HyperStatSlot>())
             hyperStatSlots.Add(child);
 
-        new Thread(LoadSymbolIcons).Start();
+        WzDatabase.OnWzDataLoadCompleted += OnWzDataLoadCompleted;
     }
+
+
 
     #region 심볼
-    private void LoadSymbolIcons()
+    private void OnWzDataLoadCompleted(WzDatabase database)
     {
-        while(!ResourceManager.itemIconLoaded) { }
+        Dictionary<string, EquipmentSlot> symbolSlots = new Dictionary<string, EquipmentSlot>()
+        {
+            {"소멸의 여로", ctYeoroSlot}, {"츄츄 아일랜드", ctChuchuSlot}, {"레헬른", ctLacheleinSlot},
+            {"아르카나", ctArcanaSlot}, {"모라스", ctMorasSlot}, {"에스페라", ctEsferaSlot},
 
+            {"세르니움", ctCerniumSlot}, {"아르크스", ctArcsSlot}, {"오디움", ctOdiumSlot},
+            {"도원경", ctDowonkyungSlot}, {"아르테리아", ctArteriaSlot}, {"카르시온", ctCarsionSlot}
+        };
         Dispatcher.Invoke(() =>
         {
-            ctYeoroSlot.ctEditLabel.Content = "소멸의 여로";
-            ctYeoroSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 소멸의 여로")!.IconRaw;
-
-            ctChuchuSlot.ctEditLabel.Content = "츄츄 포레스트";
-            ctChuchuSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 츄츄 아일랜드")!.IconRaw;
-
-            ctLacheleinSlot.ctEditLabel.Content = "레헬른";
-            ctLacheleinSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 레헬른")!.IconRaw;
-
-            ctArcanaSlot.ctEditLabel.Content = "아르카나";
-            ctArcanaSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 아르카나")!.IconRaw;
-
-            ctMorasSlot.ctEditLabel.Content = "모라스";
-            ctMorasSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 모라스")!.IconRaw;
-
-            ctEsferaSlot.ctEditLabel.Content = "에스페라";
-            ctEsferaSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("아케인심볼 : 에스페라")!.IconRaw;
-            
-            ctCerniumSlot.ctEditLabel.Content = "세르니움";
-            ctCerniumSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 세르니움")!.IconRaw;
-            
-            ctArcsSlot.ctEditLabel.Content = "아르크스";
-            ctArcsSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 아르크스")!.IconRaw;
-            
-            ctOdiumSlot.ctEditLabel.Content = "오디움";
-            ctOdiumSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 오디움")!.IconRaw;
-            
-            ctDowonkyungSlot.ctEditLabel.Content = "도원경";
-            ctDowonkyungSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 도원경")!.IconRaw;
-            
-            ctArteriaSlot.ctEditLabel.Content = "아르테리아";
-            ctArteriaSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 아르테리아")!.IconRaw;
-            
-            ctCarsionSlot.ctEditLabel.Content = "카르시온";
-            ctCarsionSlot.ctItemRenderer.Source = ResourceManager.GetItemIcon("어센틱심볼 : 카르시온")!.IconRaw;
+            int idx = 0;
+            foreach (var pair in symbolSlots)
+            {
+                string prefix = idx++ < 6 ? "아케인심볼" : "어센틱심볼";
+                pair.Value.ctEditLabel.Content = pair.Key;
+                string itemName = $"{prefix} : {pair.Key}";
+                if (!database.EquipmentDataList.TryGetValue(itemName, out var item)) continue;
+                pair.Value.ctItemRenderer.Source = item.Image;
+            }
         });
     }
-
+    
     private void CheckTextNumberOnly(object sender, TextCompositionEventArgs e)
     {
         e.Handled = e.Text.Length < 1 || e.Text[0] < '0' || e.Text[0] > '9';

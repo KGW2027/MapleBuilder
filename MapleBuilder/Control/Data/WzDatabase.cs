@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Nodes;
 using System.Windows.Media.Imaging;
+using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Serailize;
 using MapleBuilder.View.SubFrames;
@@ -11,13 +12,14 @@ namespace MapleBuilder.Control.Data;
 
 public class WzDatabase
 {
-    
     private static WzDatabase? _self;
-
     public static WzDatabase Instance
     {
         get { return _self ??= new WzDatabase(); }
     }
+    
+    public delegate void WzDataLoaded(WzDatabase database);
+    public static WzDataLoaded? OnWzDataLoadCompleted;
 
     private WzDatabase()
     {
@@ -25,8 +27,7 @@ public class WzDatabase
         LoadEquipments();
     }
 
-    public Dictionary<string, EquipmentData> EquipmentDataList;
-
+    public readonly Dictionary<string, EquipmentData> EquipmentDataList;
     private void LoadEquipments()
     {
         const string cachedEquipmentPath = "./equipments.dat";
@@ -50,33 +51,35 @@ public class WzDatabase
             Console.WriteLine($"{cachedEquipmentPath} save Start...");
             serializer.Save(cachedEquipmentPath);
             Console.WriteLine("complete");
-            return;
         }
-
-        WzDeserializer deserializer = new WzDeserializer(cachedEquipmentPath);
-        deserializer.CheckSignature(EquipmentData.GetSignature());
-        while (true)
+        else
         {
-            try
+
+            WzDeserializer deserializer = new WzDeserializer(cachedEquipmentPath);
+            deserializer.CheckSignature(EquipmentData.GetSignature());
+            while (true)
             {
-                EquipmentData data = EquipmentData.Deserialize(deserializer);
-                EquipmentDataList.TryAdd(data.Name, data);
-            }
-            catch (ArgumentNullException ignore)
-            {
-                //ignore
-            }
-            catch (Exception ex)
-            {
-                #if DEBUG
-                Console.WriteLine($"Equipment Data Deserialize sequence end. Total {EquipmentDataList.Count:N0} Items.. :: {ex.Message} :: {ex.GetType()}");
-                #endif
-                break;
+                try
+                {
+                    EquipmentData data = EquipmentData.Deserialize(deserializer);
+                    EquipmentDataList.TryAdd(data.Name, data);
+                }
+                catch (ArgumentNullException ignore)
+                {
+                    //ignore
+                }
+                catch (Exception ex)
+                {
+#if DEBUG
+                    Console.WriteLine(
+                        $"Equipment Data Deserialize sequence end. Total {EquipmentDataList.Count:N0} Items.. :: {ex.Message} :: {ex.GetType()}");
+#endif
+                    break;
+                }
             }
         }
-
+        OnWzDataLoadCompleted!.Invoke(this);
     }
-
     private void InitEquipments()
     {
         using StreamReader reader = File.OpenText("./CharacterExtractorResult.json");
@@ -198,14 +201,13 @@ public class EquipmentData : IWzSerializable
     {
         get
         {
-            if (iconPath == null) throw new NullReferenceException($"아이템 {Name}의 아이콘에 접근하는 도중 유효하지 않은 경로 정보를 발견하였습니다.");
             if (thumbnail != null) return thumbnail;
             thumbnail = new BitmapImage();
+            if (iconPath == null) return thumbnail;
             thumbnail.BeginInit();
             string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, iconPath);
             thumbnail.UriSource = new Uri(fullPath);
             thumbnail.EndInit();
-
             return thumbnail;
         }
     }
@@ -218,6 +220,14 @@ public class EquipmentData : IWzSerializable
             incTable.TryAdd(statusType, 0);
             incTable[statusType] = value;
         }
+    }
+
+    public MapleStatContainer GetStatus()
+    {
+        MapleStatContainer msc = new MapleStatContainer();
+        foreach (var pair in incTable)
+            msc[pair.Key] += pair.Value;
+        return msc;
     }
 
     public static byte[] GetSignature()

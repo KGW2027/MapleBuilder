@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 using MaplePotentialOption = MapleAPI.Enum.MaplePotentialOption;
 
 namespace MapleBuilder.View.SubFrames;
@@ -24,15 +25,7 @@ public partial class Summarize : UserControl
         selfInstance!.ctInputNickname.Focusable = true;
         selfInstance.ctInputNickname.IsReadOnly = false;
     }
-
-    public static void VisibleLoadButton()
-    {
-        selfInstance!.Dispatcher.Invoke(() =>
-        {
-            selfInstance.ctLoadBtn.Visibility = Visibility.Visible;
-        });
-    }
-
+    
     public static void StartProgressBar()
     {
         selfInstance!.Dispatcher.Invoke(() =>
@@ -65,7 +58,8 @@ public partial class Summarize : UserControl
     }
 
     public static void DispatchSummary()
-    {   
+    {
+        return;
         selfInstance!.Dispatcher.BeginInvoke(() =>
         {
             MapleStatContainer pInfo = BuilderDataContainer.PlayerStatus!.PlayerStat;
@@ -127,6 +121,20 @@ public partial class Summarize : UserControl
             selfInstance.ctAtkRate.Content = $"{pInfo[pInfo.AttackRateType]}%";
         });
     }
+
+    private void OnDataUpdated(PlayerData pdata)
+    {
+        MapleStatContainer dp = pdata.GetStatus();
+        MapleStatus.StatusType[] status = pdata.AffectTypes;
+        Dispatcher.BeginInvoke(() =>
+        {
+            ctMainStatType.Content =
+                $"주스탯 [{status[0]}]";
+            ctMainStatFlat.Content = dp[status[0]];
+            ctMainStatRate.Content = dp[status[0] + 0x10];
+            ctMainStatNonRateFlat.Content = dp[status[0] + 0x20];
+        });
+    }
     
     public Summarize()
     {
@@ -135,6 +143,14 @@ public partial class Summarize : UserControl
         InitializeComponent();
         ctLoadBtn.Visibility = Visibility.Collapsed;
         FinishProgressBar();
+        
+        GlobalDataController.OnDataUpdated += OnDataUpdated;
+        WzDatabase.OnWzDataLoadCompleted += OnWzLoadCompleted;
+    }
+
+    private void OnWzLoadCompleted(WzDatabase database)
+    {
+        Dispatcher.Invoke(() => ctLoadBtn.Visibility = Visibility.Visible);
     }
 
     public static bool IsLoadComplete {get; private set;}
@@ -180,7 +196,8 @@ public partial class Summarize : UserControl
         if (lastOcid == null || IsLoadComplete) return;
         new Thread(() =>
         {
-            ResourceManager.GetCharacterInfo(lastOcid);
+            // ResourceManager.GetCharacterInfo(lastOcid);
+            GlobalDataController.Instance.LoadPlayerData(lastOcid);
             IsLoadComplete = true;
         }).Start();
     }

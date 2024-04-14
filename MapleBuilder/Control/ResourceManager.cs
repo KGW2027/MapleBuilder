@@ -5,11 +5,11 @@ using System.Net.Http;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using MapleAPI;
 using MapleAPI.DataType;
 using MapleAPI.Web;
 using MapleAPI.WzLoader;
+using MapleBuilder.Control.Data.Item;
 using MapleBuilder.View;
 using MapleBuilder.View.SubFrames;
 
@@ -41,56 +41,9 @@ public static class ResourceManager
         return true;
     }
 
-    private static void LoadIcons(string path)
-    {
-        if(!File.Exists(path)) 
-            throw new FileNotFoundException(
-                $"Please Re-Unpack wzFileData! {path} is not found.");
-        
-        using StreamReader reader = File.OpenText(path);
-        string jsonContent = reader.ReadToEnd();
-        JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
-
-        int id = 0;
-        Summarize.StartProgressBar();
-        foreach (var pair in json)
-        {
-            // MainWindow.Window!.Dispatcher.Invoke(() =>
-            Summarize.UpdateProgressBar(++id, json.Count);
-            
-            if (pair.Value is not JsonObject childObject) continue;
-
-            if (!childObject.TryGetPropertyValue("name", out var nameNode)
-                || !childObject.TryGetPropertyValue("info", out var infoNode)
-                || !(infoNode is JsonObject infoObject &&
-                     infoObject.TryGetPropertyValue("icon", out var iconRawNode))) continue;
-
-            string name = nameNode!.ToString();
-            if (itemIcons.ContainsKey(name)) continue;
-
-            string iconRawPath = iconRawNode!.ToString();
-            if (!iconRawPath.StartsWith("./")) continue; // this is outlink format
-            string desc = childObject.TryGetPropertyValue("desc", out var descNode) ? descNode!.ToString() : "";
-
-            MainWindow.Window!.Dispatcher.Invoke(
-                () =>
-                {
-                    itemIcons.Add(name, new WzItem(name, iconRawPath, desc)); 
-                });
-        }
-        Summarize.FinishProgressBar();
-    }
-
     public static WzItem? GetItemIcon(string itemName)
     {
-        if (!itemIconLoaded && !itemIconLoading)
-        {
-            itemIconLoading = true;
-            LoadIcons("./CharacterExtractorResult.json");
-            LoadIcons("./ItemExtractorResult.json");
-            Summarize.VisibleLoadButton();
-            itemIconLoaded = true;
-        }
+        // LoadIcons("./ItemExtractorResult.json");
 
         return itemIcons!.GetValueOrDefault(itemName, null);
     }
