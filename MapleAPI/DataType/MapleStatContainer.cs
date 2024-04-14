@@ -184,20 +184,20 @@ public class MapleStatContainer
             SafeAdd(MapleStatus.StatusType.MAGIC_POWER, atkmag);
         }
 
-        if (Level > 0)
-        {
-            MapleStatus.StatusType[] perLevels = {
-                MapleStatus.StatusType.STR_PER_LEVEL, MapleStatus.StatusType.DEX_PER_LEVEL,
-                MapleStatus.StatusType.INT_PER_LEVEL, MapleStatus.StatusType.LUK_PER_LEVEL,
-            };
-            foreach (MapleStatus.StatusType perLvType in perLevels)
-            {
-                double perValue = ClearAndGet(perLvType);
-                if(perValue == 0.0) continue;
-                // Console.WriteLine($"{perLvType} => {perValue}");
-                SafeAdd(perLvType - 0x30, Math.Floor(perValue * (Level / 9.0)));
-            }
-        }
+        // if (Level > 0)
+        // {
+        //     MapleStatus.StatusType[] perLevels = {
+        //         MapleStatus.StatusType.STR_PER_LEVEL, MapleStatus.StatusType.DEX_PER_LEVEL,
+        //         MapleStatus.StatusType.INT_PER_LEVEL, MapleStatus.StatusType.LUK_PER_LEVEL,
+        //     };
+        //     foreach (MapleStatus.StatusType perLvType in perLevels)
+        //     {
+        //         double perValue = ClearAndGet(perLvType);
+        //         if(perValue == 0.0) continue;
+        //         // Console.WriteLine($"{perLvType} => {perValue}");
+        //         SafeAdd(perLvType - 0x30, Math.Floor(perValue * (Level / 9.0)));
+        //     }
+        // }
     }
 
     #region Operator Related
