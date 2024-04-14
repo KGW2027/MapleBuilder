@@ -21,15 +21,17 @@ public class GlobalDataController
         CharacterInfo? cInfo = CharacterInfo.FromOcid(ocid).Result;
         if (cInfo == null) throw new Exception($"플레이어의 데이터를 불러오려고 했지만 실패했습니다. {{OCID={ocid}}}");
 
-        playerData = new PlayerData(cInfo);
+        PlayerInstance = new PlayerData(cInfo);
 
         foreach (var equipItem in cInfo.Items)
         {
             if (!ItemDatabase.Instance.RegisterItem(equipItem, out ItemBase? item, cInfo.PlayerName) ||
                 item == null) continue;
-            if (playerData[item.EquipType] != null) continue;
-            playerData[item.EquipType] = item;
+            if (PlayerInstance[item.EquipType] != null) continue;
+            PlayerInstance[item.EquipType] = item;
         }
+        
+        OnDataUpdated!.Invoke(PlayerInstance);
 
         //MapleStatus.StatusType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
         // PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
@@ -71,9 +73,7 @@ public class GlobalDataController
         //     Console.WriteLine($"{pair.Key} : {pair.Value}");
     }
     
-    private PlayerData? playerData;
-
-    public PlayerData? PlayerInstance => playerData;
+    public PlayerData? PlayerInstance { get; private set; }
 
 
 

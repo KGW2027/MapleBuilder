@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -73,13 +74,10 @@ public partial class HyperStatSlot : UserControl
 
     private void OnLevelTextChanged(object sender, TextChangedEventArgs e)
     {
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
         if(!int.TryParse(((TextBox) sender).Text, out int level)) return;
         level = Math.Clamp(level, 0, 15);
-        ((TextBox) sender).Text = level.ToString();
-        RoutedEventArgs newEventArgs = new RoutedEventArgs(LEVEL_CHANGED_EVENT);
-        RaiseEvent(newEventArgs);
-
-        befLevel = level;
+        GlobalDataController.Instance.PlayerInstance.HyperStat[StatType] = level;
     }
 
     private double GetIncrease(MapleStatus.StatusType type, int level)

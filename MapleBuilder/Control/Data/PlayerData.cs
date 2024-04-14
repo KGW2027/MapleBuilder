@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Annotations;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Item;
+using MapleBuilder.Control.Data.Spec;
 
 namespace MapleBuilder.Control.Data;
 
@@ -25,6 +25,13 @@ public class PlayerData
         OTHER,                  // 마약 등 기타
     }
     
+    /// <summary>
+    /// [StatSource, StatusType] - Apply MainStatus
+    /// [StatSource] - Get Status by StatSource
+    /// [EquipType] - Get Equipment Item from EquipType
+    /// [SymbolType] - Get Symbol Level from SymbolType
+    /// </summary>
+    /// <param name="cInfo"></param>
     public PlayerData(CharacterInfo cInfo)
     {
         level = cInfo.Level;
@@ -33,7 +40,12 @@ public class PlayerData
         statContainers = new Dictionary<StatSources, MapleStatContainer>();
         equipData = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
         symbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
-
+        
+        HyperStat = new HyperStatWrapper();
+        HyperStat.OnStatusChanged += OnStatusChanged;
+        foreach (var pair in cInfo.HyperStatLevels)
+            HyperStat[pair.Key] = pair.Value;
+        
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
         this[StatSources.DEFAULT, MapleStatus.StatusType.INT] += cInfo.ApStats[2];
@@ -43,8 +55,11 @@ public class PlayerData
 
         // Init Symbol Data
         foreach (var pair in cInfo.SymbolLevels) this[pair.Key] += pair.Value;
+
+        isInitialized = true;
     }
 
+    private bool isInitialized;
     private int level;
     private MapleClass.ClassType playerClass;
     private readonly Dictionary<StatSources, MapleStatContainer> statContainers;
@@ -62,7 +77,7 @@ public class PlayerData
             if (!statContainers.ContainsKey(source))
                 statContainers.TryAdd(source, new MapleStatContainer());
             statContainers[source][statusType] = value;
-            GlobalDataController.OnDataUpdated!.Invoke(this);
+            AlertUpdate();
         }
     }
 
@@ -74,7 +89,7 @@ public class PlayerData
             statContainers[source] = value ??
                                      throw new NullReferenceException(
                                          "The setter for MapleStatContainer must be non-null.");
-            GlobalDataController.OnDataUpdated!.Invoke(this);
+            AlertUpdate();
         }
     }
 
@@ -87,6 +102,7 @@ public class PlayerData
             if (curItem != null)
                 RemoveItem(curItem);
             AddItem(value);
+            AlertUpdate();
         }
     }
 
@@ -100,14 +116,23 @@ public class PlayerData
             int prevLevel = symbolLevels[symbolType];
             symbolLevels[symbolType] = Math.Clamp(value, 0, symbolType <= MapleSymbol.SymbolType.ESFERA ? 20 : 11);
             ChangeSymbolLevel(symbolType, prevLevel, symbolLevels[symbolType]);
+            AlertUpdate();
         }
     }
+
+    public readonly HyperStatWrapper HyperStat;
+    
+    
 
     public MapleStatContainer GetStatus()
     {
         MapleStatContainer statusContainer = new MapleStatContainer();
         foreach (var container in statContainers)
+        {
+            Console.WriteLine($"{container.Key}.BossDamage : {container.Value[MapleStatus.StatusType.BOSS_DAMAGE]}");
             statusContainer += container.Value;
+        }
+        statusContainer.Flush();
 
         for (byte id = 0x31; id <= (byte) MapleStatus.StatusType.MAG_PER_LEVEL; id++)
         {
@@ -169,8 +194,19 @@ public class PlayerData
             this[StatSources.SYMBOL, flat] +=
                 playerClass == MapleClass.ClassType.DEMON_AVENGER ? 2100 * dLv : 100 * dLv;
         }
-        
+    }
+
+    private void AlertUpdate()
+    {
+        if (!isInitialized) return;
         GlobalDataController.OnDataUpdated!.Invoke(this);
+    }
+    
+    private void OnStatusChanged(StatSources source, MapleStatus.StatusType type, double prev, double next)
+    {
+        Console.WriteLine($"[{source}, {type}] -{prev}, +{next}");
+        this[source, type] -= prev;
+        this[source, type] += next;
     }
 
 }
