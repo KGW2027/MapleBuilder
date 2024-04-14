@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleBuilder.Control;
-using MapleBuilder.MapleData;
+using MapleBuilder.Control.Data;
 using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;

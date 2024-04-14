@@ -20,6 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="MapleData\" />
       <Folder Include="Resources\Image\" />
     </ItemGroup>
     

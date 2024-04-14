@@ -20,8 +20,6 @@ public static class ResourceManager
     private static string wzPath = "";
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
     private static Dictionary<string, WzItem> itemIcons = new();
-    private static bool itemIconLoading;
-    public static bool itemIconLoaded;
     
     #region Wz Related
     public static bool SetWzPath(string path)

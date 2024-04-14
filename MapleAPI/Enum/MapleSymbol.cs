@@ -4,19 +4,19 @@ public class MapleSymbol
 {
     public enum SymbolType
     {
-        YEORO,
-        CHUCHU,
-        LACHELEIN,
-        ARCANA,
-        MORAS,
-        ESFERA,
-        CERNIUM,
-        ARCS,
-        ODIUM,
-        DOWONKYUNG,
-        ARTERIA,
-        CARCION,
-        UNKNOWN
+        YEORO          = 0x01,
+        CHUCHU         = 0x02,
+        LACHELEIN      = 0x03,
+        ARCANA         = 0x04,
+        MORAS          = 0x05,
+        ESFERA         = 0x06,
+        CERNIUM        = 0x11,
+        ARCS           = 0x12,
+        ODIUM          = 0x13,
+        DOWONKYUNG     = 0x14,
+        ARTERIA        = 0x15,
+        CARCION        = 0x16,
+        UNKNOWN        = 0x00,
     }
 
     public static SymbolType GetSymbolType(string name)

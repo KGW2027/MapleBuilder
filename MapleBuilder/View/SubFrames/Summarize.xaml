@@ -54,13 +54,15 @@
                 <Label x:Name="ctSymbolAuthentic" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="189, 84, 0, 0"/>
                 
                 <!-- Sub Stat 1 -->
-                <Label x:Name="ctSubStatType" Content="부스텟 [XXX]" FontSize="12" FontWeight="Light" Margin="4,114,0,0"/>
-                <Label Content="기본 수치" FontSize="10" FontWeight="Thin" Margin="0,130,185,0"  HorizontalAlignment="Right"/>
-                <Label x:Name="ctSubStatFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 130, 0, 0"/> <!-- Type + 16 -->
-                <Label Content="% 수치" FontSize="10" FontWeight="Thin" Margin="0,142,185,0" HorizontalAlignment="Right"/>
-                <Label x:Name="ctSubStatRate" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 142, 0, 0"/> <!-- Flat + 12 -->
-                <Label Content="% 미적용 수치" FontSize="10" FontWeight="Thin" Margin="0,154,185,0" HorizontalAlignment="Right"/>
-                <Label x:Name="ctSubStatNonRateFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="67, 154, 0, 0"/> <!-- Rate + 12 -->
+                <Grid x:Name="ctSubStat1Grid" Margin="4, 114, 0, 0" Visibility="Visible">
+                    <Label x:Name="ctSubStat1Type" Content="부스텟 [XXX]" FontSize="12" FontWeight="Light"/>
+                    <Label Content="기본 수치" FontSize="10" FontWeight="Thin" Margin="0,16,185,0"  HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat1Flat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 16, 0, 0"/> <!-- Type + 16 -->
+                    <Label Content="% 수치" FontSize="10" FontWeight="Thin" Margin="0,28, 185,0" HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat1Rate" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 28, 0, 0"/> <!-- Flat + 12 -->
+                    <Label Content="% 미적용 수치" FontSize="10" FontWeight="Thin" Margin="0,40, 185,0" HorizontalAlignment="Right"/>
+                    <Label x:Name="ctSubStat1NonRateFlat" Content="999,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="64, 40, 0, 0"/> <!-- Rate + 12 -->
+                </Grid>
                 
                 <!-- Sub Stat 2 -->
                 <Grid x:Name="ctSubStat2Grid" Margin="125, 114, 0, 0" Visibility="Visible">

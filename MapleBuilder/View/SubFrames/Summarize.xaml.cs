@@ -56,72 +56,7 @@ public partial class Summarize : UserControl
             selfInstance.ctProgressLabel.Visibility = Visibility.Collapsed;
         });
     }
-
-    public static void DispatchSummary()
-    {
-        return;
-        selfInstance!.Dispatcher.BeginInvoke(() =>
-        {
-            MapleStatContainer pInfo = BuilderDataContainer.PlayerStatus!.PlayerStat;
-            pInfo.Flush();
-
-            var totalDmg = pInfo.GetPower(-140, false);
-            var hMil = totalDmg / 100000000;
-            var hTho = totalDmg % 100000000 / 10000;
-            var tho = totalDmg % 10000;
-
-            if (hMil > 0) selfInstance.ctDisplayPower.Content = $"{hMil:0000}억 {hTho:0000}만 {tho:0000}";
-            else if (hTho > 0) selfInstance.ctDisplayPower.Content = $"{hTho:0000}만 {tho:0000}";
-            else selfInstance.ctDisplayPower.Content = $"{tho:0000}";
-
-            selfInstance.ctMainStatType.Content =
-                $"주스탯 [{pInfo.MainStatType.ToString()}]";
-            selfInstance.ctMainStatFlat.Content = pInfo[pInfo.MainStatType];
-            selfInstance.ctMainStatRate.Content = pInfo[pInfo.MainStatType + 0x10];
-            selfInstance.ctMainStatNonRateFlat.Content = pInfo[pInfo.MainStatType + 0x20];
-
-            selfInstance.ctSymbolArcane.Content = $"{pInfo[MapleStatus.StatusType.ARCANE_FORCE]:N0}";
-            selfInstance.ctSymbolAuthentic.Content = $"{pInfo[MapleStatus.StatusType.AUTHENTIC_FORCE]:N0}";
-
-            selfInstance.ctSubStatType.Content =
-                $"부스탯 [{pInfo.SubStatType.ToString()}]";
-            selfInstance.ctSubStatFlat.Content = pInfo[pInfo.SubStatType];
-            selfInstance.ctSubStatRate.Content = pInfo[pInfo.SubStatType + 0x10];
-            selfInstance.ctSubStatNonRateFlat.Content = pInfo[pInfo.SubStatType + 0x20];
-
-            selfInstance.ctSubStat2Grid.Visibility =
-                pInfo.SubStat2Type == MapleStatus.StatusType.OTHER
-                    ? Visibility.Collapsed
-                    : Visibility.Visible;
-            selfInstance.ctSubStat2Type.Content =
-                $"부스탯 [{pInfo.SubStat2Type.ToString()}]";
-            selfInstance.ctSubStat2Flat.Content = pInfo[pInfo.SubStat2Type];
-            selfInstance.ctSubStat2Rate.Content = pInfo[pInfo.SubStat2Type + 0x10];
-            selfInstance.ctSubStat2NonRateFlat.Content = pInfo[pInfo.SubStat2Type + 0x20];
-
-            selfInstance.ctBossDmg.Content = $"{pInfo[MapleStatus.StatusType.BOSS_DAMAGE]}%";
-            selfInstance.ctIgnoreArmor.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_DEF]:F2}%";
-
-            selfInstance.ctCommonDmg.Content = $"{pInfo[MapleStatus.StatusType.COMMON_DAMAGE]}%";
-            selfInstance.ctDropItem.Content = $"{pInfo[MapleStatus.StatusType.ITEM_DROP]}%";
-            selfInstance.ctDropMeso.Content = $"{pInfo[MapleStatus.StatusType.MESO_DROP]}%";
-
-            selfInstance.ctDmg.Content = $"{pInfo[MapleStatus.StatusType.DAMAGE]}%";
-            selfInstance.ctCritChance.Content = $"{pInfo[MapleStatus.StatusType.CRITICAL_CHANCE]}%";
-            selfInstance.ctCritDmg.Content = $"{pInfo[MapleStatus.StatusType.CRITICAL_DAMAGE]:F2}%";
-            selfInstance.ctDurBuff.Content = $"{pInfo[MapleStatus.StatusType.BUFF_DURATION]}%";
-            selfInstance.ctDurSummon.Content = $"{pInfo[MapleStatus.StatusType.SUMMON_DURATION]}%";
-            selfInstance.ctDebuffDmg.Content = $"{pInfo[MapleStatus.StatusType.DEBUFF_DAMAGE]}%";
-            selfInstance.ctCooldownDecrease.Content = $"{pInfo[MapleStatus.StatusType.COOL_DEC_SECOND]}초, {pInfo[MapleStatus.StatusType.COOL_DEC_RATE]}%";
-            selfInstance.ctCooldownIgnore.Content = $"{pInfo[MapleStatus.StatusType.COOL_IGNORE]:F2}%";
-            selfInstance.ctTolerance.Content = $"{pInfo[MapleStatus.StatusType.ABN_STATUS_RESIS]}";
-            selfInstance.ctIgnoreImmune.Content = $"{pInfo[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
-
-            selfInstance.ctAtkVal.Content = $"{pInfo[pInfo.AttackFlatType]:N0}";
-            selfInstance.ctAtkRate.Content = $"{pInfo[pInfo.AttackRateType]}%";
-        });
-    }
-
+    
     private void OnDataUpdated(PlayerData pdata)
     {
         MapleStatContainer dp = pdata.GetStatus();
@@ -133,6 +68,47 @@ public partial class Summarize : UserControl
             ctMainStatFlat.Content = dp[status[0]];
             ctMainStatRate.Content = dp[status[0] + 0x10];
             ctMainStatNonRateFlat.Content = dp[status[0] + 0x20];
+
+            if (status[1] != MapleStatus.StatusType.OTHER)
+            {
+                ctSubStat1Grid.Visibility = Visibility.Visible;
+                ctSubStat1Type.Content = $"부스탯 [{status[1]}]";
+                ctSubStat1Flat.Content = dp[status[1]];
+                ctSubStat1Rate.Content = dp[status[1] + 0x10];
+                ctSubStat1NonRateFlat.Content = dp[status[1] + 0x20];
+            } else ctSubStat1Grid.Visibility = Visibility.Collapsed;
+            
+            if (status[2] != MapleStatus.StatusType.OTHER)
+            {
+                ctSubStat2Grid.Visibility = Visibility.Visible;
+                ctSubStat2Type.Content = $"부스탯 [{status[2]}]";
+                ctSubStat2Flat.Content = dp[status[2]];
+                ctSubStat2Rate.Content = dp[status[2] + 0x10];
+                ctSubStat2NonRateFlat.Content = dp[status[2] + 0x20];
+            } else ctSubStat2Grid.Visibility = Visibility.Collapsed;
+
+            ctSymbolArcane.Content = $"{dp[MapleStatus.StatusType.ARCANE_FORCE]:N0}";
+            ctSymbolAuthentic.Content = $"{dp[MapleStatus.StatusType.AUTHENTIC_FORCE]:N0}";
+
+            ctBossDmg.Content = $"{dp[MapleStatus.StatusType.BOSS_DAMAGE]}%";
+            ctIgnoreArmor.Content = $"{dp[MapleStatus.StatusType.IGNORE_DEF]:F2}%";
+            ctCommonDmg.Content = $"{dp[MapleStatus.StatusType.COMMON_DAMAGE]}%";
+            ctDropItem.Content = $"{dp[MapleStatus.StatusType.ITEM_DROP]}%";
+            ctDropMeso.Content = $"{dp[MapleStatus.StatusType.MESO_DROP]}%";
+
+            ctDmg.Content = $"{dp[MapleStatus.StatusType.DAMAGE]}%";
+            ctCritChance.Content = $"{dp[MapleStatus.StatusType.CRITICAL_CHANCE]}%";
+            ctCritDmg.Content = $"{dp[MapleStatus.StatusType.CRITICAL_DAMAGE]}%";
+            ctDurBuff.Content = $"{dp[MapleStatus.StatusType.BUFF_DURATION]}%";
+            ctDurSummon.Content = $"{dp[MapleStatus.StatusType.SUMMON_DURATION]}%";
+            ctDebuffDmg.Content = $"{dp[MapleStatus.StatusType.DEBUFF_DAMAGE]}%";
+            ctCooldownDecrease.Content = $"{dp[MapleStatus.StatusType.COOL_DEC_SECOND]}초, {dp[MapleStatus.StatusType.COOL_DEC_RATE]}%";
+            ctCooldownIgnore.Content = $"{dp[MapleStatus.StatusType.COOL_IGNORE]:F2}%";
+            ctTolerance.Content = $"{dp[MapleStatus.StatusType.ABN_STATUS_RESIS]}";
+            ctIgnoreImmune.Content = $"{dp[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
+
+            ctAtkVal.Content = $"{dp[dp.AttackFlatType]:N0}";
+            ctAtkRate.Content = $"{dp[dp.AttackRateType]}%";
         });
     }
     

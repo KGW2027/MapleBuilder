@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.View
 {
@@ -17,7 +18,8 @@ namespace MapleBuilder.View
             SetWindowTitle();
             new Thread(() =>
             {
-                ResourceManager.GetItemIcon("카오스 벨룸의 헬름"); // Pre load Iconlist
+                // ResourceManager.GetItemIcon("카오스 벨룸의 헬름"); // Pre load Iconlist
+                WzDatabase.Instance.ToString();
             }).Start();
         }
 

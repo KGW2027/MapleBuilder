@@ -10,6 +10,8 @@ using MapleBuilder.View.SubFrames;
 
 namespace MapleBuilder.Control.Data;
 
+#pragma warning disable CS0168
+
 public class WzDatabase
 {
     private static WzDatabase? _self;

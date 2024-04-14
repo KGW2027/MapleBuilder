@@ -38,7 +38,7 @@ public class BuilderDataContainer
         PlayerStatus?.PlayerStat.Flush();
         RenderFrame.UpdateCharacterTop();
         StatSymbol.Update();
-        Summarize.DispatchSummary();
+        // Summarize.DispatchSummary();
     }
     
     /// <summary>
@@ -125,6 +125,6 @@ public class BuilderDataContainer
             PlayerStatus!.AddCommonItem(newItem);
         
         RenderOverview.UpdateSetDisplay(PlayerStatus!.SetEffects.GetSetOptionString());
-        Summarize.DispatchSummary();
+        // Summarize.DispatchSummary();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
-using MapleBuilder.MapleData;
+using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.Control;
 

@@ -21,7 +21,7 @@ public class GlobalDataController
         CharacterInfo? cInfo = CharacterInfo.FromOcid(ocid).Result;
         if (cInfo == null) throw new Exception($"플레이어의 데이터를 불러오려고 했지만 실패했습니다. {{OCID={ocid}}}");
 
-        playerData = new PlayerData(cInfo.Level, cInfo.Class, cInfo.ApStats);
+        playerData = new PlayerData(cInfo);
 
         foreach (var equipItem in cInfo.Items)
         {
@@ -73,10 +73,12 @@ public class GlobalDataController
     
     private PlayerData? playerData;
 
-    
-    
-    
-    
+    public PlayerData? PlayerInstance => playerData;
+
+
+
+
+
 
 
 }
