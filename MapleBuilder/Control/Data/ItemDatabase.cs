@@ -21,31 +21,18 @@ public class ItemDatabase
     }
 
     public readonly ObservableCollection<ItemBase> CachedItemList;
-    private HashSet<string> cachedHashes;
+    private readonly HashSet<string> cachedHashes;
 
     public bool RegisterItem(MapleItemBase itemBase, out ItemBase? outItem, string author = "")
     {
         outItem = null;
         if (!cachedHashes.Add(itemBase.Hash)) return false;
-
-        if (itemBase is MapleCommonItem commonItem)
-        {
-            CraftableItem cItem = GetCraftableItem(commonItem);
-            if (author != "") cItem.DisplayName += $" (from {author})";
-            CachedItemList.Add(cItem);
-            outItem = cItem;
-            return true;
-        }
-
-        return false;
-    }
-
-    private CraftableItem GetCraftableItem(MapleCommonItem commonItem)
-    {
-        CraftableItem item = new CraftableItem(commonItem.EquipType, commonItem.Name);
-        item.StatContainer += commonItem.Status;
         
-        return item;
+        ItemBase? parsedItem = ItemBase.ParseItemBase(itemBase);
+        if (parsedItem == null) return false;
+        parsedItem.DisplayName += $" (by {author})";
+        CachedItemList.Add(parsedItem);
+        return true;
     }
 
 }
