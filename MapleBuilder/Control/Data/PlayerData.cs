@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Item;
@@ -127,11 +128,7 @@ public class PlayerData
     public MapleStatContainer GetStatus()
     {
         MapleStatContainer statusContainer = new MapleStatContainer();
-        foreach (var container in statContainers)
-        {
-            Console.WriteLine($"{container.Key}.BossDamage : {container.Value[MapleStatus.StatusType.BOSS_DAMAGE]}");
-            statusContainer += container.Value;
-        }
+        statusContainer = statContainers.Aggregate(statusContainer, (current, container) => current + container.Value);
         statusContainer.Flush();
 
         for (byte id = 0x31; id <= (byte) MapleStatus.StatusType.MAG_PER_LEVEL; id++)
@@ -204,9 +201,9 @@ public class PlayerData
     
     private void OnStatusChanged(StatSources source, MapleStatus.StatusType type, double prev, double next)
     {
-        Console.WriteLine($"[{source}, {type}] -{prev}, +{next}");
         this[source, type] -= prev;
         this[source, type] += next;
+        GlobalDataController.OnDataUpdated!.Invoke(this);
     }
 
 }
