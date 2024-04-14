@@ -6,13 +6,6 @@ namespace MapleBuilder.Control.Data.Spec;
 
 public class HyperStatWrapper : StatWrapper
 {
-    public HyperStatWrapper() : base(new Dictionary<MapleStatus.StatusType, int>())
-    {
-    }
-
-    public HyperStatWrapper(Dictionary<MapleStatus.StatusType, int> dict) : base(dict)
-    {
-    }
 
     protected override void CallStatusChanged(MapleStatus.StatusType statusType, int prev, int next)
     {
@@ -52,5 +45,9 @@ public class HyperStatWrapper : StatWrapper
         for (int i = 1; i <= level; i++)
             v += GetIncrease(statusType, level);
         return v;
+    }
+
+    public HyperStatWrapper(Dictionary<MapleStatus.StatusType, int> dict, StatusChanged onStatusChanged) : base(dict, onStatusChanged)
+    {
     }
 }

@@ -7,14 +7,18 @@ namespace MapleBuilder.Control.Data.Spec;
 
 public abstract class StatWrapper : IEnumerable<KeyValuePair<MapleStatus.StatusType, int>>
 {
-    private readonly Dictionary<MapleStatus.StatusType, int> wrappedDict;
+    protected readonly Dictionary<MapleStatus.StatusType, int> wrappedDict;
 
     public delegate void StatusChanged(PlayerData.StatSources source, MapleStatus.StatusType type, double prev, double next);
     public StatusChanged? OnStatusChanged;
 
-    protected StatWrapper(Dictionary<MapleStatus.StatusType, int> dict)
+    protected StatWrapper(Dictionary<MapleStatus.StatusType, int> dict, StatusChanged onStatusChanged)
     {
-        wrappedDict = dict;
+        OnStatusChanged += onStatusChanged;
+        wrappedDict = new Dictionary<MapleStatus.StatusType, int>();
+
+        foreach (var pair in dict)
+            this[pair.Key] = pair.Value;
     }
 
     protected abstract void CallStatusChanged(MapleStatus.StatusType statusType, int prev, int next);

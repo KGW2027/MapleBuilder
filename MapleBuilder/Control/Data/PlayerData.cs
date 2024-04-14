@@ -42,10 +42,8 @@ public class PlayerData
         equipData = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
         symbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         
-        HyperStat = new HyperStatWrapper();
-        HyperStat.OnStatusChanged += OnStatusChanged;
-        foreach (var pair in cInfo.HyperStatLevels)
-            HyperStat[pair.Key] = pair.Value;
+        HyperStat = new HyperStatWrapper(cInfo.HyperStatLevels, OnStatusChanged);
+        Ability = new AbilityWrapper(cInfo.AbilityValues, OnStatusChanged);
         
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
@@ -122,6 +120,7 @@ public class PlayerData
     }
 
     public readonly HyperStatWrapper HyperStat;
+    public readonly AbilityWrapper Ability;
     
     
 
@@ -203,7 +202,7 @@ public class PlayerData
     {
         this[source, type] -= prev;
         this[source, type] += next;
-        GlobalDataController.OnDataUpdated!.Invoke(this);
+        AlertUpdate();
     }
 
 }

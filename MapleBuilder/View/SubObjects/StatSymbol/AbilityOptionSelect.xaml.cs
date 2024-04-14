@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubObjects.StatSymbol;
 
@@ -13,15 +15,29 @@ public partial class AbilityOptionSelect : UserControl
     
     private MaplePotentialGrade.GradeType optionGrade;
     private bool IsUp => IsUpValue.IsChecked!.Value;
-    private MapleStatus.StatusType selectedOption;
     private string ComboBoxStr => MapleAbility.GetAbilityString(selectedOption).Replace("%d", ((int) ValueSlider.Value).ToString());
+    private MapleStatus.StatusType selectedOption;
+    public MapleStatus.StatusType Option
+    {
+        get => selectedOption;
+        set
+        {
+            selectedOption = value;
+            ChangedOptionAction();
+        }
+    }
 
+    public double Value
+    {
+        set => ValueSlider.Value = Math.Clamp(value, ValueSlider.Minimum, ValueSlider.Maximum);
+    }
+    
     public AbilityOptionSelect()
     {
         InitializeComponent();
         optionGrade = MaplePotentialGrade.GradeType.RARE;
         selectedOption = MapleStatus.StatusType.OTHER;
-        OnChangedGrade();
+        GradeChangedAction();
     }
 
     public void OnGradeChanged(MaplePotentialGrade.GradeType newGrade)
@@ -29,9 +45,9 @@ public partial class AbilityOptionSelect : UserControl
         optionGrade = newGrade;
         if (!IsTop)
             optionGrade = (MaplePotentialGrade.GradeType) Math.Max((int) optionGrade - 2, 1);
-        OnChangedGrade();
+        GradeChangedAction();
     }
-    
+
     #region XAML Property
 
     public static readonly DependencyProperty IsTopProperty =
@@ -48,24 +64,30 @@ public partial class AbilityOptionSelect : UserControl
         get => (bool) GetValue(IsTopProperty);
         set => SetValue(IsTopProperty, value);
     }
-    
     #endregion
 
     private void OnAbilitySelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (e.AddedItems.Count == 0 || !IsInitialized) return;
         
+        // 선택 해제
+        if (selectedOption != MapleStatus.StatusType.OTHER && GlobalDataController.Instance.PlayerInstance != null)
+            GlobalDataController.Instance.PlayerInstance.Ability[selectedOption] = 0;
+        
         string newSelect = e.AddedItems[0]!.ToString()!;
         selectedOption = CACHED_OPTION.GetValueOrDefault(newSelect, MapleStatus.StatusType.OTHER);
-        OnChangedValue();
+        ChangedOptionAction();
     }
 
     private void OnSliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
         DisplayAbility.Text = ComboBoxStr;
+
+        if (selectedOption != MapleStatus.StatusType.OTHER && GlobalDataController.Instance.PlayerInstance != null)
+            GlobalDataController.Instance.PlayerInstance.Ability[selectedOption] = (int) e.NewValue;
     }
 
-    private void OnChangedValue()
+    private void ChangedOptionAction()
     {
         if (selectedOption == MapleStatus.StatusType.OTHER)
         {
@@ -84,7 +106,7 @@ public partial class AbilityOptionSelect : UserControl
         if (options[0] == 0 && options[1] == 0)
         {
             selectedOption = MapleStatus.StatusType.OTHER;
-            OnChangedGrade();
+            GradeChangedAction();
             return;
         }
         
@@ -92,10 +114,9 @@ public partial class AbilityOptionSelect : UserControl
         ValueSlider.Maximum = options[1];
         ValueSlider.SmallChange = options.Length == 3 ? options[2] : 1;
         ValueSlider.Value = options[0];
-        
     }
 
-    private void OnChangedGrade()
+    private void GradeChangedAction()
     {
         MaplePotentialGrade.GradeType targetGrade = optionGrade;
         if (IsUp) targetGrade += 1;
@@ -114,17 +135,17 @@ public partial class AbilityOptionSelect : UserControl
         }
         DisplayAbility.Items.Add("잡옵");
         
-        OnChangedValue();
+        ChangedOptionAction();
     }
 
     private void OnCheckboxChecked(object sender, RoutedEventArgs e)
     {
-        OnChangedGrade();
+        GradeChangedAction();
     }
 
     private void OnCheckboxUnchecked(object sender, RoutedEventArgs e)
     {
-        OnChangedGrade();
+        GradeChangedAction();
     }
 
     private void OnDropdownClosed(object? sender, EventArgs e)

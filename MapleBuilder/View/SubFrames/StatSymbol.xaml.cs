@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 using MapleBuilder.Control.Data;
@@ -26,58 +25,6 @@ public partial class StatSymbol : UserControl
     private readonly List<MapleStatus.StatusType> abilityTypes;
     private readonly Dictionary<string, MapleStatus.StatusType> displayToAbilityType;
     private static bool syncLock = false;
-    
-    public static void Update()
-    {
-        selfInstnace!.Dispatcher.BeginInvoke(() =>
-        {
-            int arcane = 0, arcaneStat = 0, authentic = 0, authenticStat = 0;
-            bool isXenon = BuilderDataContainer.CharacterInfo!.Class == MapleClass.ClassType.XENON;
-            bool isAvenger = BuilderDataContainer.CharacterInfo.Class == MapleClass.ClassType.DEMON_AVENGER;
-            foreach (var pair in selfInstnace.symbolLevels)
-            {
-                int level = BuilderDataContainer.PlayerStatus!.LastSymbols.TryGetValue(pair.Key, out int val) ? val : 0;
-                ((TextBox) pair.Value).Text = level.ToString();
-
-                if (level == 0) continue;
-                
-                switch (pair.Key)
-                {
-                    case MapleSymbol.SymbolType.YEORO:
-                    case MapleSymbol.SymbolType.CHUCHU:
-                    case MapleSymbol.SymbolType.LACHELEIN:
-                    case MapleSymbol.SymbolType.ARCANA:
-                    case MapleSymbol.SymbolType.MORAS:
-                    case MapleSymbol.SymbolType.ESFERA:
-                        arcane += (level + 2) * 10;
-                        arcaneStat += isXenon ? 48 * (level + 2) : isAvenger ? 2100 * (level + 2) : 100 * (level + 2);
-                        break;
-                    case MapleSymbol.SymbolType.CERNIUM:
-                    case MapleSymbol.SymbolType.ARCS:
-                    case MapleSymbol.SymbolType.ODIUM:
-                    case MapleSymbol.SymbolType.DOWONKYUNG:
-                    case MapleSymbol.SymbolType.ARTERIA:
-                    case MapleSymbol.SymbolType.CARCION:
-                        authentic += level * 10;
-                        authenticStat += isXenon ? 48 * (2 * level + 3) : isAvenger ? 2100 * (2 * level + 3) : 100 * (2 * level + 3);
-                        break;
-                    case MapleSymbol.SymbolType.UNKNOWN:
-                    default:
-                        break;
-                }
-            }
-
-            selfInstnace.ctArcaneForceDisplay.Content = $"ARC +{arcane:N0}";
-            selfInstnace.ctArcaneStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{arcaneStat:N0}" :
-                isAvenger ? $"MAX HP +{arcaneStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.MainStatType} +{arcaneStat:N0}";
-            
-            selfInstnace.ctAuthenticForceDisplay.Content = $"AUT +{authentic:N0}";
-            selfInstnace.ctAuthenticStatDisplay.Content = isXenon ? $"STR, DEX, LUK +{authenticStat:N0}" :
-                isAvenger ? $"MAX HP +{authenticStat:N0}" :
-                $"{BuilderDataContainer.PlayerStatus!.PlayerStat.MainStatType} +{authenticStat:N0}";
-        });
-    }
 
     public static void InitAbility(Dictionary<MapleStatus.StatusType, int> abilities)
     {
@@ -127,7 +74,7 @@ public partial class StatSymbol : UserControl
         });
     }
 
-    private Dictionary<MapleSymbol.SymbolType, UIElement> symbolLevels;
+    private readonly Dictionary<MapleSymbol.SymbolType, UIElement> symbolLevels;
     
     public StatSymbol()
     {
@@ -150,9 +97,9 @@ public partial class StatSymbol : UserControl
             {MapleSymbol.SymbolType.CARCION, ctCarsionText},
         };
 
-        abilityComboBoxes = new List<ComboBox> {ctAbility1, ctAbility2, ctAbility3};
-        abilitySliders = new List<Slider> {ctAbilitySlider1, ctAbilitySlider2, ctAbilitySlider3};
-        abilityCheckboxes = new List<CheckBox?> {null, ctAbilityOver2, ctAbilityOver3};
+        // abilityComboBoxes = new List<ComboBox> {ctAbility1, ctAbility2, ctAbility3};
+        // abilitySliders = new List<Slider> {ctAbilitySlider1, ctAbilitySlider2, ctAbilitySlider3};
+        // abilityCheckboxes = new List<CheckBox?> {null, ctAbilityOver2, ctAbilityOver3};
         abilityTypes = new List<MapleStatus.StatusType>
             {MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER, MapleStatus.StatusType.OTHER};
         
@@ -161,14 +108,14 @@ public partial class StatSymbol : UserControl
         {
             string str = MapleAbility.GetAbilityString(abType).Replace("%d", "[ ]").Trim();
             if (!displayToAbilityType.TryAdd(str, abType)) continue;
-            ctAbility1.Items.Add(str);
-            ctAbility2.Items.Add(str);
-            ctAbility3.Items.Add(str);
+            // ctAbility1.Items.Add(str);
+            // ctAbility2.Items.Add(str);
+            // ctAbility3.Items.Add(str);
         }
 
-        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.EPIC));
-        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.UNIQUE));
-        ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.LEGENDARY));
+        // ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.EPIC));
+        // ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.UNIQUE));
+        // ctGradeAbility.Items.Add(MaplePotentialGrade.GetPotentialGradeString(MaplePotentialGrade.GradeType.LEGENDARY));
 
         ApplyAbility();
 
@@ -200,16 +147,20 @@ public partial class StatSymbol : UserControl
             ctAuthenticForceDisplay.Content = $"AUT +{aut:N0}";
             ctAuthenticStatDisplay.Content = $"{prefix}{autStat:N0}";
 
+            // 심볼 레벨 바인딩
             foreach (var pair in symbolLevels)
                 ((TextBox) pair.Value).Text = pdata[pair.Key].ToString();
+
+            // 하이퍼스텟 레벨 바인딩
+            foreach (var pair in pdata.HyperStat)
+                foreach (var hSlot in hyperStatSlots.Where(hSlot => hSlot.StatType == pair.Key))
+                    hSlot.Level = pair.Value;
         });
     }
 
-
-    #region 심볼
     private void OnWzDataLoadCompleted(WzDatabase database)
     {
-        Dictionary<string, EquipmentSlot> symbolSlots = new Dictionary<string, EquipmentSlot>()
+        Dictionary<string, EquipmentSlot> symbolSlots = new Dictionary<string, EquipmentSlot>
         {
             {"소멸의 여로", ctYeoroSlot}, {"츄츄 아일랜드", ctChuchuSlot}, {"레헬른", ctLacheleinSlot},
             {"아르카나", ctArcanaSlot}, {"모라스", ctMorasSlot}, {"에스페라", ctEsferaSlot},
@@ -217,6 +168,8 @@ public partial class StatSymbol : UserControl
             {"세르니움", ctCerniumSlot}, {"아르크스", ctArcsSlot}, {"오디움", ctOdiumSlot},
             {"도원경", ctDowonkyungSlot}, {"아르테리아", ctArteriaSlot}, {"카르시온", ctCarsionSlot}
         };
+        
+        // 심볼 이미지 로드
         Dispatcher.Invoke(() =>
         {
             int idx = 0;
@@ -231,6 +184,8 @@ public partial class StatSymbol : UserControl
         });
     }
     
+
+    #region 심볼
     private void CheckTextNumberOnly(object sender, TextCompositionEventArgs e)
     {
         e.Handled = e.Text.Length < 1 || e.Text[0] < '0' || e.Text[0] > '9';
@@ -290,21 +245,21 @@ public partial class StatSymbol : UserControl
     {
         if (abilitySliders == null || abilityComboBoxes == null) return;
         
-        MaplePotentialGrade.GradeType topGrade = MaplePotentialGrade.GetPotentialGrade(ctGradeAbility.Text);
-        for (int slot = 0; slot < 3; slot++)
-        {
-            MaplePotentialGrade.GradeType applyType = slot == 0 ? topGrade :
-                (bool) abilityCheckboxes[slot]!.IsChecked! ? topGrade - 1 : topGrade - 2;
-            if (applyType == MaplePotentialGrade.GradeType.NONE) applyType = MaplePotentialGrade.GradeType.RARE;
-            
-            int[] abV = MapleAbility.GetMinMax(abilityTypes[slot], applyType);
-            abilitySliders[slot].Minimum = abV[0];
-            abilitySliders[slot].Maximum = abV[1];
-            abilitySliders[slot].SmallChange = abV.Length == 2 ? 1 : abV[2];
-            abilitySliders[slot].Value = Math.Clamp(abilitySliders[slot].Value, abV[0], abV[1]);
-            abilityComboBoxes[slot].Text = MapleAbility.GetAbilityString(abilityTypes[slot])
-                .Replace("%d", abilitySliders[slot].Value.ToString(CultureInfo.CurrentCulture));
-        }
+        // MaplePotentialGrade.GradeType topGrade = MaplePotentialGrade.GetPotentialGrade(ctGradeAbility.Text);
+        // for (int slot = 0; slot < 3; slot++)
+        // {
+        //     MaplePotentialGrade.GradeType applyType = slot == 0 ? topGrade :
+        //         (bool) abilityCheckboxes[slot]!.IsChecked! ? topGrade - 1 : topGrade - 2;
+        //     if (applyType == MaplePotentialGrade.GradeType.NONE) applyType = MaplePotentialGrade.GradeType.RARE;
+        //     
+        //     int[] abV = MapleAbility.GetMinMax(abilityTypes[slot], applyType);
+        //     abilitySliders[slot].Minimum = abV[0];
+        //     abilitySliders[slot].Maximum = abV[1];
+        //     abilitySliders[slot].SmallChange = abV.Length == 2 ? 1 : abV[2];
+        //     abilitySliders[slot].Value = Math.Clamp(abilitySliders[slot].Value, abV[0], abV[1]);
+        //     abilityComboBoxes[slot].Text = MapleAbility.GetAbilityString(abilityTypes[slot])
+        //         .Replace("%d", abilitySliders[slot].Value.ToString(CultureInfo.CurrentCulture));
+        // }
         
         ApplyAbilityToPlayerInfo();
     }
@@ -335,20 +290,9 @@ public partial class StatSymbol : UserControl
     private void OnAbilityGradeChanged(object sender, SelectionChangedEventArgs e)
     {
         if (e.AddedItems.Count == 0) return;
-        ctGradeAbility.Text = e.AddedItems[0]!.ToString();
+        // ctGradeAbility.Text = e.AddedItems[0]!.ToString();
         ApplyAbility();
     }
     
-    #endregion
-
-    #region 하이퍼스탯
-
-    private void OnHyperStatLevelChanged(object sender, RoutedEventArgs e)
-    {
-        if (e.Source is not HyperStatSlot slot) return;
-        if (BuilderDataContainer.PlayerStatus == null) return;
-        BuilderDataContainer.PlayerStatus.ApplyHyperStat(slot.StatType, slot.Delta);
-    }
-
     #endregion
 }

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
+             xmlns:statSymbol="clr-namespace:MapleBuilder.View.SubObjects.StatSymbol"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
     <Grid Name="ParentGrid">
@@ -58,42 +59,43 @@
         <Label x:Name="ctAuthenticStatDisplay" Content="INT + 15,600" Margin="445, 355, 0, 0"/>
         
         <!-- 어빌리티 -->
-        <Label Content="어빌리티" Margin="429, 398, 0, 0"/>
-        <ComboBox x:Name="ctGradeAbility" Width="83" Height="24" Margin="445, 430, 0, 0" 
-                  Background="#222222" Text="레전드리" SelectionChanged="OnAbilityGradeChanged"/>
-        
-        <ComboBox x:Name="ctAbility1" Width="318" Height="24" Margin="445, 462, 0, 0" 
-                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/>
-        <Slider x:Name="ctAbilitySlider1"  Width="200" Height="18" Margin="445, 489, 0, 0" Minimum="1" Maximum="1" Value="1" ValueChanged="OnSliderChanged"/>
-        
-        <ComboBox x:Name="ctAbility2" Width="318" Height="24" Margin="445, 511, 0, 0" 
-                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/>
-        <Slider x:Name="ctAbilitySlider2" Width="200" Height="18" Margin="445, 538, 0, 0" Minimum="8" Maximum="10" Value="9" SmallChange="1" ValueChanged="OnSliderChanged"/>
-        <CheckBox x:Name="ctAbilityOver2" Margin="770, 515, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/>
-        
-        <ComboBox x:Name="ctAbility3" Width="318" Height="24" Margin="445, 560, 0, 0" 
-                  Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/>
-        <Slider x:Name="ctAbilitySlider3"  Width="200" Height="18" Margin="445, 587, 0, 0" Minimum="5" Maximum="11" Value="5" SmallChange="2" ValueChanged="OnSliderChanged"/>
-        <CheckBox x:Name="ctAbilityOver3" Margin="770, 564, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/>
+        <statSymbol:AbilityPanel Margin="424, 420, 0, 0"/>
+        <!-- <Label Content="어빌리티" Margin="429, 398, 0, 0"/> -->
+        <!-- <ComboBox x:Name="ctGradeAbility" Width="83" Height="24" Margin="445, 430, 0, 0"  -->
+        <!--           Background="#222222" Text="레전드리" SelectionChanged="OnAbilityGradeChanged"/> -->
+        <!-- -->
+        <!-- <ComboBox x:Name="ctAbility1" Width="318" Height="24" Margin="445, 462, 0, 0"  -->
+        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
+        <!-- <Slider x:Name="ctAbilitySlider1"  Width="200" Height="18" Margin="445, 489, 0, 0" Minimum="1" Maximum="1" Value="1" ValueChanged="OnSliderChanged"/> -->
+        <!-- -->
+        <!-- <ComboBox x:Name="ctAbility2" Width="318" Height="24" Margin="445, 511, 0, 0"  -->
+        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
+        <!-- <Slider x:Name="ctAbilitySlider2" Width="200" Height="18" Margin="445, 538, 0, 0" Minimum="8" Maximum="10" Value="9" SmallChange="1" ValueChanged="OnSliderChanged"/> -->
+        <!-- <CheckBox x:Name="ctAbilityOver2" Margin="770, 515, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/> -->
+        <!-- -->
+        <!-- <ComboBox x:Name="ctAbility3" Width="318" Height="24" Margin="445, 560, 0, 0"  -->
+        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
+        <!-- <Slider x:Name="ctAbilitySlider3"  Width="200" Height="18" Margin="445, 587, 0, 0" Minimum="5" Maximum="11" Value="5" SmallChange="2" ValueChanged="OnSliderChanged"/> -->
+        <!-- <CheckBox x:Name="ctAbilityOver3" Margin="770, 564, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/> -->
         
         <!-- 하이퍼 스탯 -->
-        <subObjects:HyperStatSlot Text="STR" StatType="STR_FLAT" Margin="27.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="DEX" StatType="DEX_FLAT" Margin="27.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="INT" StatType="INT_FLAT" Margin="27.5, 336, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="LUK" StatType="LUK_FLAT" Margin="27.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="HP" StatType="HP_RATE" Margin="27.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="MP" StatType="MP_RATE" Margin="27.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="DF/TF/PP" StatType="DF_TT_PP" Margin="27.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="크리티컬 확률" StatType="CRITICAL_CHANCE" Margin="27.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="STR" StatType="STR_FLAT" Margin="27.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="DEX" StatType="DEX_FLAT" Margin="27.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="INT" StatType="INT_FLAT" Margin="27.5, 336, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="LUK" StatType="LUK_FLAT" Margin="27.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="HP" StatType="HP_RATE" Margin="27.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="MP" StatType="MP_RATE" Margin="27.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="DF/TF/PP" StatType="DF_TT_PP" Margin="27.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="크리티컬 확률" StatType="CRITICAL_CHANCE" Margin="27.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         
-        <subObjects:HyperStatSlot Text="크리 데미지" StatType="CRITICAL_DAMAGE" Margin="219.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="방어율 무시" StatType="IGNORE_DEF" Margin="219.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="데미지" StatType="DAMAGE" Margin="219.5, 336, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="보스 데미지" StatType="BOSS_DAMAGE" Margin="219.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="일반 데미지" StatType="COMMON_DAMAGE" Margin="219.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="상태 이상 내성" StatType="ABN_STATUS_RESIS" Margin="219.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="공격력 / 마력" StatType="ATTACK_AND_MAGIC" Margin="219.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="획득 경험치" StatType="EXP_INCREASE" Margin="219.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
-        <subObjects:HyperStatSlot Text="아케인 포스" StatType="ARCANE_FORCE" Margin="219.5, 504, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" LevelChanged="OnHyperStatLevelChanged"/>
+        <subObjects:HyperStatSlot Text="크리 데미지" StatType="CRITICAL_DAMAGE" Margin="219.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="방어율 무시" StatType="IGNORE_DEF" Margin="219.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="데미지" StatType="DAMAGE" Margin="219.5, 336, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="보스 데미지" StatType="BOSS_DAMAGE" Margin="219.5, 364, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="일반 데미지" StatType="COMMON_DAMAGE" Margin="219.5, 392, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="상태 이상 내성" StatType="ABN_STATUS_RESIS" Margin="219.5, 420, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="공격력 / 마력" StatType="ATTACK_AND_MAGIC" Margin="219.5, 448, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="획득 경험치" StatType="EXP_INCREASE" Margin="219.5, 476, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <subObjects:HyperStatSlot Text="아케인 포스" StatType="ARCANE_FORCE" Margin="219.5, 504, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
     </Grid>
 </UserControl>

@@ -37,7 +37,7 @@ public class BuilderDataContainer
     {
         PlayerStatus?.PlayerStat.Flush();
         RenderFrame.UpdateCharacterTop();
-        StatSymbol.Update();
+        // StatSymbol.Update();
         // Summarize.DispatchSummary();
     }
     
