@@ -47,7 +47,6 @@ public partial class UnionArtifactControl : UserControl
             foreach (string option in MapleArtifact.GetOptionList())
                 comboBox.Items.Add(option);
             comboBox.Items.Add("잠김");
-
             comboBox.Text = "잠김";
         }
 
