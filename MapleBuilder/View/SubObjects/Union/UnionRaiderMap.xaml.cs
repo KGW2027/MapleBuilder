@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -94,19 +95,45 @@ public partial class UnionRaiderMap : UserControl
         };
         // 유니온 스텟 선택
         DrawUnionInnerSelection();
+        
+        GlobalDataController.OnDataUpdated += OnDataUpdated;
     }
 
-    private void ApplyStatusChange(MapleStatus.StatusType statusType, double delta)
+    private void OnDataUpdated(PlayerData pdata)
     {
-        if (BuilderDataContainer.PlayerStatus == null) return;
-        if (statusType == MapleStatus.StatusType.IGNORE_DEF)
-        {
-            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] -= statClaimed[statusType] - delta;
-            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += statClaimed[statusType];
-        } else 
-            BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
+        GlobalDataController.OnDataUpdated -= OnDataUpdated;
 
-        BuilderDataContainer.RefreshAll();
+        Dispatcher.BeginInvoke(() =>
+        {
+            // Set Inner Stats
+            lockCombobox = true;
+            var innerTypes = GlobalDataController.Instance.PlayerInstance!.Raider.InnerStatus;
+            for (int idx = 0; idx < 8; idx++)
+            {
+                int ridx = (idx + 7) % 8;
+                Console.WriteLine($"{string.Join(", ", innerTypes)}");
+                string label = innerTypes[idx] switch
+                {
+                    MapleStatus.StatusType.STR => "STR",
+                    MapleStatus.StatusType.DEX => "DEX",
+                    MapleStatus.StatusType.INT => "INT",
+                    MapleStatus.StatusType.LUK => "LUK",
+                    MapleStatus.StatusType.HP => "HP",
+                    MapleStatus.StatusType.MP => "MP",
+                    MapleStatus.StatusType.ATTACK_POWER => "공격력",
+                    MapleStatus.StatusType.MAGIC_POWER => "마력",
+                    _ => throw new Exception($"Expected StatusType from UnionRaider sync sequence. {innerTypes[idx]}")
+                };
+
+                innerSelections[idx].Text = label;
+                displaysInner[idx].Content = label;
+            }
+            lockCombobox = false;
+            
+            var poses = pdata.Raider.InitClaimPoses;
+            for(int idx = 0 ; idx < poses.GetLength(0) ; idx++)
+                SafeToggleClaimBlock(poses[idx, 0], poses[idx, 1]);
+        });
     }
     
     #region Draw
@@ -207,27 +234,6 @@ public partial class UnionRaiderMap : UserControl
             .ToList();
     }
 
-    private double GetStatMultiplier(MapleStatus.StatusType statusType)
-    {
-        return statusType switch
-        {
-            MapleStatus.StatusType.STR => 5,
-            MapleStatus.StatusType.DEX => 5,
-            MapleStatus.StatusType.INT => 5,
-            MapleStatus.StatusType.LUK => 5,
-            MapleStatus.StatusType.MP => 250,
-            MapleStatus.StatusType.HP => 250,
-            MapleStatus.StatusType.EXP_INCREASE => 0.25,
-            MapleStatus.StatusType.CRITICAL_DAMAGE => 0.5,
-            _ => 1
-        };
-    }
-
-    private void SafeToggleClaimBlock(sbyte x, sbyte y)
-    {
-        SafeToggleClaimBlock(x+11, Math.Abs(y-10), true);
-    }
-    
     private void SafeToggleClaimBlock(int x, int y, bool beVisible)
     {
         bool isNull = claims[y, x] == null;
@@ -249,21 +255,12 @@ public partial class UnionRaiderMap : UserControl
             ctUnionBlocks.Children.Add(claims[y, x]!);
         }
 
-        MapleStatus.StatusType claimStatusType =
-            MapleUnion.GetStatusTypeByClaimType(MapleUnion.GetOptionBySlot(x-11, y+10), GetInnerStatus());
-        if (beVisible)
-        {
-            claims[y, x]!.Visibility = Visibility.Visible;
-            statClaimed.TryAdd(claimStatusType, 0);
-            statClaimed[claimStatusType]++;
-            ApplyStatusChange(claimStatusType, GetStatMultiplier(claimStatusType));
-        }
-        else
-        {
-            claims[y, x]!.Visibility = Visibility.Collapsed;
-            statClaimed[claimStatusType] = Math.Max(statClaimed[claimStatusType]-1, 0);
-            if(!isNull) ApplyStatusChange(claimStatusType, -GetStatMultiplier(claimStatusType));
-        }
+        var slotClaimType = MapleUnion.GetOptionBySlot(x-11, y+10);
+        int delta = beVisible ? 1 : -1;
+        claims[y, x]!.Visibility = beVisible ? Visibility.Visible : Visibility.Collapsed;
+
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        GlobalDataController.Instance.PlayerInstance.Raider[slotClaimType] += delta;
     }
 
     private void SafeToggleClaimBlockBulk(int x, int y, bool beVisible, MapleUnion.ClaimType targetType)
@@ -371,7 +368,7 @@ public partial class UnionRaiderMap : UserControl
     private void OnInnerSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (lockCombobox || e.AddedItems.Count == 0) return;
-        lockCombobox = true;
+        
         
         ComboBox comboBox = (ComboBox) sender;
         int selfIdx = -1, targetIdx = -1;
@@ -388,24 +385,34 @@ public partial class UnionRaiderMap : UserControl
             }
         }
 
-        List<MapleStatus.StatusType> innerStatus = GetInnerStatus();
+        if (selfIdx == -1 || targetIdx == -1) return;
+
+        lockCombobox = true;
         innerSelections[targetIdx].Text = comboBox.Text;
         displaysInner[targetIdx].Content = comboBox.Text;
-        
+
         innerSelections[selfIdx].Text = target;
         displaysInner[selfIdx].Content = target;
-
-        MapleStatus.StatusType targetStatusType = innerStatus[targetIdx];
-        MapleStatus.StatusType selfStatusType = innerStatus[selfIdx];
-        int targetClaim = statClaimed.GetValueOrDefault(targetStatusType, 0);
-        int selfClaim = statClaimed.GetValueOrDefault(selfStatusType, 0);
-        double targetMul = GetStatMultiplier(targetStatusType);
-        double selfMul = GetStatMultiplier(selfStatusType);
-        
-        ApplyStatusChange(targetStatusType, (selfClaim-targetClaim) * targetMul);
-        ApplyStatusChange(selfStatusType, (targetClaim-selfClaim) * selfMul);
-
         lockCombobox = false;
+        
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        string labels = "";
+        displaysInner.ForEach(l => labels += $", {l.Content}");
+        Console.WriteLine($"Labels : {labels}");
+        
+        GlobalDataController.Instance.PlayerInstance.Raider.SwapInners(targetIdx, selfIdx);
+        Console.WriteLine($"Radier.Inners : {string.Join(", ", GlobalDataController.Instance.PlayerInstance.Raider.InnerStatus)}");
+        
+        // MapleStatus.StatusType targetStatusType = innerStatus[targetIdx];
+        // MapleStatus.StatusType selfStatusType = innerStatus[selfIdx];
+        // int targetClaim = statClaimed.GetValueOrDefault(targetStatusType, 0);
+        // int selfClaim = statClaimed.GetValueOrDefault(selfStatusType, 0);
+        // double targetMul = GetStatMultiplier(targetStatusType);
+        // double selfMul = GetStatMultiplier(selfStatusType);
+        //
+        // ApplyStatusChange(targetStatusType, (selfClaim-targetClaim) * targetMul);
+        // ApplyStatusChange(selfStatusType, (targetClaim-selfClaim) * selfMul);
+
     }
 
     #endregion

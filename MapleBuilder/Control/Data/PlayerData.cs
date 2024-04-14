@@ -154,7 +154,12 @@ public class PlayerData
 
     public MapleStatContainer GetStatus()
     {
-        MapleStatContainer statusContainer = new MapleStatContainer();
+        MapleStatContainer statusContainer = new MapleStatContainer
+        {
+            MainStatType = AffectTypes[0],
+            SubStatType  = AffectTypes[1],
+            SubStat2Type = AffectTypes[2]
+        };
         statusContainer = statContainers.Aggregate(statusContainer, (current, container) => current + container.Value);
         statusContainer.Flush();
 

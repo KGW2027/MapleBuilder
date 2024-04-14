@@ -107,6 +107,8 @@ public partial class Summarize : UserControl
             ctTolerance.Content = $"{dp[MapleStatus.StatusType.ABN_STATUS_RESIS]}";
             ctIgnoreImmune.Content = $"{dp[MapleStatus.StatusType.IGNORE_IMMUNE]:F2}%";
 
+            ctAtkLabel.Content = dp.AttackFlatType == MapleStatus.StatusType.ATTACK_POWER ? "공격력" : "마력";
+            ctAtkrLabel.Content = dp.AttackRateType == MapleStatus.StatusType.ATTACK_RATE ? "공격력%" : "마력%";
             ctAtkVal.Content = $"{dp[dp.AttackFlatType]:N0}";
             ctAtkRate.Content = $"{dp[dp.AttackRateType]}%";
         });

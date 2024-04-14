@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
+             xmlns:union="clr-namespace:MapleBuilder.View.SubObjects.Union"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
     <Grid>
@@ -30,7 +31,7 @@
         
         <!-- 유니온 아티팩트 -->
         <Grid x:Name="ctArtifact" Visibility="Collapsed">
-            <subObjects:UnionArtifactPanel Margin="8, 48, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <union:UnionArtifactPanel Margin="8, 48, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         </Grid>
     </Grid>
 </UserControl>

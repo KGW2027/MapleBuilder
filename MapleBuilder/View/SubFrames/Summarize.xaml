@@ -114,9 +114,9 @@
                 <Label Content="속성 내성 무시" FontSize="10" FontWeight="Thin" Margin="0, 398, 151,0" HorizontalAlignment="Right"/>
                 <Label x:Name="ctIgnoreImmune" Content="5.00%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="103, 398, 0, 0"/>
                 
-                <Label Content="공격력/마력" FontSize="10" FontWeight="Thin" Margin="0, 290, 41,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctAtkLabel" Content="공격력/마력" FontSize="10" FontWeight="Thin" Margin="0, 290, 41,0" HorizontalAlignment="Right"/>
                 <Label x:Name="ctAtkVal" Content="99,999" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="214, 290,0, 0"/>
-                <Label Content="공격력/마력%" FontSize="10" FontWeight="Thin" Margin="0, 302, 41,0" HorizontalAlignment="Right"/>
+                <Label x:Name="ctAtkrLabel" Content="공격력/마력%" FontSize="10" FontWeight="Thin" Margin="0, 302, 41,0" HorizontalAlignment="Right"/>
                 <Label x:Name="ctAtkRate" Content="100%" FontSize="10" FontWeight="Regular" Foreground="#17AF12" Margin="214, 302,0, 0"/>
                 
                 <!-- Special -->
