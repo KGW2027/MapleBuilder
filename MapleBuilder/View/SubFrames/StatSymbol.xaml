@@ -60,24 +60,7 @@
         
         <!-- 어빌리티 -->
         <statSymbol:AbilityPanel Margin="424, 420, 0, 0"/>
-        <!-- <Label Content="어빌리티" Margin="429, 398, 0, 0"/> -->
-        <!-- <ComboBox x:Name="ctGradeAbility" Width="83" Height="24" Margin="445, 430, 0, 0"  -->
-        <!--           Background="#222222" Text="레전드리" SelectionChanged="OnAbilityGradeChanged"/> -->
-        <!-- -->
-        <!-- <ComboBox x:Name="ctAbility1" Width="318" Height="24" Margin="445, 462, 0, 0"  -->
-        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
-        <!-- <Slider x:Name="ctAbilitySlider1"  Width="200" Height="18" Margin="445, 489, 0, 0" Minimum="1" Maximum="1" Value="1" ValueChanged="OnSliderChanged"/> -->
-        <!-- -->
-        <!-- <ComboBox x:Name="ctAbility2" Width="318" Height="24" Margin="445, 511, 0, 0"  -->
-        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
-        <!-- <Slider x:Name="ctAbilitySlider2" Width="200" Height="18" Margin="445, 538, 0, 0" Minimum="8" Maximum="10" Value="9" SmallChange="1" ValueChanged="OnSliderChanged"/> -->
-        <!-- <CheckBox x:Name="ctAbilityOver2" Margin="770, 515, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/> -->
-        <!-- -->
-        <!-- <ComboBox x:Name="ctAbility3" Width="318" Height="24" Margin="445, 560, 0, 0"  -->
-        <!--           Background="#222222" Text="스킬 사용 시 10% 확률로 재사용 대기시간이 미적용" SelectionChanged="OnAbilitySelectionChanged"/> -->
-        <!-- <Slider x:Name="ctAbilitySlider3"  Width="200" Height="18" Margin="445, 587, 0, 0" Minimum="5" Maximum="11" Value="5" SmallChange="2" ValueChanged="OnSliderChanged"/> -->
-        <!-- <CheckBox x:Name="ctAbilityOver3" Margin="770, 564, 0, 0" Content="이탈" Checked="OnCheckboxChecked" Unchecked="OnCheckboxUnchecked"/> -->
-        
+
         <!-- 하이퍼 스탯 -->
         <subObjects:HyperStatSlot Text="STR" StatType="STR_FLAT" Margin="27.5, 280, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <subObjects:HyperStatSlot Text="DEX" StatType="DEX_FLAT" Margin="27.5, 308, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
