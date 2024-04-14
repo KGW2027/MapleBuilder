@@ -37,7 +37,10 @@ public class RaiderWrapper : StatWrapper
 
     public void SwapInners(int idx1, int idx2)
     {
-        Console.WriteLine($"Swap {InnerStatus[idx1]} with {InnerStatus[idx2]}");
+        double val1 = GetClaimMultiplier(InnerStatus[idx1]) * this[(MapleUnion.ClaimType) (idx1 + 1)];
+        double val2 = GetClaimMultiplier(InnerStatus[idx2]) * this[(MapleUnion.ClaimType) (idx2 + 1)];
+        this[InnerStatus[idx1]] = val2;
+        this[InnerStatus[idx2]] = val1;
         (InnerStatus[idx1], InnerStatus[idx2]) = (InnerStatus[idx2], InnerStatus[idx1]);
     }
 
@@ -64,8 +67,7 @@ public class RaiderWrapper : StatWrapper
     {
         MapleStatus.StatusType statusType = MapleUnion.GetStatusTypeByClaimType(claimType, InnerStatus);
         double multiplier = GetClaimMultiplier(statusType);
-        Console.WriteLine($"Claim Changed {statusType} from {prev} to {next}");
-        CallStatusChanged(statusType, prev * multiplier, next * multiplier);
+        this[statusType] += multiplier * (next-prev);
     }
     
     private double GetClaimMultiplier(MapleStatus.StatusType statusType)

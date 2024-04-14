@@ -19,68 +19,17 @@ public partial class UnionRaiderMap : UserControl
     private static readonly SolidColorBrush BORDER_BRUSH = new(Colors.White);
     private static readonly SolidColorBrush CLAIM_BRUSH = new(Color.FromArgb(0xF0, 170, 136, 102));
     private static Stopwatch _doubleClickTester = new();
-    private static UnionRaiderMap? _selfInstance;
     
     private readonly UIElement?[,] claims;
-    private readonly Dictionary<MapleStatus.StatusType, int> statClaimed;
     private readonly List<ComboBox> innerSelections;
     private readonly List<Label> displaysInner;
     private bool lockCombobox;
 
-    public static void UpdateUnionRaider(List<MapleUnion.UnionBlock> unionBlocks, List<MapleStatus.StatusType> innerTypes)
-    {
-        _selfInstance!.Dispatcher.BeginInvoke(() =>
-        {
-            // Clear Array
-            _selfInstance.statClaimed.Clear();
-            for(int y = 0 ; y < _selfInstance.claims.GetLength(0) ; y++)
-                for(int x = 0 ; x < _selfInstance.claims.GetLength(1) ; x++)
-                    if (_selfInstance.claims[y, x] != null)
-                    {
-                        _selfInstance.claims[y, x]!.Visibility = Visibility.Collapsed;
-                        _selfInstance.claims[y, x] = null;
-                    }
-            
-            // Set Inner Stats
-            _selfInstance.lockCombobox = true;
-            for (int idx = 0; idx < 8; idx++)
-            {
-                int ridx = (idx + 7) % 8;
-                string label = innerTypes[idx] switch
-                {
-                    MapleStatus.StatusType.STR => "STR",
-                    MapleStatus.StatusType.DEX => "DEX",
-                    MapleStatus.StatusType.INT => "INT",
-                    MapleStatus.StatusType.LUK => "LUK",
-                    MapleStatus.StatusType.HP => "HP",
-                    MapleStatus.StatusType.MP => "MP",
-                    MapleStatus.StatusType.ATTACK_POWER => "공격력",
-                    MapleStatus.StatusType.MAGIC_POWER => "마력",
-                    _ => throw new Exception($"Expected StatusType from UnionRaider sync sequence. {innerTypes[idx]}")
-                };
-
-                _selfInstance.innerSelections[ridx].Text = label;
-                _selfInstance.displaysInner[ridx].Content = label;
-            }
-            _selfInstance.lockCombobox = false;
-            
-            // Fill Union Raider Claims
-            foreach (var unionBlock in unionBlocks)
-            {
-                foreach(sbyte[] pos in unionBlock.blockPositions)
-                    _selfInstance.SafeToggleClaimBlock(pos[0], pos[1]);
-            }
-            // BuilderDataContainer.RefreshAll();
-        });
-        
-    }
     
     public UnionRaiderMap()
     {
         claims = new UIElement?[20, 22];
         innerSelections = new List<ComboBox>();
-        statClaimed = new Dictionary<MapleStatus.StatusType, int>();
-        _selfInstance = this;
             
         InitializeComponent();
         // 유니온 블럭 X,Y 선
@@ -110,8 +59,6 @@ public partial class UnionRaiderMap : UserControl
             var innerTypes = GlobalDataController.Instance.PlayerInstance!.Raider.InnerStatus;
             for (int idx = 0; idx < 8; idx++)
             {
-                int ridx = (idx + 7) % 8;
-                Console.WriteLine($"{string.Join(", ", innerTypes)}");
                 string label = innerTypes[idx] switch
                 {
                     MapleStatus.StatusType.STR => "STR",
@@ -396,23 +343,7 @@ public partial class UnionRaiderMap : UserControl
         lockCombobox = false;
         
         if (GlobalDataController.Instance.PlayerInstance == null) return;
-        string labels = "";
-        displaysInner.ForEach(l => labels += $", {l.Content}");
-        Console.WriteLine($"Labels : {labels}");
-        
         GlobalDataController.Instance.PlayerInstance.Raider.SwapInners(targetIdx, selfIdx);
-        Console.WriteLine($"Radier.Inners : {string.Join(", ", GlobalDataController.Instance.PlayerInstance.Raider.InnerStatus)}");
-        
-        // MapleStatus.StatusType targetStatusType = innerStatus[targetIdx];
-        // MapleStatus.StatusType selfStatusType = innerStatus[selfIdx];
-        // int targetClaim = statClaimed.GetValueOrDefault(targetStatusType, 0);
-        // int selfClaim = statClaimed.GetValueOrDefault(selfStatusType, 0);
-        // double targetMul = GetStatMultiplier(targetStatusType);
-        // double selfMul = GetStatMultiplier(selfStatusType);
-        //
-        // ApplyStatusChange(targetStatusType, (selfClaim-targetClaim) * targetMul);
-        // ApplyStatusChange(selfStatusType, (targetClaim-selfClaim) * selfMul);
-
     }
 
     #endregion

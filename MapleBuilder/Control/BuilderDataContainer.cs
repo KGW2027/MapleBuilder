@@ -59,32 +59,32 @@ public class BuilderDataContainer
         // PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
         PlayerStatus.ApplyPetItem(charInfo.PetEquips);
         // 임시 성향 로드 코드
-        foreach (var pair in charInfo.PropensityLevels)
-        {
-            MapleStatus.StatusType[] propStatTypes = MaplePropensity.GetStatusByPropensity(pair.Key);
-            double[] args = MaplePropensity.GetStatusValueByPropensity(pair.Key);
-
-            for (int idx = 0; idx < propStatTypes.Length; idx++)
-            {
-                double delta = args[idx + 1] * Math.Floor(pair.Value / args[0]);
-                PlayerStatus.PlayerStat[propStatTypes[idx]] += delta;
-            }
-        }
+        // foreach (var pair in charInfo.PropensityLevels)
+        // {
+        //     MapleStatus.StatusType[] propStatTypes = MaplePropensity.GetStatusByPropensity(pair.Key);
+        //     double[] args = MaplePropensity.GetStatusValueByPropensity(pair.Key);
+        //
+        //     for (int idx = 0; idx < propStatTypes.Length; idx++)
+        //     {
+        //         double delta = args[idx + 1] * Math.Floor(pair.Value / args[0]);
+        //         PlayerStatus.PlayerStat[propStatTypes[idx]] += delta;
+        //     }
+        // }
         // 임시 헥사 스텟 로드 코드
-        MapleHexaStatus.HexaStatus hexaStatus = charInfo.HexaStatLevels;
-        if (hexaStatus.MainStat.Key != MapleStatus.StatusType.OTHER)
-        {
-            PlayerStatus.PlayerStat[hexaStatus.MainStat.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.MainStat.Key,
-                hexaStatus.MainStat.Value, true, charInfo.Class);
-            PlayerStatus.PlayerStat[hexaStatus.SubStat1.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat1.Key,
-                hexaStatus.SubStat1.Value, false, charInfo.Class);
-            PlayerStatus.PlayerStat[hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
-                hexaStatus.SubStat2.Value, false, charInfo.Class);
-        }
-        RenderOverview.Update(charInfo);
+        // MapleHexaStatus.HexaStatus hexaStatus = charInfo.HexaStatLevels;
+        // if (hexaStatus.MainStat.Key != MapleStatus.StatusType.OTHER)
+        // {
+        //     PlayerStatus.PlayerStat[hexaStatus.MainStat.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.MainStat.Key,
+        //         hexaStatus.MainStat.Value, true, charInfo.Class);
+        //     PlayerStatus.PlayerStat[hexaStatus.SubStat1.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat1.Key,
+        //         hexaStatus.SubStat1.Value, false, charInfo.Class);
+        //     PlayerStatus.PlayerStat[hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
+        //         hexaStatus.SubStat2.Value, false, charInfo.Class);
+        // }
+        // RenderOverview.Update(charInfo);
         foreach (var unionInfo in charInfo.UnionInfo)
             UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
-        UnionRaiderMap.UpdateUnionRaider(charInfo.UnionInfo, charInfo.UnionInner);
+        // UnionRaiderMap.UpdateUnionRaider(charInfo.UnionInfo, charInfo.UnionInner);
         // UnionArtifactPanel.UpdateArtifactPanel(charInfo.ArtifactPanels);
         
         foreach(var pair in charInfo.SkillData)
