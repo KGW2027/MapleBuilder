@@ -74,10 +74,8 @@ public static class AddOptions
                     newCombinations.Add(newCombination);
                 }
             }
-
             combinations = newCombinations;
         }
-
         return combinations;
     }
 
@@ -101,9 +99,21 @@ public static class AddOptions
                 if ((type & AddOptionType.INT) == AddOptionType.INT && lnt == 0) bClearZeroTest = false;
                 if ((type & AddOptionType.LUK) == AddOptionType.LUK && luk == 0) bClearZeroTest = false;
             }
-            
             if (!bClearZeroTest) continue;
+            
+            // Duplicate Test
+            bool bClearDuplicateTest = true;
+            for (int idx = 0; idx < addOptionTypes.Length; idx++)
+            {
+                for (int jdx = idx+1; jdx < addOptionTypes.Length; jdx++)
+                {
+                    if (addOptionTypes[idx] == addOptionTypes[jdx]) bClearDuplicateTest = false;
+                }
+            }
 
+            if (!bClearDuplicateTest) continue;
+            
+            // Test Status
             foreach (var enumerable in grades)
             {
                 int[] levels = enumerable.ToArray();
@@ -149,16 +159,13 @@ public static class AddOptions
                             testInt += doubleSt * levels[i];
                             testLuk += doubleSt * levels[i];
                             break;
-                        default:
-                            continue;
                     }
                 }
+
                 if (testStr != str || testDex != dex || testInt != lnt || testLuk != luk) continue;
-                {
-                    for (int i = 0; i < rem; i++)
-                        dict.TryAdd(addOptionTypes[i], levels[i]);
-                    return true;
-                }
+                for (int i = 0; i < rem; i++)
+                    dict.TryAdd(addOptionTypes[i], levels[i]);
+                return true;
             }
         }
 
@@ -204,6 +211,7 @@ public static class AddOptions
         int luk = (int) msc[MapleStatus.StatusType.LUK];
         int remSlot = 4 - addOptions.Count;
         
+        // Console.WriteLine($"[추가옵션 분석 :: {item.UniqueName}] 남은 슬롯 - {remSlot}, STR {str}, DEX {dex}, INT {lnt}, LUK {luk}");
         // 스텟 분석
         do if (item.StatAnalysis(addOptions, str, dex, lnt, luk, remSlot)) break;
         while (--remSlot > 0);
