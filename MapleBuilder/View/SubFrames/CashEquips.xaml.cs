@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.View.SubFrames;
 
@@ -70,10 +71,6 @@ public partial class CashEquips : UserControl
         string next = e.AddedItems[0]!.ToString()!;
 
         if (setOptions.TryGetValue(before, out var prev) && setOptions.TryGetValue(next, out var now))
-        {
-            // BuilderDataContainer.PlayerStatus.PlayerStat += (now - prev);
-            // BuilderDataContainer.RefreshAll();
-        }
-
+            GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT] += (now - prev);
     }
 }

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.View.SubObjects;
 
@@ -93,20 +94,18 @@ public partial class CashEquipSlot : UserControl
             }
             ApplySliderValue(index, text);
 
-
-            // if (BuilderDataContainer.PlayerStatus == null) return;
-            // int sliderValue = (int) sliders[index].Value;
-            // if (EquipType != MapleEquipType.EquipType.WEAPON)
-            // {
-            //     if (Enum.TryParse(selectBoxes[index].Text, out MapleStatus.StatusType befStat))
-            //         BuilderDataContainer.PlayerStatus.PlayerStat[befStat] -= sliderValue;
-            //     
-            //     if (Enum.TryParse(text, out MapleStatus.StatusType newStat))
-            //         BuilderDataContainer.PlayerStatus.PlayerStat[newStat] += sliderValue;
-            //     
-            //     BuilderDataContainer.RefreshAll();
-            // }
-            
+            if (GlobalDataController.Instance.PlayerInstance == null) return;
+            int sliderValue = (int) sliders[index].Value;
+            if (EquipType != MapleEquipType.EquipType.WEAPON)
+            {
+                if (Enum.TryParse(selectBoxes[index].Text, out MapleStatus.StatusType befStat))
+                    GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT, befStat] -=
+                        sliderValue;
+                
+                if (Enum.TryParse(text, out MapleStatus.StatusType newStat))
+                    GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT, newStat] +=
+                        sliderValue;
+            }
             break;
         }
     }
@@ -127,26 +126,27 @@ public partial class CashEquipSlot : UserControl
 
     private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
     {
-    //     for (int index = 0; index < 3; index++)
-    //     {
-    //         if (sliders[index] != (Slider) sender) continue;
-    //         ApplySliderValue(index, selectBoxes[index].Text);
-    //
-    //         if (BuilderDataContainer.PlayerStatus == null || selectBoxes[index].Text.Equals("없음")) break;
-    //         int delta = (int)e.NewValue - (int)e.OldValue;
-    //         if (EquipType == MapleEquipType.EquipType.WEAPON)
-    //         {
-    //             BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.ATTACK_POWER] += delta;
-    //             BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.MAGIC_POWER] += delta;
-    //         }
-    //         else if(Enum.TryParse(selectBoxes[index].Text, out MapleStatus.StatusType statusType))
-    //         {
-    //             BuilderDataContainer.PlayerStatus.PlayerStat[statusType] += delta;
-    //         }
-    //         
-    //         BuilderDataContainer.RefreshAll();
-    //         break;
-    //     }
+        for (int index = 0; index < 3; index++)
+        {
+            if (sliders[index] != (Slider) sender) continue;
+            ApplySliderValue(index, selectBoxes[index].Text);
+
+            if (GlobalDataController.Instance.PlayerInstance == null) break;
+            if (selectBoxes[index].Text.Equals("없음")) break;
+            
+            int delta = (int)e.NewValue - (int)e.OldValue;
+            if (EquipType == MapleEquipType.EquipType.WEAPON)
+            {
+                GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT,
+                    MapleStatus.StatusType.ATTACK_POWER] += delta;
+                GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT,
+                    MapleStatus.StatusType.MAGIC_POWER] += delta;
+            }
+            else if(Enum.TryParse(selectBoxes[index].Text, out MapleStatus.StatusType statusType))
+            {
+                GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT, statusType] += delta;
+            }
+        }
     }
 
     private void ApplySliderValue(int idx, string text)
