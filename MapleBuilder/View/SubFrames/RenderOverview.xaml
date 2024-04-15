@@ -25,7 +25,7 @@
         <TextBox x:Name="ctItemFilter" Width="186" Height="24" Margin="472, 44, 0, 0" TextChanged="OnSearchText"/>
         
         <ScrollViewer VerticalScrollBarVisibility="Hidden" CanContentScroll="True" Height="585" Width="539" HorizontalAlignment="Left" HorizontalContentAlignment="Left" VerticalAlignment="Top" VerticalContentAlignment="Top" Margin="425, 75, 0, 0">
-            <StackPanel x:Name="ctItemListStack" Width="539" Background="#111111" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical"/>
+            <StackPanel x:Name="ItemButtonStackPanel" Width="539" Background="#111111" HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical"/>
         </ScrollViewer>
         <!-- <Border Margin="425, 75, 0, 0" BorderBrush="#707070" BorderThickness="1"/> -->
         

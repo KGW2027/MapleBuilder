@@ -42,6 +42,10 @@ public class PlayerData
         equipData = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
         symbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         
+        PlayerImage = cInfo.PlayerImage;
+        PlayerName = cInfo.PlayerName;
+        PlayerGuild = cInfo.GuildName;
+        
         HyperStat = new HyperStatWrapper(cInfo.HyperStatLevels, OnStatusChanged);
         Ability = new AbilityWrapper(cInfo.AbilityValues, OnStatusChanged);
         Artifact = new ArtifactWrapper(cInfo.ArtifactPanels, OnStatusChanged);
@@ -95,6 +99,12 @@ public class PlayerData
     
     public readonly MapleStatus.StatusType[] AffectTypes;
     public MapleClass.ClassType Class => playerClass;
+    
+    public readonly byte[] PlayerImage;
+    public readonly string PlayerName;
+    public readonly string PlayerGuild;
+    public int Level => level;
+    
 
     public double this[StatSources source, MapleStatus.StatusType statusType]
     {
@@ -119,21 +129,6 @@ public class PlayerData
             AlertUpdate();
         }
     }
-
-    // public ItemBase? this[MapleEquipType.EquipType equipType]
-    // {
-    //     get => equipData.GetValueOrDefault(equipType);
-    //     set
-    //     {
-    //         ItemBase? curItem = this[equipType];
-    //         if (curItem != null)
-    //             RemoveItem(curItem);
-    //         equipData.TryAdd(equipType, null);
-    //         equipData[equipType] = value;
-    //         AddItem(value);
-    //         AlertUpdate();
-    //     }
-    // }
 
     public int this[MapleSymbol.SymbolType symbolType]
     {

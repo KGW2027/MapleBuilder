@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 using MapleBuilder.View.SubFrames;
 
 namespace MapleBuilder.View.SubObjects;
@@ -13,23 +15,28 @@ public partial class OverviewTopbar : UserControl
     public OverviewTopbar()
     {
         InitializeComponent();
+        
+        GlobalDataController.OnDataUpdated += OnDataUpdated;
     }
 
-    // public async void UpdateProfileImage()
-    // {
-    //     while (BuilderDataContainer.CharacterInfo == null || BuilderDataContainer.CharacterInfo.PlayerImage.Length == 0) await Task.Delay(100);
-    //     
-    //     BitmapImage bitmapImage = new BitmapImage();
-    //     bitmapImage.BeginInit();
-    //     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-    //     bitmapImage.StreamSource = new MemoryStream(BuilderDataContainer.CharacterInfo.PlayerImage);
-    //     bitmapImage.EndInit();
-    //     
-    //     await Dispatcher.BeginInvoke(() =>
-    //     {
-    //         ctCharacterImage.Source = bitmapImage;
-    //     });
-    // }
+    private void OnDataUpdated(PlayerData pdata)
+    {
+        Dispatcher.BeginInvoke(() =>
+        {
+            BitmapImage bitmapImage = new BitmapImage();
+            bitmapImage.BeginInit();
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapImage.StreamSource = new MemoryStream(pdata.PlayerImage);
+            bitmapImage.EndInit();
+
+            PlayerThumbnail.Source = bitmapImage;
+            PlayerGuild.Content = pdata.PlayerGuild;
+            PlayerName.Content = pdata.PlayerName;
+            PlayerLvAndClass.Content = $"LV {pdata.Level} {MapleClass.GetMapleClassString(pdata.Class)}";
+            PlayerSymbol.Content =
+                $"Arcane {pdata[PlayerData.StatSources.SYMBOL, MapleStatus.StatusType.ARCANE_FORCE]}\nAuthentic {pdata[PlayerData.StatSources.SYMBOL, MapleStatus.StatusType.AUTHENTIC_FORCE]}";
+        });
+    }
 
     private void OnChangeScreenToEquip(object sender, RoutedEventArgs e)
     {

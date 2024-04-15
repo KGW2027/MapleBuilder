@@ -7,6 +7,7 @@ using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 using MapleBuilder.Control.Data;
+using MapleBuilder.Control.Data.Item;
 using MapleBuilder.Control.Data.Spec;
 using MapleBuilder.View.SubObjects;
 
@@ -14,46 +15,9 @@ namespace MapleBuilder.View.SubFrames;
 
 public partial class RenderOverview : UserControl
 {
-    // private static readonly Style? BUTTON_STYLE = (Style?)Application.Current.Resources[typeof(Button)];
-    //
-    // private void OnRegisterItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    // {
-    //     Dictionary<string, MapleItemBase> hashToItem = new();
-    //     Dictionary<string, bool> hashToBool = new();
-    //
-    //     selfInstance!.Dispatcher.BeginInvoke(() =>
-    //     {
-    //         List<UIElement> removes = new();
-    //         foreach (var element in ctItemListStack.Children)
-    //         {
-    //             string eHash = ((Button) element).Tag.ToString()!;
-    //             if (hashToBool.ContainsKey(eHash)) hashToBool[eHash] = true;
-    //             else removes.Add((UIElement) element);
-    //         }
-    //
-    //         removes.ForEach(obj => ctItemListStack.Children.Remove(obj));
-    //
-    //         foreach (var pair in hashToItem)
-    //         {
-    //             if (hashToBool[pair.Key]) continue;
-    //
-    //             Button newButton = new Button
-    //             {
-    //                 Tag = pair.Key,
-    //                 Style = BUTTON_STYLE,
-    //                 Content = pair.Value.DisplayName,
-    //                 HorizontalContentAlignment = HorizontalAlignment.Left,
-    //                 Width = 537,
-    //                 Height = 32,
-    //                 Padding = new Thickness(12, 0, 0, 0)
-    //             };
-    //             newButton.Click += EditItem;
-    //             ctItemListStack.Children.Add(newButton);
-    //         }
-    //     });
-    // }
+    private static readonly Style? BUTTON_STYLE = (Style?)Application.Current.Resources[typeof(Button)];
 
-    public EquipmentSlot? this[MapleEquipType.EquipType type, int slot]
+    private EquipmentSlot? this[MapleEquipType.EquipType type, int slot]
     {
         get
         {
@@ -112,15 +76,65 @@ public partial class RenderOverview : UserControl
             return null;
         }
     }
-
-
+    
     public RenderOverview()
     {
         InitializeComponent();
 
         EquipWrapper.OnEquipmentChanged += OnEquipmentChanged;
+        ItemDatabase.Instance.CachedItemList.CollectionChanged += CachedItemListOnCollectionChanged;
     }
-    
+
+    private Button NewButton(string name, string hash)
+    {
+        return new Button
+        {
+            Tag = hash,
+            Style = BUTTON_STYLE,
+            Content = name,
+            HorizontalContentAlignment = HorizontalAlignment.Left,
+            Width = 537,
+            Height = 32,
+            Padding = new Thickness(12, 0, 0, 0)
+        };
+    }
+
+    private void CachedItemListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        Dispatcher.BeginInvoke(() =>
+        {
+            if (e.NewItems != null)
+            {
+                foreach (object o in e.NewItems)
+                {
+                    ItemBase itembase = (ItemBase) o;
+                    var button = NewButton(itembase.DisplayName, itembase.GetHashCode().ToString());
+                    button.Click += EditItem;
+                    ItemButtonStackPanel.Children.Add(button);
+                }
+            }
+
+            if (e.OldItems is not {Count: > 0}) return;
+
+            List<string> oldItemHashes = new List<string>();
+            foreach (var oldItem in e.OldItems)
+            {
+                ItemBase itembase = (ItemBase) oldItem;
+                oldItemHashes.Add(itembase.GetHashCode().ToString());
+            }
+
+            List<UIElement> deleteQueue = new List<UIElement>();
+            foreach (var o in ItemButtonStackPanel.Children)
+            {
+                if (o is not Button button) continue;
+                if (oldItemHashes.Contains(button.Tag.ToString()!))
+                    deleteQueue.Add(button);
+            }
+
+            deleteQueue.ForEach(del => ItemButtonStackPanel.Children.Remove(del));
+        });
+    }
+
     private void OnEquipmentChanged(MapleEquipType.EquipType type, int slot)
     {
         EquipmentSlot? element = this[type, slot];

@@ -7,11 +7,11 @@
              mc:Ignorable="d"
              d:DesignHeight="150" d:DesignWidth="417" Background="Transparent">
     <Grid>
-        <Image Name="ctCharacterImage" Width="120" Height="120" Margin="8, 30, 0, 0"/>
-        <Label Name="ctCharacterName" Content="불러오는 중 입니다.." Margin="126, 22, 0, 0" FontSize="20"/>
-        <Label Name="ctCharacterLevelAndClass" Content="" FontWeight="Light" FontSize="12" Margin="126, 58, 0, 0"/>
-        <Label Name="ctCharacterGuild" Content="" FontWeight="Light" FontSize="12" Margin="126, 80, 0, 0"/>
-        <Label Name="ctCharacterSymbol" Content="" FontWeight="Light" FontSize="12" Margin="126, 102, 0, 0"/>
+        <Image Name="PlayerThumbnail" Width="120" Height="120" Margin="8, 30, 0, 0"/>
+        <Label Name="PlayerName" Content="불러오는 중 입니다.." Margin="126, 22, 0, 0" FontSize="20"/>
+        <Label Name="PlayerLvAndClass" Content="" FontWeight="Light" FontSize="12" Margin="126, 58, 0, 0"/>
+        <Label Name="PlayerGuild" Content="" FontWeight="Light" FontSize="12" Margin="126, 80, 0, 0"/>
+        <Label Name="PlayerSymbol" Content="" FontWeight="Light" FontSize="12" Margin="126, 102, 0, 0"/>
         
         <Button Content="장비 설정" Width="134" Height="24" Margin="267, 31, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToEquip"/>
         <Button Content="스텟 / 심볼" Width="134" Height="24" Margin="267, 59, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Click="OnChangeScreenToStatSymbol"/>
