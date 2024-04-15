@@ -207,8 +207,9 @@ public class EquipmentData : IWzSerializable
             if (thumbnail != null) return thumbnail;
             thumbnail = new BitmapImage();
             if (iconPath == null) return thumbnail;
-            thumbnail.BeginInit();
             string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, iconPath);
+            if (!File.Exists(fullPath)) return thumbnail;
+            thumbnail.BeginInit();
             thumbnail.UriSource = new Uri(fullPath);
             thumbnail.EndInit();
             return thumbnail;
