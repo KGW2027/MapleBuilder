@@ -1,5 +1,6 @@
 ﻿using System;
 using MapleAPI.DataType;
+using MapleAPI.Enum;
 using MapleBuilder.Control.Data;
 using MapleBuilder.Control.Data.Item;
 
@@ -23,54 +24,21 @@ public class GlobalDataController
 
         PlayerInstance = new PlayerData(cInfo);
 
+        int ringCount = 0, pendCount = 0;
         foreach (var equipItem in cInfo.Items)
         {
             if (!ItemDatabase.Instance.RegisterItem(equipItem, out ItemBase? item, cInfo.PlayerName) ||
                 item == null) continue;
-            if (PlayerInstance[item.EquipType] != null) continue;
-            PlayerInstance[item.EquipType] = item;
+
+            if (item.EquipType == MapleEquipType.EquipType.RING && ringCount <= 3)
+                PlayerInstance.Equipment[item.EquipType, ringCount++] = item;
+            else if (item.EquipType == MapleEquipType.EquipType.PENDANT && pendCount <= 1)
+                PlayerInstance.Equipment[item.EquipType, pendCount++] = item;
+            else if (PlayerInstance.Equipment[item.EquipType, 0] == null)
+                PlayerInstance.Equipment[item.EquipType, 0] = item;
         }
         
         OnDataUpdated!.Invoke(PlayerInstance);
-
-        //MapleStatus.StatusType[] statTypes = MapleClass.GetClassStatType(charInfo.Class);
-        // PlayerStatus = new PlayerInfo(charInfo.Level, statTypes[0], statTypes[1], statTypes[2]);
-        // PlayerStatus.ApplySymbolData(charInfo.SymbolLevels);
-        // PlayerStatus.ApplyPetItem(charInfo.PetEquips);
-        // // 임시 성향 로드 코드
-        // foreach (var pair in charInfo.PropensityLevels)
-        // {
-        //     MapleStatus.StatusType[] propStatTypes = MaplePropensity.GetStatusByPropensity(pair.Key);
-        //     double[] args = MaplePropensity.GetStatusValueByPropensity(pair.Key);
-        //
-        //     for (int idx = 0; idx < propStatTypes.Length; idx++)
-        //     {
-        //         double delta = args[idx + 1] * Math.Floor(pair.Value / args[0]);
-        //         PlayerStatus.PlayerStat[propStatTypes[idx]] += delta;
-        //     }
-        // }
-        // // 임시 헥사 스텟 로드 코드
-        // MapleHexaStatus.HexaStatus hexaStatus = charInfo.HexaStatLevels;
-        // if (hexaStatus.MainStat.Key != MapleStatus.StatusType.OTHER)
-        // {
-        //     PlayerStatus.PlayerStat[hexaStatus.MainStat.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.MainStat.Key,
-        //         hexaStatus.MainStat.Value, true, charInfo.Class);
-        //     PlayerStatus.PlayerStat[hexaStatus.SubStat1.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat1.Key,
-        //         hexaStatus.SubStat1.Value, false, charInfo.Class);
-        //     PlayerStatus.PlayerStat[hexaStatus.SubStat2.Key] += MapleHexaStatus.GetStatusValue(hexaStatus.SubStat2.Key,
-        //         hexaStatus.SubStat2.Value, false, charInfo.Class);
-        // }
-        //
-        // StatSymbol.InitAbility(charInfo.AbilityValues);
-        // StatSymbol.InitHyperStat(charInfo.HyperStatLevels);
-        // RenderOverview.Update(charInfo);
-        // foreach (var unionInfo in charInfo.UnionInfo)
-        //     UnionFrame.UpdateUnionRank(unionInfo.classType, unionInfo.raiderRank);
-        // UnionRaiderMap.UpdateUnionRaider(charInfo.UnionInfo, charInfo.UnionInner);
-        // UnionArtifactPanel.UpdateArtifactPanel(charInfo.ArtifactPanels);
-        //
-        // foreach(var pair in charInfo.SkillData)
-        //     Console.WriteLine($"{pair.Key} : {pair.Value}");
     }
     
     public PlayerData? PlayerInstance { get; private set; }

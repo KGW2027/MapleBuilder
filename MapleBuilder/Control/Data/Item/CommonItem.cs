@@ -164,28 +164,12 @@ public class CommonItem : ItemBase
         MapleStatContainer sfStatus = this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
         msc += sfStatus;
 
-        // Console.WriteLine($" ===== [ {UniqueName}'s AddStatus INFO ] =====");
-        // foreach (var pair in GetAddStatus())
-        //     Console.WriteLine($"\t{pair.Key} : {pair.Value}");
-        // if (UniqueName.Equals("아케인셰이드 메이지글러브"))
-        // {
-        //     
-        //     
-        //     Console.WriteLine($" ===== [ {UniqueName}'s UPGRADE INFO ] =====");
-        //     foreach (var pair in upgStatus)
-        //         Console.WriteLine($"\t{pair.Key} : {pair.Value}");
-        //     
-        //     Console.WriteLine($" ===== [ {UniqueName}'s STARFORCE INFO ] =====");
-        //     foreach (var pair in sfStatus)
-        //         Console.WriteLine($"\t{pair.Key} : {pair.Value}");
-        // }
-
         if (SoulOption != null)
             msc[SoulOption.Value.Key] += SoulOption.Value.Value;
 
-        string s = $"[Equipment {UniqueName}] Status = {{";
-        foreach (var pair in msc) s += $"{pair.Key}={pair.Value}, ";
-        Console.WriteLine($"{s[..^2]}}}");
+        // string s = $"[Equipment {UniqueName}] Status = {{";
+        // foreach (var pair in msc) s += $"{pair.Key}={pair.Value}, ";
+        // Console.WriteLine($"{s[..^2]}}}");
         
         return msc;
     }

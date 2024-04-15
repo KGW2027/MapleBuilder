@@ -47,6 +47,7 @@ public class PlayerData
         Artifact = new ArtifactWrapper(cInfo.ArtifactPanels, OnStatusChanged);
         UnionClaim = new UnionClaimWrapper(cInfo.UnionInfo, cInfo.UnionInner, OnStatusChanged);
         Raider = new UnionRaiderWrapper(cInfo.UnionInfo, OnStatusChanged);
+        Equipment = new EquipWrapper(OnStatusChanged);
         
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
@@ -119,20 +120,20 @@ public class PlayerData
         }
     }
 
-    public ItemBase? this[MapleEquipType.EquipType equipType]
-    {
-        get => equipData.GetValueOrDefault(equipType);
-        set
-        {
-            ItemBase? curItem = this[equipType];
-            if (curItem != null)
-                RemoveItem(curItem);
-            equipData.TryAdd(equipType, null);
-            equipData[equipType] = value;
-            AddItem(value);
-            AlertUpdate();
-        }
-    }
+    // public ItemBase? this[MapleEquipType.EquipType equipType]
+    // {
+    //     get => equipData.GetValueOrDefault(equipType);
+    //     set
+    //     {
+    //         ItemBase? curItem = this[equipType];
+    //         if (curItem != null)
+    //             RemoveItem(curItem);
+    //         equipData.TryAdd(equipType, null);
+    //         equipData[equipType] = value;
+    //         AddItem(value);
+    //         AlertUpdate();
+    //     }
+    // }
 
     public int this[MapleSymbol.SymbolType symbolType]
     {
@@ -153,6 +154,7 @@ public class PlayerData
     public readonly UnionClaimWrapper UnionClaim;
     public readonly ArtifactWrapper Artifact;
     public readonly UnionRaiderWrapper Raider;
+    public readonly EquipWrapper Equipment;
     
     
 
@@ -180,19 +182,6 @@ public class PlayerData
         }
         
         return statusContainer;
-    }
-    
-    private void AddItem(ItemBase? item)
-    {
-        if (item == null) return;
-        if (this[StatSources.EQUIPMENT] == null) this[StatSources.EQUIPMENT] = new MapleStatContainer();
-        item.EquipItem(this);
-    }
-
-    private void RemoveItem(ItemBase item)
-    {
-        equipData[item.EquipType] = null;
-        item.UnequipItem(this);
     }
 
     private void ChangeSymbolLevel(MapleSymbol.SymbolType symbolType, int prev, int next)

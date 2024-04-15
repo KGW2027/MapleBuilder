@@ -4,6 +4,7 @@ using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
+using MapleBuilder.Control.Data.Item;
 
 namespace MapleBuilder.Control.Data;
 
@@ -68,29 +69,29 @@ public class SetEffect
         LuckySets = new List<SetType>();
     }
 
-    private SetType GetSetType(MapleCommonItem item)
+    private SetType GetSetType(ItemBase item)
     {
-        foreach (var pair in setMap.Where(pair => pair.Value.Any(prefix => item.Name.StartsWith(prefix))))
+        foreach (var pair in setMap.Where(pair => pair.Value.Any(prefix => item.UniqueName.StartsWith(prefix))))
             return pair.Key;
         return SetType.NONE;
     }
 
-    private List<SetType> GetLuckySets(MapleCommonItem item)
+    private List<SetType> GetLuckySets(ItemBase item)
     {
-        if (item.Name.StartsWith("제네시스"))
+        if (item.UniqueName.StartsWith("제네시스"))
             return new List<SetType>
             {
                 SetType.NECRO, SetType.MUSPELL, SetType.ROYAL, SetType.PENSALIR, SetType.MAISTER, SetType.CYGNUS,
                 SetType.ROOTABYSS, SetType.ABSOLABSE, SetType.ARCANESHADE, SetType.ETERNEL
             };
-        if (item.Name.Equals("카오스 반반 투구") || item.Name.Equals("카오스 벨룸의 헬름") || item.Name.Equals("카오스 피에르 모자")
-            || item.Name.Equals("카오스 퀸의 티아라"))
+        if (item.UniqueName.Equals("카오스 반반 투구") || item.UniqueName.Equals("카오스 벨룸의 헬름") || item.UniqueName.Equals("카오스 피에르 모자")
+            || item.UniqueName.Equals("카오스 퀸의 티아라"))
             return new List<SetType>
             {
                 SetType.NECRO, SetType.MUSPELL, SetType.ROYAL, SetType.PENSALIR, SetType.CYGNUS,
                 SetType.ROOTABYSS, SetType.ABSOLABSE, SetType.ARCANESHADE, SetType.ETERNEL
             };
-        if (item.Name.StartsWith("스칼렛 링"))
+        if (item.UniqueName.StartsWith("스칼렛 링"))
             return new List<SetType>
             {
                 SetType.BOSSACCESSORY, SetType.DAWN, SetType.BLACK
@@ -492,7 +493,7 @@ public class SetEffect
                 current + $"{pair.Key} {pair.Value + (LuckySets.Contains(pair.Key) && pair.Value >= 3 ? 1 : 0)} ");
     }
 
-    public void Add(MapleCommonItem item)
+    public void Add(ItemBase item)
     {
         SetType type = GetSetType(item);
         if (type == SetType.NONE)
@@ -507,7 +508,7 @@ public class SetEffect
         Sets[type] += 1;
     }
 
-    public void Sub(MapleCommonItem item)
+    public void Sub(ItemBase item)
     {
         SetType type = GetSetType(item);
         if (type == SetType.NONE)

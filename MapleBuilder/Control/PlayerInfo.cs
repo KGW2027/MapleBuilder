@@ -64,12 +64,12 @@ public class PlayerInfo
         }
         
         // 세트 효과 적용
-        MapleStatContainer setEffectPrev = SetEffects.GetSetOptions();
-        if(isAdd)
-            SetEffects.Add(item);
-        else
-            SetEffects.Sub(item);
-        PlayerStat += SetEffects.GetSetOptions() - setEffectPrev;
+        // MapleStatContainer setEffectPrev = SetEffects.GetSetOptions();
+        // if(isAdd)
+        //     SetEffects.Add(item);
+        // else
+        //     SetEffects.Sub(item);
+        // PlayerStat += SetEffects.GetSetOptions() - setEffectPrev;
     }
 
     private void ApplyAddSub(MapleTitleItem item, bool isAdd)
