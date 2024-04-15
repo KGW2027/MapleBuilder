@@ -38,6 +38,10 @@ public class CommonItem : ItemBase
         if ((flag & ItemFlag.ADD_OPTION) == ItemFlag.ADD_OPTION)
         {
             AddOptions = this.ParseAddOption(itemBase.AddOption);
+            string s = "";
+            foreach (var pair in AddOptions) s += $"{pair.Key}={8-pair.Value}추 ({pair.Value}등급), ";
+            Console.WriteLine($"{UniqueName} 추옵 분석 결과 : {(s.Length > 3 ? s[..^2] : "실패")}");
+            // System.Environment.Exit(0);
         }
 
         if ((flag & ItemFlag.SOUL_ENCHANT) == ItemFlag.SOUL_ENCHANT)
