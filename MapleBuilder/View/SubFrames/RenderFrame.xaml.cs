@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using MapleAPI.Enum;
-using MapleBuilder.Control;
 
 namespace MapleBuilder.View.SubFrames;
 

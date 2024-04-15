@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using MapleAPI.DataType;
-using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Item;
 
@@ -9,22 +8,16 @@ namespace MapleBuilder.Control.Data.Spec;
 
 public class EquipWrapper : StatWrapper
 {
+    public delegate void EquipmentChanged(MapleEquipType.EquipType type, int slot);
+
+    public static EquipmentChanged? OnEquipmentChanged;
+    
     public EquipWrapper(StatusChanged onStatusChanged) : base(new Dictionary<MapleStatus.StatusType, double>(), onStatusChanged)
     {
         commonEquips = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
         setEffect = new SetEffect();
         rings = new ItemBase?[] { null, null, null, null };
         pendants = new ItemBase?[] {null, null};
-    }
-
-    private void UnequipItem(ItemBase item)
-    {
-        item.UnequipItem(PlayerData!);
-    }
-
-    private void EquipItem(ItemBase item)
-    {
-        item.EquipItem(PlayerData!);
     }
 
     private Dictionary<MapleEquipType.EquipType, ItemBase?> commonEquips;
@@ -68,6 +61,7 @@ public class EquipWrapper : StatWrapper
                 commonEquips[equipType] = value;
             }
             
+            OnEquipmentChanged!.Invoke(equipType, slot);
             SetChanged(prevSetEffect, setEffect.GetSetOptions());
         }
     }

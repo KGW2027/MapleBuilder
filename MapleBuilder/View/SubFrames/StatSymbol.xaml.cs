@@ -100,10 +100,10 @@ public partial class StatSymbol : UserControl
             foreach (var pair in symbolSlots)
             {
                 string prefix = idx++ < 6 ? "아케인심볼" : "어센틱심볼";
-                pair.Value.ctEditLabel.Content = pair.Key;
+                pair.Value.ItemLabel.Content = pair.Key;
                 string itemName = $"{prefix} : {pair.Key}";
                 if (!database.EquipmentDataList.TryGetValue(itemName, out var item)) continue;
-                pair.Value.ctItemRenderer.Source = item.Image;
+                pair.Value.DisplayImage.Source = item.Image;
             }
         });
     }
