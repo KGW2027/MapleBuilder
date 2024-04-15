@@ -51,6 +51,7 @@ public class PlayerData
         UnionClaim = new UnionClaimWrapper(cInfo.UnionInfo, cInfo.UnionInner, OnStatusChanged);
         Raider = new UnionRaiderWrapper(cInfo.UnionInfo, OnStatusChanged);
         Equipment = new EquipWrapper(OnStatusChanged);
+        PetEquip = new PetEquipWrapper(OnStatusChanged);
         
         this[StatSources.DEFAULT, MapleStatus.StatusType.STR] += cInfo.ApStats[0];
         this[StatSources.DEFAULT, MapleStatus.StatusType.DEX] += cInfo.ApStats[1];
@@ -148,6 +149,7 @@ public class PlayerData
     public readonly ArtifactWrapper Artifact;
     public readonly UnionRaiderWrapper Raider;
     public readonly EquipWrapper Equipment;
+    public readonly PetEquipWrapper PetEquip;
 
     public MapleStatContainer GetStatus()
     {

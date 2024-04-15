@@ -11,7 +11,6 @@ public class HyperStatWrapper : StatWrapper
     {
         double pValue = GetValue(statusType, prev);
         double nValue = GetValue(statusType, next);
-        Console.WriteLine($"[HYPERSTAT {statusType}'s Level Changed from {prev} to {next}. so OPTION changed from {pValue} to {nValue}.]");
         OnStatusChanged!.Invoke(PlayerData.StatSources.HYPER_STAT, statusType, pValue, nValue);
     }
     

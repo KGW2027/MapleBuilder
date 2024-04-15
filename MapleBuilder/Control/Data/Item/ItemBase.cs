@@ -117,6 +117,10 @@ public abstract class ItemBase
         {
             return new TitleItem(title);
         }
+        else if (itemBase is MaplePetItem petEquip)
+        {
+            return new PetItem(petEquip);
+        }
 
         return null;
     }

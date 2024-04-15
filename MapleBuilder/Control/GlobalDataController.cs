@@ -38,6 +38,12 @@ public class GlobalDataController
                 PlayerInstance.Equipment[item.EquipType, 0] = item;
         }
         
+        for (int idx = 0; idx < cInfo.PetEquips.Count ; idx++)
+        {
+            if (!ItemDatabase.Instance.RegisterItem(cInfo.PetEquips[idx], out var outItem) || outItem is not PetItem newPetItem) continue;
+            PlayerInstance.PetEquip[idx] = newPetItem;
+        }
+        
         OnDataUpdated!.Invoke(PlayerInstance);
     }
     
