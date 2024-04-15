@@ -148,15 +148,13 @@ public class PlayerData
     public readonly ArtifactWrapper Artifact;
     public readonly UnionRaiderWrapper Raider;
     public readonly EquipWrapper Equipment;
-    
-    
 
     public MapleStatContainer GetStatus()
     {
         MapleStatContainer statusContainer = new MapleStatContainer
         {
             MainStatType = AffectTypes[0],
-            SubStatType  = AffectTypes[1],
+            SubStatType = AffectTypes[1],
             SubStat2Type = AffectTypes[2]
         };
         statusContainer = statContainers.Aggregate(statusContainer, (current, container) => current + container.Value);
@@ -169,13 +167,28 @@ public class PlayerData
             if (statusContainer[statusType] <= 0) continue;
 
             if (id < 0x35) // 스탯은 9레벨당 STAT +[VALUE]
-                statusContainer[(MapleStatus.StatusType) id - 0x30] += Math.Floor(level / 9.0) * statusContainer[statusType];
-            else           // 공,마는 어빌에서 [VALUE] 레벨당 공,마 + 1
+                statusContainer[(MapleStatus.StatusType) id - 0x30] +=
+                    Math.Floor(level / 9.0) * statusContainer[statusType];
+            else // 공,마는 어빌에서 [VALUE] 레벨당 공,마 + 1
                 statusContainer[(MapleStatus.StatusType) id - 0x30] += Math.Floor(level / statusContainer[statusType]);
         }
-        
+
         return statusContainer;
     }
+
+#if DEBUG
+    public void DEBUG_statContainers()
+    {
+        foreach (var pair in statContainers)
+        {
+            Console.WriteLine("");
+            Console.WriteLine($" ] === === === {pair.Key}'s StatContainer === === === [");
+            pair.Value.Flush();
+            foreach(var pair2 in pair.Value)
+                Console.WriteLine($"    {pair2.Key} : {pair2.Value:F2}");
+        }
+    }
+#endif
 
     private void ChangeSymbolLevel(MapleSymbol.SymbolType symbolType, int prev, int next)
     {

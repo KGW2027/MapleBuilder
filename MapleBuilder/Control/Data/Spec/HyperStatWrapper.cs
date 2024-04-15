@@ -11,6 +11,7 @@ public class HyperStatWrapper : StatWrapper
     {
         double pValue = GetValue(statusType, prev);
         double nValue = GetValue(statusType, next);
+        Console.WriteLine($"[HYPERSTAT {statusType}'s Level Changed from {prev} to {next}. so OPTION changed from {pValue} to {nValue}.]");
         OnStatusChanged!.Invoke(PlayerData.StatSources.HYPER_STAT, statusType, pValue, nValue);
     }
     
@@ -44,7 +45,7 @@ public class HyperStatWrapper : StatWrapper
         double v = 0.0;
         int lv = (int) level;
         for (int i = 1; i <= lv; i++)
-            v += GetIncrease(statusType, lv);
+            v += GetIncrease(statusType, i);
         return v;
     }
 

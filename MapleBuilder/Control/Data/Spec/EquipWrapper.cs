@@ -20,6 +20,8 @@ public class EquipWrapper : StatWrapper
         pendants = new ItemBase?[] {null, null};
     }
 
+    private static MapleStatContainer DEBUG_EquipContainer = new MapleStatContainer();
+
     private Dictionary<MapleEquipType.EquipType, ItemBase?> commonEquips;
     private ItemBase?[] rings;
     private ItemBase?[] pendants;
@@ -44,11 +46,19 @@ public class EquipWrapper : StatWrapper
             {
                 prevItem.UnequipItem(PlayerData!);
                 setEffect.Sub(prevItem);
+                
+#if DEBUG
+                DEBUG_EquipContainer -= prevItem.DEBUG_GetItemStatus();
+#endif
             }
+
             if (value != null)
             {
                 value.EquipItem(PlayerData!);
                 setEffect.Add(value);
+#if DEBUG
+                DEBUG_EquipContainer += value.DEBUG_GetItemStatus();
+#endif
             }
 
             if (equipType == MapleEquipType.EquipType.RING)
@@ -75,4 +85,14 @@ public class EquipWrapper : StatWrapper
     {
         
     }
+    
+    #if DEBUG
+    public static void DEBUG_PrintDebugStatus()
+    {
+        Console.WriteLine();
+        Console.WriteLine($" = [ ==== E Q U I P M E N T S ==== ] = ");
+        foreach(var pair in DEBUG_EquipContainer)
+            Console.WriteLine($"    {pair.Key} : {pair.Value:F2}");
+    }
+    #endif
 }

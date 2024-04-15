@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
 using MapleBuilder.View.SubObjects;
 
 namespace MapleBuilder.View.SubFrames;
@@ -52,9 +53,10 @@ public partial class PetEquips : UserControl
         }
         
         int delta = atkmag - beforePetEffect;
-        // BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.ATTACK_POWER] += delta;
-        // BuilderDataContainer.PlayerStatus.PlayerStat[MapleStatus.StatusType.MAGIC_POWER] += delta;
-        // BuilderDataContainer.RefreshAll();
+        GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT,
+            MapleStatus.StatusType.ATTACK_POWER] += delta;
+        GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT,
+            MapleStatus.StatusType.MAGIC_POWER] += delta;
         ctPetSetEffectLabel.Content = $"세트효과 - 공/마 +{atkmag}";
         beforePetEffect = atkmag;
     }

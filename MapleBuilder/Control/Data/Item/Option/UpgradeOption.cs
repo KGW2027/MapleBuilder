@@ -443,7 +443,7 @@ public static class UpgradeOption
                 total += 6;
                 continue;
             }
-            if ((int) type <= 0x10) continue;
+            if ((int) type <= 0x30) continue;
             total += type.ToString()[^1] - '0';
         }
 

@@ -4,9 +4,8 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MapleAPI.DataType;
-using MapleAPI.Enum;
 using MapleBuilder.Control;
+using MapleBuilder.Control.Data.Spec;
 using Microsoft.Win32;
 
 namespace MapleBuilder.View.SubFrames;
@@ -87,6 +86,9 @@ public partial class TitleBar : UserControl
     #if DEBUG
     private void OnDebugStatusTrace(object sender, RoutedEventArgs e)
     {
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        GlobalDataController.Instance.PlayerInstance.DEBUG_statContainers();
+        EquipWrapper.DEBUG_PrintDebugStatus();
     }
     #endif
 }

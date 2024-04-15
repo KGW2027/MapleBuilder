@@ -9,6 +9,7 @@ using MapleAPI.Enum;
 using MapleBuilder.Control;
 using MapleBuilder.Control.Data;
 using MapleBuilder.View.SubObjects;
+using MapleBuilder.View.SubObjects.StatSymbol;
 
 namespace MapleBuilder.View.SubFrames;
 

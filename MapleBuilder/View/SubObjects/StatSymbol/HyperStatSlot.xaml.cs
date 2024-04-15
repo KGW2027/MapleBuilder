@@ -5,7 +5,7 @@ using System.Windows.Input;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 
-namespace MapleBuilder.View.SubObjects;
+namespace MapleBuilder.View.SubObjects.StatSymbol;
 
 public partial class HyperStatSlot : UserControl
 {

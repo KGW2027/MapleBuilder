@@ -111,6 +111,15 @@ public partial class Summarize : UserControl
             ctAtkrLabel.Content = dp.AttackRateType == MapleStatus.StatusType.ATTACK_RATE ? "공격력%" : "마력%";
             ctAtkVal.Content = $"{dp[dp.AttackFlatType]:N0}";
             ctAtkRate.Content = $"{dp[dp.AttackRateType]}%";
+
+            ulong power = dp.GetPower(-140, false);
+            ulong top = power / 100_000_000;
+            ulong mid = power % 100_000_000 / 10000;
+            ulong bot = power % 10000;
+
+            if (top > 0) ctDisplayPower.Content = $"{top}억 {mid:0000}만 {bot:0000}";
+            else if(mid > 0) ctDisplayPower.Content = $"{mid}만 {bot:0000}";
+            else ctDisplayPower.Content = $"{bot}";
         });
     }
     
