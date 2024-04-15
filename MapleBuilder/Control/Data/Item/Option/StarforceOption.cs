@@ -26,8 +26,8 @@ internal static class StarforceOption
         if(starforce <= 15)
         {
             double refValue = isMage
-                ? item.EquipData![MapleStatus.StatusType.MAGIC_POWER] + item.EquipData![MapleStatus.StatusType.MAGIC_POWER]
-                : item.EquipData![MapleStatus.StatusType.ATTACK_POWER] + item.EquipData![MapleStatus.StatusType.MAGIC_POWER];
+                ? item.EquipData![MapleStatus.StatusType.MAGIC_POWER]
+                : item.EquipData![MapleStatus.StatusType.ATTACK_POWER];
             refValue += increase;
             return (int) Math.Floor(refValue / 50.0) + 1;
         }

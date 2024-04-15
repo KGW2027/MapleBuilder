@@ -131,21 +131,11 @@ public class CommonItem : ItemBase
                     msc[MapleStatus.StatusType.DAMAGE] += val;
                     break;
                 case Option.AddOptions.AddOptionType.ALL_STAT:
-                    msc[MapleStatus.StatusType.ALL_STAT] += val;
+                    msc[MapleStatus.StatusType.ALL_STAT_RATE] += val;
                     break;
             }
         }
 
-        return msc;
-    }
-
-    private MapleStatContainer GetUpgradeStatus()
-    {
-        MapleStatContainer msc = new MapleStatContainer();
-        if (Upgrades == null) return msc;
-
-        
-        msc.Flush();
         return msc;
     }
 
@@ -159,18 +149,36 @@ public class CommonItem : ItemBase
 
         return msc;
     }
-
+    
     protected override MapleStatContainer GetItemStatus()
     {
         MapleStatContainer msc = new MapleStatContainer();
         msc += EquipData!.GetStatus(); // 기본 정보
+        
         msc += GetAddStatus();         // 추옵 정보
         msc += GetPotentialStatus();   // 잠재 정보
-        
-        MapleStatContainer upgStatus = GetUpgradeStatus();
-        msc += upgStatus;              // 작 정보
+
+        MapleStatContainer upgStatus = Upgrades.ConvertUpgrades(this, ChaosAverage);
+        msc += upgStatus; // 작 정보
         // 스타포스 정보
-        msc += this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
+        MapleStatContainer sfStatus = this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
+        msc += sfStatus;
+
+        // Console.WriteLine($" ===== [ {UniqueName}'s AddStatus INFO ] =====");
+        // foreach (var pair in GetAddStatus())
+        //     Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        // if (UniqueName.Equals("아케인셰이드 메이지글러브"))
+        // {
+        //     
+        //     
+        //     Console.WriteLine($" ===== [ {UniqueName}'s UPGRADE INFO ] =====");
+        //     foreach (var pair in upgStatus)
+        //         Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        //     
+        //     Console.WriteLine($" ===== [ {UniqueName}'s STARFORCE INFO ] =====");
+        //     foreach (var pair in sfStatus)
+        //         Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        // }
 
         if (SoulOption != null)
             msc[SoulOption.Value.Key] += SoulOption.Value.Value;

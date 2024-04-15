@@ -127,6 +127,8 @@ public class PlayerData
             ItemBase? curItem = this[equipType];
             if (curItem != null)
                 RemoveItem(curItem);
+            equipData.TryAdd(equipType, null);
+            equipData[equipType] = value;
             AddItem(value);
             AlertUpdate();
         }
