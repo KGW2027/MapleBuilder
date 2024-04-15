@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MapleAPI.DataType.Item;
 using MapleBuilder.Control.Data.Item;
@@ -32,6 +33,7 @@ public class ItemDatabase
         if (parsedItem == null) return false;
         parsedItem.DisplayName += $" (by {author})";
         CachedItemList.Add(parsedItem);
+        outItem = parsedItem;
         return true;
     }
 

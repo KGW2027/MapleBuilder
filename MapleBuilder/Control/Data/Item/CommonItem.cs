@@ -38,10 +38,6 @@ public class CommonItem : ItemBase
         if ((flag & ItemFlag.ADD_OPTION) == ItemFlag.ADD_OPTION)
         {
             AddOptions = this.ParseAddOption(itemBase.AddOption);
-            string s = "";
-            foreach (var pair in AddOptions) s += $"{pair.Key}={8-pair.Value}추 ({pair.Value}등급), ";
-            Console.WriteLine($"{UniqueName} 추옵 분석 결과 : {(s.Length > 3 ? s[..^2] : "실패")}");
-            // System.Environment.Exit(0);
         }
 
         if ((flag & ItemFlag.SOUL_ENCHANT) == ItemFlag.SOUL_ENCHANT)
@@ -69,9 +65,120 @@ public class CommonItem : ItemBase
     public int? MaxUpgradeCount;
     public UpgradeOption.UpgradeType[]? Upgrades;
     public Dictionary<MapleStatus.StatusType, double>? ChaosAverage;
-    
-    public override MapleStatContainer GetItemStatus()
+
+    private MapleStatContainer GetAddStatus()
     {
-        throw new System.NotImplementedException();
+        MapleStatContainer msc = new MapleStatContainer();
+        if (AddOptions == null) return msc;
+
+        foreach (var pair in AddOptions)
+        {
+            int val = pair.Key.GetOptionStatus(this, pair.Value);
+            switch (pair.Key)
+            {
+                case Option.AddOptions.AddOptionType.STR:
+                    msc[MapleStatus.StatusType.STR] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.DEX:
+                    msc[MapleStatus.StatusType.DEX] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.INT:
+                    msc[MapleStatus.StatusType.INT] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.LUK:
+                    msc[MapleStatus.StatusType.LUK] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.STR_DEX:
+                    msc[MapleStatus.StatusType.DEX] += val;
+                    msc[MapleStatus.StatusType.STR] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.STR_INT:
+                    msc[MapleStatus.StatusType.STR] += val;
+                    msc[MapleStatus.StatusType.INT] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.STR_LUK:
+                    msc[MapleStatus.StatusType.STR] += val;
+                    msc[MapleStatus.StatusType.LUK] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.DEX_INT:
+                    msc[MapleStatus.StatusType.DEX] += val;
+                    msc[MapleStatus.StatusType.INT] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.DEX_LUK:
+                    msc[MapleStatus.StatusType.DEX] += val;
+                    msc[MapleStatus.StatusType.LUK] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.INT_LUK:
+                    msc[MapleStatus.StatusType.INT] += val;
+                    msc[MapleStatus.StatusType.LUK] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.HP:
+                    msc[MapleStatus.StatusType.HP] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.MP:
+                    msc[MapleStatus.StatusType.MP] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.ATTACK:
+                    msc[MapleStatus.StatusType.ATTACK_POWER] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.MAGIC:
+                    msc[MapleStatus.StatusType.MAGIC_POWER] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.BOSS_DAMAGE:
+                    msc[MapleStatus.StatusType.BOSS_DAMAGE] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.DAMAGE:
+                    msc[MapleStatus.StatusType.DAMAGE] += val;
+                    break;
+                case Option.AddOptions.AddOptionType.ALL_STAT:
+                    msc[MapleStatus.StatusType.ALL_STAT] += val;
+                    break;
+            }
+        }
+
+        return msc;
+    }
+
+    private MapleStatContainer GetUpgradeStatus()
+    {
+        MapleStatContainer msc = new MapleStatContainer();
+        if (Upgrades == null) return msc;
+
+        
+        msc.Flush();
+        return msc;
+    }
+
+    private MapleStatContainer GetPotentialStatus()
+    {
+        MapleStatContainer msc = new MapleStatContainer();
+        if (Potential == null) return msc;
+
+        foreach (var pair in Potential)
+            msc[pair.Key] += pair.Value;
+
+        return msc;
+    }
+
+    protected override MapleStatContainer GetItemStatus()
+    {
+        MapleStatContainer msc = new MapleStatContainer();
+        msc += EquipData!.GetStatus(); // 기본 정보
+        msc += GetAddStatus();         // 추옵 정보
+        msc += GetPotentialStatus();   // 잠재 정보
+        
+        MapleStatContainer upgStatus = GetUpgradeStatus();
+        msc += upgStatus;              // 작 정보
+        // 스타포스 정보
+        msc += this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
+
+        if (SoulOption != null)
+            msc[SoulOption.Value.Key] += SoulOption.Value.Value;
+
+        string s = $"[Equipment {UniqueName}] Status = {{";
+        foreach (var pair in msc) s += $"{pair.Key}={pair.Value}, ";
+        Console.WriteLine($"{s[..^2]}}}");
+        
+        return msc;
     }
 }

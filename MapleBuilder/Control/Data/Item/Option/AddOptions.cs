@@ -255,5 +255,38 @@ public static class AddOptions
     public static int GetHpMpOption(this CommonItem item, int grade)
     {
         return item.EquipData!.Level * 3 * grade;
-    } 
+    }
+
+    public static int GetOptionStatus(this AddOptionType optionType, CommonItem item, int grade)
+    {
+        switch (optionType)
+        {
+            case AddOptionType.STR:
+            case AddOptionType.DEX:
+            case AddOptionType.INT:
+            case AddOptionType.LUK:
+                return item.GetStatOption(grade, false);
+            case AddOptionType.STR_DEX:
+            case AddOptionType.STR_INT:
+            case AddOptionType.STR_LUK:
+            case AddOptionType.DEX_INT:
+            case AddOptionType.DEX_LUK:
+            case AddOptionType.INT_LUK:
+                return item.GetStatOption(grade, true);
+            case AddOptionType.HP:
+            case AddOptionType.MP:
+                return item.GetHpMpOption(grade);
+            case AddOptionType.ATTACK:
+            case AddOptionType.MAGIC:
+                return item.GetAttackOption(grade, optionType == AddOptionType.ATTACK);
+            case AddOptionType.BOSS_DAMAGE:
+                return item.GetBossDamageOption(grade);
+            case AddOptionType.DAMAGE:
+                return item.GetDamageOption(grade);
+            case AddOptionType.ALL_STAT:
+                return item.GetAllStatOption(grade);
+            default:
+                return 0;
+        }
+    }
 }

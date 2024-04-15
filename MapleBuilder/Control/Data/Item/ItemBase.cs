@@ -45,7 +45,7 @@ public abstract class ItemBase
         }
     }
 
-    public abstract MapleStatContainer GetItemStatus();
+    protected abstract MapleStatContainer GetItemStatus();
 
     public void EquipItem(PlayerData playerData)
     {
@@ -95,13 +95,17 @@ public abstract class ItemBase
                     return new CommonItem(commonBase,
                         ItemFlag.UPGRADE | ItemFlag.ADD_OPTION | ItemFlag.POTENTIAL | ItemFlag.STARFORCE);
                 case MapleEquipType.EquipType.SUB_WEAPON:
-                    break;
+                    if (itemBase.Name.EndsWith("블레이드") || itemBase.Name.EndsWith("실드") || itemBase.Name.EndsWith("프렐류드"))
+                        return new CommonItem(commonBase, ItemFlag.UPGRADE | ItemFlag.POTENTIAL | ItemFlag.STARFORCE);
+                    return new CommonItem(commonBase, ItemFlag.POTENTIAL);
                 case MapleEquipType.EquipType.TITLE:
                 case MapleEquipType.EquipType.ANDROID:
                     break;
-                default:
-                    return null;
             }
+        }
+        else if (itemBase is MapleTitleItem title)
+        {
+            return new TitleItem(title);
         }
 
         return null;
