@@ -64,15 +64,15 @@ public partial class CashEquips : UserControl
     {
         if (e.AddedItems.Count == 0) return;
         UpdateLabel(e.AddedItems[0]!.ToString()!);
-        if (BuilderDataContainer.PlayerStatus == null) return;
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
         
         string before = ((ComboBox) sender).Text;
         string next = e.AddedItems[0]!.ToString()!;
 
         if (setOptions.TryGetValue(before, out var prev) && setOptions.TryGetValue(next, out var now))
         {
-            BuilderDataContainer.PlayerStatus.PlayerStat += (now - prev);
-            BuilderDataContainer.RefreshAll();
+            // BuilderDataContainer.PlayerStatus.PlayerStat += (now - prev);
+            // BuilderDataContainer.RefreshAll();
         }
 
     }

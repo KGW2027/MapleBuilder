@@ -15,21 +15,21 @@ public partial class OverviewTopbar : UserControl
         InitializeComponent();
     }
 
-    public async void UpdateProfileImage()
-    {
-        while (BuilderDataContainer.CharacterInfo == null || BuilderDataContainer.CharacterInfo.PlayerImage.Length == 0) await Task.Delay(100);
-        
-        BitmapImage bitmapImage = new BitmapImage();
-        bitmapImage.BeginInit();
-        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        bitmapImage.StreamSource = new MemoryStream(BuilderDataContainer.CharacterInfo.PlayerImage);
-        bitmapImage.EndInit();
-        
-        await Dispatcher.BeginInvoke(() =>
-        {
-            ctCharacterImage.Source = bitmapImage;
-        });
-    }
+    // public async void UpdateProfileImage()
+    // {
+    //     while (BuilderDataContainer.CharacterInfo == null || BuilderDataContainer.CharacterInfo.PlayerImage.Length == 0) await Task.Delay(100);
+    //     
+    //     BitmapImage bitmapImage = new BitmapImage();
+    //     bitmapImage.BeginInit();
+    //     bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+    //     bitmapImage.StreamSource = new MemoryStream(BuilderDataContainer.CharacterInfo.PlayerImage);
+    //     bitmapImage.EndInit();
+    //     
+    //     await Dispatcher.BeginInvoke(() =>
+    //     {
+    //         ctCharacterImage.Source = bitmapImage;
+    //     });
+    // }
 
     private void OnChangeScreenToEquip(object sender, RoutedEventArgs e)
     {

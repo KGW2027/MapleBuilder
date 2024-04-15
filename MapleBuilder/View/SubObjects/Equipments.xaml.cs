@@ -42,11 +42,11 @@ public partial class Equipments : UserControl
             {MapleEquipType.EquipType.HEART, new List<UIElement> {Heart}},
         };
         
-        BuilderDataContainer.InitEquipmentSlots(new List<UIElement>
-        {
-            Ring1, Ring2, Ring3, Ring4, Pocket, Pendant1, Pendant2, Weapon, Belt, Cap, Face, Eye, Top, Bottom,
-            Boot, Earring, Shoulder, Gloves, Title, Emblem, Badge, Medal, SubWeapon, Cape, Heart
-        });
+        // BuilderDataContainer.InitEquipmentSlots(new List<UIElement>
+        // {
+        //     Ring1, Ring2, Ring3, Ring4, Pocket, Pendant1, Pendant2, Weapon, Belt, Cap, Face, Eye, Top, Bottom,
+        //     Boot, Earring, Shoulder, Gloves, Title, Emblem, Badge, Medal, SubWeapon, Cape, Heart
+        // });
     }
 
     private void PushEquipment(MapleEquipType.EquipType equipType, MapleItemBase commonItem)

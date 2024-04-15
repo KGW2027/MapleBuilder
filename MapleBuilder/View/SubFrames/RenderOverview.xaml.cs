@@ -54,11 +54,11 @@ public partial class RenderOverview : UserControl
         Dictionary<string, MapleItemBase> hashToItem = new();
         Dictionary<string, bool> hashToBool = new();
 
-        foreach (MapleItemBase item in BuilderDataContainer.RegisterItems)
-        {
-            hashToBool.Add(item.Hash, false);
-            hashToItem.Add(item.Hash, item);
-        }
+        // foreach (MapleItemBase item in BuilderDataContainer.RegisterItems)
+        // {
+        //     hashToBool.Add(item.Hash, false);
+        //     hashToItem.Add(item.Hash, item);
+        // }
 
         selfInstance!.Dispatcher.BeginInvoke(() =>
         {
@@ -96,7 +96,7 @@ public partial class RenderOverview : UserControl
     public RenderOverview()
     {
         selfInstance = this;
-        BuilderDataContainer.RegisterItems.CollectionChanged += OnRegisterItemsChanged;
+        // BuilderDataContainer.RegisterItems.CollectionChanged += OnRegisterItemsChanged;
         InitializeComponent();
     }
 

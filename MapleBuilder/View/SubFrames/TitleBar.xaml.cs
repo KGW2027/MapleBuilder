@@ -87,19 +87,6 @@ public partial class TitleBar : UserControl
     #if DEBUG
     private void OnDebugStatusTrace(object sender, RoutedEventArgs e)
     {
-        if (BuilderDataContainer.PlayerStatus == null) return;
-        var sourceTrace = BuilderDataContainer.PlayerStatus.PlayerStat.SourceTrace;
-
-        foreach (var pair in sourceTrace)
-        {
-            Console.WriteLine($"== ===== [ STATUS SOURCE TRACE :: {pair.Key} ] ===== ==");
-
-            foreach (MapleStatus.StatusType statusType in Enum.GetValues<MapleStatus.StatusType>())
-            {
-                if(pair.Value[statusType] == 0) continue;
-                Console.WriteLine($"\t{statusType} : {pair.Value[statusType]}");
-            }
-        }
     }
     #endif
 }

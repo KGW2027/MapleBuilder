@@ -109,47 +109,4 @@ public partial class RenderFrame : UserControl
         else RenderType = RenderScreenType.OVERVIEW_EQUIPMENT;
     }
     #endregion
-
-    public static void UpdateCharacterTop()
-    {
-        selfInstance?.Dispatcher.BeginInvoke(() =>
-        {
-            var charTop = selfInstance.ctCharacterTop;
-            charTop.UpdateProfileImage();
-            charTop.ctCharacterName.Content = BuilderDataContainer.CharacterInfo!.PlayerName;
-            charTop.ctCharacterGuild.Content = $"길드 {BuilderDataContainer.CharacterInfo.GuildName}";
-            string classString = MapleClass.GetMapleClassString(BuilderDataContainer.CharacterInfo.Class);
-            charTop.ctCharacterLevelAndClass.Content = $"Lv. {BuilderDataContainer.CharacterInfo.Level} {classString}";
-
-            Dictionary<MapleSymbol.SymbolType, int> symbols = BuilderDataContainer.PlayerStatus!.LastSymbols;
-            int arcane = 0, authentic = 0;
-            foreach (var pair in symbols)
-            {
-                switch (pair.Key)
-                {
-                    case MapleSymbol.SymbolType.YEORO:
-                    case MapleSymbol.SymbolType.CHUCHU:
-                    case MapleSymbol.SymbolType.LACHELEIN:
-                    case MapleSymbol.SymbolType.ARCANA:
-                    case MapleSymbol.SymbolType.MORAS:
-                    case MapleSymbol.SymbolType.ESFERA:
-                        arcane += (pair.Value + 2) * 10;
-                        break;
-                    case MapleSymbol.SymbolType.CERNIUM:
-                    case MapleSymbol.SymbolType.ARCS:
-                    case MapleSymbol.SymbolType.ODIUM:
-                    case MapleSymbol.SymbolType.DOWONKYUNG:
-                    case MapleSymbol.SymbolType.ARTERIA:
-                    case MapleSymbol.SymbolType.CARCION:
-                        authentic += pair.Value * 10;
-                        break;
-                    case MapleSymbol.SymbolType.UNKNOWN:
-                    default:
-                        break;
-                }
-            }
-            charTop.ctCharacterSymbol.Content = $"아케인 {arcane:N0}\n어센틱 {authentic:N0}";
-        });
-    }
-    
 }

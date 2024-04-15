@@ -109,10 +109,10 @@ public static class ResourceManager
         return result;
     }
 
-    public static void GetCharacterInfo(string ocid)
-    {
-        BuilderDataContainer.CharacterInfo = CharacterInfo.FromOcid(ocid).Result;
-    }
+    // public static void GetCharacterInfo(string ocid)
+    // {
+    //     BuilderDataContainer.CharacterInfo = CharacterInfo.FromOcid(ocid).Result;
+    // }
     #endregion
 
 }
