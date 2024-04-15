@@ -77,6 +77,7 @@ public class MapleStatus
         SUB_STAT        = 0x77,
         FINAL_DAMAGE    = 0x78,
         FINAL_DAMAGE_SUM= 0x79,
+        MAIN_ATTACK     = 0x7A,
         
         
     }

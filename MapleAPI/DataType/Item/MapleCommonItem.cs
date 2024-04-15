@@ -84,6 +84,7 @@ public class MapleCommonItem : MapleItemBase
                 _ => MapleStatus.StatusType.OTHER,
             };
 
+            SoulOption = KeyValuePair.Create(soulStatusType, optionValueInt);
             UpgradeOption[soulStatusType] += optionValueInt;
         }
 
@@ -104,12 +105,13 @@ public class MapleCommonItem : MapleItemBase
     public string SoulName { get; private set; }
     public MapleItemPotential? Potential { get; private set; }
 
-    private MapleStatContainer ExceptionalOption { get; set; }
-    private MapleStatContainer BaseOption { get; set; }
-    private MapleStatContainer AddOption { get; set; }
-    private MapleStatContainer UpgradeOption { get; set; }
-    private MapleStatContainer StarforceOption { get; set; }
+    public MapleStatContainer ExceptionalOption { get; set; }
+    public MapleStatContainer BaseOption { get; set; }
+    public MapleStatContainer AddOption { get; set; }
+    public MapleStatContainer UpgradeOption { get; set; }
+    public MapleStatContainer StarforceOption { get; set; }
 
+    public KeyValuePair<MapleStatus.StatusType, int> SoulOption;
     public new MapleStatContainer Status => ExceptionalOption + BaseOption + AddOption + UpgradeOption + StarforceOption;
     // {
     //     get

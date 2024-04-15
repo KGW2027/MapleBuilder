@@ -110,7 +110,7 @@ public class EquipmentData : IWzSerializable
         Id = id;
         SetId = setId;
         Level = level;
-        MaxUpgrade = maxUpgrade;
+        this.maxUpgrade = maxUpgrade;
         IsBlockGoldHammer = isBlockGoldHammer;
         IsSuperior = isSuperior;
         this.iconPath = iconPath;
@@ -122,7 +122,7 @@ public class EquipmentData : IWzSerializable
         Name = data["name"]!.ToString();
         Id = int.Parse(data["itemId"]!.ToString());
         SetId = -1;
-        MaxUpgrade = 0;
+        maxUpgrade = 0;
         IsBlockGoldHammer = false;
         IsSuperior = false;
         incTable = new Dictionary<MapleStatus.StatusType, int>();
@@ -175,7 +175,7 @@ public class EquipmentData : IWzSerializable
                     this[MapleStatus.StatusType.BOSS_DAMAGE] = val;
                     break;
                 case "tuc":
-                    MaxUpgrade = val;
+                    maxUpgrade = val;
                     break;
                 case "blockGoldHammer":
                     IsBlockGoldHammer = true;
@@ -190,14 +190,15 @@ public class EquipmentData : IWzSerializable
     private readonly Dictionary<MapleStatus.StatusType, int> incTable;
     private string? iconPath;
     private BitmapImage? thumbnail;
+    private readonly int maxUpgrade;
     
     public readonly string Name;
     public readonly int Id;
     public readonly int SetId;
     public readonly int Level;
-    public readonly int MaxUpgrade;
     public readonly bool IsBlockGoldHammer;
     public readonly bool IsSuperior;
+    public int MaxUpgrade => maxUpgrade + (IsBlockGoldHammer ? 0 : 1);
     
     public BitmapImage Image
     {
@@ -243,7 +244,7 @@ public class EquipmentData : IWzSerializable
         serializer.SerializeInt(Id);
         serializer.SerializeInt(SetId);
         serializer.SerializeInt(Level);
-        serializer.SerializeInt(MaxUpgrade);
+        serializer.SerializeInt(maxUpgrade);
         serializer.SerializeByte((byte) (IsBlockGoldHammer ? 1 : 0));
         serializer.SerializeByte((byte) (IsSuperior ? 1 : 0));
         serializer.SerializeString(iconPath);

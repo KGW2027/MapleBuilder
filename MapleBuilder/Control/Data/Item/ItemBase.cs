@@ -1,4 +1,5 @@
-﻿using MapleAPI.DataType;
+﻿using System;
+using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 
@@ -8,6 +9,17 @@ namespace MapleBuilder.Control.Data.Item;
 
 public abstract class ItemBase
 {
+    [Flags]
+    public enum ItemFlag
+    {
+        ADD_OPTION = 1 << 0,
+        POTENTIAL  = 1 << 1,
+        SOUL_ENCHANT = 1 << 2,
+        STARFORCE  = 1 << 3,
+        UPGRADE    = 1 << 4,
+        SPECIAL    = 1 << 5,
+    }
+    
     public string UniqueName;
     public string DisplayName;
     public MapleEquipType.EquipType EquipType;
@@ -49,34 +61,25 @@ public abstract class ItemBase
 
     public static ItemBase? ParseItemBase(MapleItemBase itemBase)
     {
-        if (itemBase is MapleCommonItem)
+        if (itemBase is MapleCommonItem commonBase)
         {
             switch (itemBase.EquipType)
             {
-                case MapleEquipType.EquipType.PENDANT:
-                case MapleEquipType.EquipType.FACE:
-                case MapleEquipType.EquipType.EYE:
-                case MapleEquipType.EquipType.EARRING:
-                case MapleEquipType.EquipType.BELT:
                 case MapleEquipType.EquipType.HEART:
-                    break;
                 case MapleEquipType.EquipType.RING:
-                    break;
                 case MapleEquipType.EquipType.SHOULDER:
-                    break;
+                    return new CommonItem(commonBase,
+                        ItemFlag.UPGRADE | ItemFlag.POTENTIAL | ItemFlag.STARFORCE);
                 case MapleEquipType.EquipType.POCKET:
-                    break;
-                case MapleEquipType.EquipType.ANDROID:
-                    break;
+                    return new CommonItem(commonBase, ItemFlag.ADD_OPTION);
                 case MapleEquipType.EquipType.BADGE:
                 case MapleEquipType.EquipType.MEDAL:
-                    break;
+                    return new CommonItem(commonBase);
                 case MapleEquipType.EquipType.WEAPON:
-                    break;
-                case MapleEquipType.EquipType.SUB_WEAPON:
-                    break;
+                    return new CommonItem(commonBase,
+                        ItemFlag.UPGRADE | ItemFlag.ADD_OPTION | ItemFlag.POTENTIAL | ItemFlag.STARFORCE | ItemFlag.SOUL_ENCHANT);
                 case MapleEquipType.EquipType.EMBLEM:
-                    break;
+                    return new CommonItem(commonBase, ItemFlag.POTENTIAL);
                 case MapleEquipType.EquipType.HELMET:
                 case MapleEquipType.EquipType.TOP:
                 case MapleEquipType.EquipType.BOTTOM:
@@ -84,8 +87,17 @@ public abstract class ItemBase
                 case MapleEquipType.EquipType.GLOVE:
                 case MapleEquipType.EquipType.CAPE:
                 case MapleEquipType.EquipType.BOOT:
-                    return new ArmorItem((itemBase as MapleCommonItem)!);
+                case MapleEquipType.EquipType.PENDANT:
+                case MapleEquipType.EquipType.FACE:
+                case MapleEquipType.EquipType.EYE:
+                case MapleEquipType.EquipType.EARRING:
+                case MapleEquipType.EquipType.BELT:
+                    return new CommonItem(commonBase,
+                        ItemFlag.UPGRADE | ItemFlag.ADD_OPTION | ItemFlag.POTENTIAL | ItemFlag.STARFORCE);
+                case MapleEquipType.EquipType.SUB_WEAPON:
+                    break;
                 case MapleEquipType.EquipType.TITLE:
+                case MapleEquipType.EquipType.ANDROID:
                     break;
                 default:
                     return null;
