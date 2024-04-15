@@ -39,7 +39,6 @@ public class PlayerData
         playerClass = cInfo.Class;
         AffectTypes = MapleClass.GetClassStatType(playerClass);
         statContainers = new Dictionary<StatSources, MapleStatContainer>();
-        equipData = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
         symbolLevels = new Dictionary<MapleSymbol.SymbolType, int>();
         
         PlayerImage = cInfo.PlayerImage;
@@ -94,7 +93,6 @@ public class PlayerData
     private readonly int level;
     private readonly MapleClass.ClassType playerClass;
     private readonly Dictionary<StatSources, MapleStatContainer> statContainers;
-    private readonly Dictionary<MapleEquipType.EquipType, ItemBase?> equipData;
     private readonly Dictionary<MapleSymbol.SymbolType, int> symbolLevels;
     
     public readonly MapleStatus.StatusType[] AffectTypes;

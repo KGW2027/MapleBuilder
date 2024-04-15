@@ -17,18 +17,15 @@ namespace MapleBuilder.Control;
 
 public static class ResourceManager
 {
-    private static string wzPath = "";
     private static readonly MapleAPI.MapleAPI API = MapleAPI.MapleAPI.Instance;
-    private static Dictionary<string, WzItem> itemIcons = new();
     
     #region Wz Related
     public static bool SetWzPath(string path)
     {
         string testFilePath = $@"{path}\Base\Base.wz";
         if (!File.Exists(testFilePath)) return false;
-        wzPath = path;
         
-        WzLoader.Instance.SetDataPath(wzPath)
+        WzLoader.Instance.SetDataPath(path)
             .AddExtract("Skill") // 10,498 Files (36.6MB)
             .AddExtract(
                 "Character\\[Accessory,Android,ArcaneForce,AuthenticForce,Cap,Cape,Coat,Dragon,Face,Glove,Longcoat,Mechanic,Pants,Ring,Shield,Shoes,Weapon]") // IconRaw only :: 9,688 Files (12.3MB)
@@ -39,16 +36,8 @@ public static class ResourceManager
         return true;
     }
 
-    public static WzItem? GetItemIcon(string itemName)
-    {
-        // LoadIcons("./ItemExtractorResult.json");
-
-        return itemIcons!.GetValueOrDefault(itemName, null);
-    }
-
     #endregion
 
-    #region API Related
     public static bool SetApiKey(string apiKey)
     {
         bool apiKeySuccess = API.SetApiKey(apiKey);
@@ -108,11 +97,5 @@ public static class ResourceManager
         else if(res.IsError) AddErrorData(result, res.ResponseType);
         return result;
     }
-
-    // public static void GetCharacterInfo(string ocid)
-    // {
-    //     BuilderDataContainer.CharacterInfo = CharacterInfo.FromOcid(ocid).Result;
-    // }
-    #endregion
 
 }
