@@ -35,4 +35,25 @@ public class MapleSymbol
         if (name.Equals("어센틱심볼 : 카르시온")) return SymbolType.CARCION;
         return SymbolType.UNKNOWN;
     }
+    
+    public static string GetSymbolTypeString(SymbolType symbolType)
+    {
+        return symbolType switch
+        {
+            SymbolType.YEORO => "아케인심볼 : 소멸의 여로",
+            SymbolType.CHUCHU => "아케인심볼 : 츄츄 아일랜드",
+            SymbolType.LACHELEIN => "아케인심볼 : 레헬른",
+            SymbolType.ARCANA => "아케인심볼 : 아르카나",
+            SymbolType.MORAS => "아케인심볼 : 모라스",
+            SymbolType.ESFERA => "아케인심볼 : 에스페라",
+            SymbolType.CERNIUM => "어센틱심볼 : 세르니움",
+            SymbolType.ARCS => "어센틱심볼 : 아르크스",
+            SymbolType.ODIUM => "어센틱심볼 : 오디움",
+            SymbolType.DOWONKYUNG => "어센틱심볼 : 도원경",
+            SymbolType.ARTERIA => "어센틱심볼 : 아르테리아",
+            SymbolType.CARCION => "어센틱심볼 : 카르시온",
+            SymbolType.UNKNOWN => "알 수 없음",
+            _ => throw new ArgumentOutOfRangeException(nameof(symbolType), symbolType, null)
+        };
+    }
 }
