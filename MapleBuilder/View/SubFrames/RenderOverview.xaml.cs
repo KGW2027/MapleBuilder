@@ -10,6 +10,7 @@ using MapleBuilder.Control.Data;
 using MapleBuilder.Control.Data.Item;
 using MapleBuilder.Control.Data.Spec;
 using MapleBuilder.View.SubObjects;
+using MapleBuilder.View.SubObjects.Equipment;
 
 namespace MapleBuilder.View.SubFrames;
 

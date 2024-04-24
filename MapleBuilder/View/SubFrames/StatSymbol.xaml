@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
              xmlns:statSymbol="clr-namespace:MapleBuilder.View.SubObjects.StatSymbol"
+             xmlns:equipment="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
     <Grid Name="ParentGrid">
@@ -15,44 +16,44 @@
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="547" Height="668" HorizontalAlignment="Left" Margin="421, 0, 0, 0"/>
         
         <Label Content="아케인 심볼" Margin="429, 8, 0, 0"/>
-        <subObjects:EquipmentSlot x:Name="ctYeoroSlot" Margin="445, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctYeoroSlot" Margin="445, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctYeoroText" Margin="467, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctChuchuSlot" Margin="530, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctChuchuSlot" Margin="530, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctChuchuText" Margin="552, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctLacheleinSlot" Margin="615, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctLacheleinSlot" Margin="615, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctLacheleinText" Margin="637, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctArcanaSlot" Margin="700, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctArcanaSlot" Margin="700, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctArcanaText" Margin="722, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctMorasSlot" Margin="785, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctMorasSlot" Margin="785, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctMorasText" Margin="807, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctEsferaSlot" Margin="870, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctEsferaSlot" Margin="870, 40, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctEsferaText" Margin="892, 121, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
         <Label x:Name="ctArcaneForceDisplay" Content="ARC + 1,320" Margin="445, 140, 0, 0"/>
         <Label x:Name="ctArcaneStatDisplay" Content="INT + 13,200" Margin="445, 160, 0, 0"/>
         
         <Label Content="어센틱 심볼" Margin="429, 203, 0, 0"/>
-        <subObjects:EquipmentSlot x:Name="ctCerniumSlot" Margin="445, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctCerniumSlot" Margin="445, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctCerniumText" Margin="467, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctArcsSlot" Margin="530, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctArcsSlot" Margin="530, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctArcsText" Margin="552, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctOdiumSlot" Margin="615, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctOdiumSlot" Margin="615, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctOdiumText" Margin="637, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctDowonkyungSlot" Margin="700, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctDowonkyungSlot" Margin="700, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctDowonkyungText" Margin="722, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctArteriaSlot" Margin="785, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctArteriaSlot" Margin="785, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctArteriaText" Margin="807, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
-        <subObjects:EquipmentSlot x:Name="ctCarsionSlot" Margin="870, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <equipment:EquipmentSlot x:Name="ctCarsionSlot" Margin="870, 235, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         <TextBox x:Name="ctCarsionText" Margin="892, 316, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Height="17"
                  Padding="0,-1,0,2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" PreviewTextInput="CheckTextNumberOnly" TextChanged="OnTextChanged"/>
         <Label x:Name="ctAuthenticForceDisplay" Content="AUT + 660" Margin="445, 335, 0, 0"/>

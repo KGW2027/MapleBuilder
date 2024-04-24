@@ -7,10 +7,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
 using MapleBuilder.Control.Data;
 using MapleBuilder.Control.Data.Item;
 
-namespace MapleBuilder.View.SubObjects;
+namespace MapleBuilder.View.SubObjects.Equipment;
 
 public partial class EquipmentSlot : UserControl
 {
@@ -19,6 +20,7 @@ public partial class EquipmentSlot : UserControl
         public string Text { get; set; }
         public BitmapImage Image { get; set; }
         public int Hash { get; set; }
+        public ItemBase? Item { get; set; }
     }
     
     private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
@@ -27,6 +29,7 @@ public partial class EquipmentSlot : UserControl
 
     private static readonly ItemSlot EMPTY = new()
     {
+        Item = null,
         Image = new BitmapImage(),
         Hash = -1,
         Text = "장착 해제"
@@ -55,7 +58,8 @@ public partial class EquipmentSlot : UserControl
                 {
                     Text = item.DisplayName,
                     Image = item.EquipData.Image,
-                    Hash = item.GetHashCode()
+                    Hash = item.GetHashCode(),
+                    Item = item
                 };
                 ItemsSources.Add(slot);
             }
@@ -69,6 +73,8 @@ public partial class EquipmentSlot : UserControl
 
     private static void OnDisplayItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
+        if (e.NewValue == null) return;
+        
         var control = (EquipmentSlot) d;
         ItemBase newItem = (ItemBase) e.NewValue;
 
@@ -109,6 +115,15 @@ public partial class EquipmentSlot : UserControl
         get => (MapleEquipType.EquipType) GetValue(TargetEquipTypeProperty);
         set => SetValue(TargetEquipTypeProperty, value);
     }
+    
+    public static readonly DependencyProperty TargetEquipIndexProperty =
+        DependencyProperty.Register(nameof(TargetEquipIndex), typeof(int), typeof(EquipmentSlot));
+    
+    public int TargetEquipIndex
+    {
+        get => (int) GetValue(TargetEquipIndexProperty);
+        set => SetValue(TargetEquipIndexProperty, value);
+    }
     #endregion
 
     
@@ -123,5 +138,14 @@ public partial class EquipmentSlot : UserControl
     {
         // Borderline.Background = NON_HOVER;
         // ItemLabel.Visibility = Visibility.Collapsed;
+    }
+
+    private void OnUserChangedEquipment(object sender, SelectionChangedEventArgs e)
+    {
+        if (!IsInitialized || e.AddedItems.Count == 0 || e.AddedItems[0] == null) return;
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+
+        ItemSlot newSlot = (ItemSlot) e.AddedItems[0]!;
+        GlobalDataController.Instance.PlayerInstance.Equipment[TargetEquipType, TargetEquipIndex] = newSlot.Item;
     }
 }

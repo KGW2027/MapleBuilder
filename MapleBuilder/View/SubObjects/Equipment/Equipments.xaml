@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MapleBuilder.View.SubObjects"
+             xmlns:equipment="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
              mc:Ignorable="d"
              d:DesignHeight="482" d:DesignWidth="401" Background="Transparent">
     <UserControl.Resources>
-        <Style TargetType="local:EquipmentSlot">
+        <Style TargetType="equipment:EquipmentSlot">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Width" Value="77"/>
@@ -15,35 +16,35 @@
         </Style>    
     </UserControl.Resources>
     <Grid>
-        <local:EquipmentSlot x:Name="Ring4" Margin="0, 0, 0, 0" TargetEquipType="RING"/>
-        <local:EquipmentSlot x:Name="Ring3" Margin="0, 81, 0, 0" TargetEquipType="RING"/>
-        <local:EquipmentSlot x:Name="Ring2" Margin="0, 162, 0, 0" TargetEquipType="RING"/>
-        <local:EquipmentSlot x:Name="Ring1" Margin="0, 243, 0, 0" TargetEquipType="RING"/>
-        <local:EquipmentSlot x:Name="Pocket" Margin="0, 324, 0, 0" TargetEquipType="POCKET"/>
+        <equipment:EquipmentSlot x:Name="Ring4" Margin="0, 0, 0, 0" TargetEquipType="RING" TargetEquipIndex="3"/>
+        <equipment:EquipmentSlot x:Name="Ring3" Margin="0, 81, 0, 0" TargetEquipType="RING" TargetEquipIndex="2"/>
+        <equipment:EquipmentSlot x:Name="Ring2" Margin="0, 162, 0, 0" TargetEquipType="RING" TargetEquipIndex="1"/>
+        <equipment:EquipmentSlot x:Name="Ring1" Margin="0, 243, 0, 0" TargetEquipType="RING" TargetEquipIndex="0"/>
+        <equipment:EquipmentSlot x:Name="Pocket" Margin="0, 324, 0, 0" TargetEquipType="POCKET"/>
         
-        <local:EquipmentSlot x:Name="Pendant2" Margin="81, 81, 0, 0" TargetEquipType="PENDANT"/>
-        <local:EquipmentSlot x:Name="Pendant1" Margin="81, 162, 0, 0" TargetEquipType="PENDANT"/>
-        <local:EquipmentSlot x:Name="Weapon" Margin="81, 243, 0, 0" TargetEquipType="WEAPON"/>
-        <local:EquipmentSlot x:Name="Belt" Margin="81, 324, 0, 0" TargetEquipType="BELT"/>
+        <equipment:EquipmentSlot x:Name="Pendant2" Margin="81, 81, 0, 0" TargetEquipType="PENDANT" TargetEquipIndex="1"/>
+        <equipment:EquipmentSlot x:Name="Pendant1" Margin="81, 162, 0, 0" TargetEquipType="PENDANT" TargetEquipIndex="0"/>
+        <equipment:EquipmentSlot x:Name="Weapon" Margin="81, 243, 0, 0" TargetEquipType="WEAPON"/>
+        <equipment:EquipmentSlot x:Name="Belt" Margin="81, 324, 0, 0" TargetEquipType="BELT"/>
         
-        <local:EquipmentSlot x:Name="Cap" Margin="162, 0, 0, 0" TargetEquipType="HELMET"/>
-        <local:EquipmentSlot x:Name="Face" Margin="162, 81, 0, 0" TargetEquipType="FACE"/>
-        <local:EquipmentSlot x:Name="Eye" Margin="162, 162, 0, 0" TargetEquipType="EYE"/>
-        <local:EquipmentSlot x:Name="Top" Margin="162, 243, 0, 0" TargetEquipType="TOP"/>
-        <local:EquipmentSlot x:Name="Bottom" Margin="162, 324, 0, 0" TargetEquipType="BOTTOM"/>
-        <local:EquipmentSlot x:Name="Boot" Margin="162, 405, 0, 0" TargetEquipType="BOOT"/>
+        <equipment:EquipmentSlot x:Name="Cap" Margin="162, 0, 0, 0" TargetEquipType="HELMET"/>
+        <equipment:EquipmentSlot x:Name="Face" Margin="162, 81, 0, 0" TargetEquipType="FACE"/>
+        <equipment:EquipmentSlot x:Name="Eye" Margin="162, 162, 0, 0" TargetEquipType="EYE"/>
+        <equipment:EquipmentSlot x:Name="Top" Margin="162, 243, 0, 0" TargetEquipType="TOP"/>
+        <equipment:EquipmentSlot x:Name="Bottom" Margin="162, 324, 0, 0" TargetEquipType="BOTTOM"/>
+        <equipment:EquipmentSlot x:Name="Boot" Margin="162, 405, 0, 0" TargetEquipType="BOOT"/>
         
-        <local:EquipmentSlot x:Name="Earring" Margin="243, 162, 0, 0" TargetEquipType="EARRING"/>
-        <local:EquipmentSlot x:Name="Shoulder" Margin="243, 243, 0, 0" TargetEquipType="SHOULDER"/>
-        <local:EquipmentSlot x:Name="Gloves" Margin="243, 324, 0, 0" TargetEquipType="GLOVE"/>
-        <local:EquipmentSlot x:Name="Title" Margin="243, 405, 0, 0" TargetEquipType="TITLE"/>
+        <equipment:EquipmentSlot x:Name="Earring" Margin="243, 162, 0, 0" TargetEquipType="EARRING"/>
+        <equipment:EquipmentSlot x:Name="Shoulder" Margin="243, 243, 0, 0" TargetEquipType="SHOULDER"/>
+        <equipment:EquipmentSlot x:Name="Gloves" Margin="243, 324, 0, 0" TargetEquipType="GLOVE"/>
+        <equipment:EquipmentSlot x:Name="Title" Margin="243, 405, 0, 0" TargetEquipType="TITLE"/>
         
-        <local:EquipmentSlot x:Name="Emblem" Margin="324, 0, 0, 0" TargetEquipType="EMBLEM"/>
-        <local:EquipmentSlot x:Name="Badge" Margin="324, 81, 0, 0" TargetEquipType="BADGE"/>
-        <local:EquipmentSlot x:Name="Medal" Margin="324, 162, 0, 0" TargetEquipType="MEDAL"/>
-        <local:EquipmentSlot x:Name="SubWeapon" Margin="324, 243, 0, 0" TargetEquipType="SUB_WEAPON"/>
-        <local:EquipmentSlot x:Name="Cape" Margin="324, 324, 0, 0" TargetEquipType="CAPE"/>
-        <local:EquipmentSlot x:Name="Heart" Margin="324, 405, 0, 0" TargetEquipType="HEART"/>
+        <equipment:EquipmentSlot x:Name="Emblem" Margin="324, 0, 0, 0" TargetEquipType="EMBLEM"/>
+        <equipment:EquipmentSlot x:Name="Badge" Margin="324, 81, 0, 0" TargetEquipType="BADGE"/>
+        <equipment:EquipmentSlot x:Name="Medal" Margin="324, 162, 0, 0" TargetEquipType="MEDAL"/>
+        <equipment:EquipmentSlot x:Name="SubWeapon" Margin="324, 243, 0, 0" TargetEquipType="SUB_WEAPON"/>
+        <equipment:EquipmentSlot x:Name="Cape" Margin="324, 324, 0, 0" TargetEquipType="CAPE"/>
+        <equipment:EquipmentSlot x:Name="Heart" Margin="324, 405, 0, 0" TargetEquipType="HEART"/>
         
     </Grid>
 </UserControl>

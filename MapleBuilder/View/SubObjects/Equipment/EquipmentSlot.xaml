@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MapleBuilder.View.SubObjects.EquipmentSlot"
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.EquipmentSlot"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -54,10 +54,6 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <ComboBox x:Name="DisplayBox" Width="77" Height="77"/>
-        
-        <!-- <Image x:Name="DisplayImage" Width="69" Height="69" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
-        <!-- <Border x:Name="Borderline" Width="77" Height="77" BorderBrush="Black" BorderThickness="1" CornerRadius="4" Background="Transparent"/> -->
-        <!-- <Label x:Name="ItemLabel" VerticalAlignment="Center" HorizontalAlignment="Center" Content="수정하기" Foreground="White" FontSize="12" Visibility="Collapsed"/> -->
+        <ComboBox x:Name="DisplayBox" Width="77" Height="77" SelectionChanged="OnUserChangedEquipment"/>
     </Grid>
 </UserControl>
