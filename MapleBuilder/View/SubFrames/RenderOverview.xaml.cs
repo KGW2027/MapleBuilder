@@ -144,6 +144,19 @@ public partial class RenderOverview : UserControl
         Dispatcher.BeginInvoke(() =>
         {
             element.DisplayItem = GlobalDataController.Instance.PlayerInstance!.Equipment[type, slot]!;
+            
+            ctSetPanel.Children.Clear();
+            var setOptions = GlobalDataController.Instance.PlayerInstance.Equipment.SetEffect.SetString;
+
+            foreach (var set in setOptions.Split("|"))
+            {
+                string[] split = set.Split(":");
+                SetEffectDisplay setDisplay = new SetEffectDisplay();
+                setDisplay.SetName = split[0];
+                setDisplay.SetCount = split[1];
+                ctSetPanel.Children.Add(setDisplay);
+            }
+
         });
     }
 

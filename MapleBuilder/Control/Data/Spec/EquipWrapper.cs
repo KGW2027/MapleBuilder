@@ -15,17 +15,19 @@ public class EquipWrapper : StatWrapper
     public EquipWrapper(StatusChanged onStatusChanged) : base(new Dictionary<MapleStatus.StatusType, double>(), onStatusChanged)
     {
         commonEquips = new Dictionary<MapleEquipType.EquipType, ItemBase?>();
-        setEffect = new SetEffect();
+        SetEffect = new SetEffect();
         rings = new ItemBase?[] { null, null, null, null };
         pendants = new ItemBase?[] {null, null};
     }
 
     private static MapleStatContainer DEBUG_EquipContainer = new MapleStatContainer();
 
-    private Dictionary<MapleEquipType.EquipType, ItemBase?> commonEquips;
-    private ItemBase?[] rings;
-    private ItemBase?[] pendants;
-    private SetEffect setEffect;
+    private readonly Dictionary<MapleEquipType.EquipType, ItemBase?> commonEquips;
+    private readonly ItemBase?[] rings;
+    private readonly ItemBase?[] pendants;
+
+    protected internal readonly SetEffect SetEffect;
+    
     private PlayerData? PlayerData => GlobalDataController.Instance.PlayerInstance;
 
     public ItemBase? this[MapleEquipType.EquipType equipType, int slot]
@@ -41,11 +43,11 @@ public class EquipWrapper : StatWrapper
         set
         {
             ItemBase? prevItem = this[equipType, slot];
-            MapleStatContainer prevSetEffect = setEffect.GetSetOptions();
+            MapleStatContainer prevSetEffect = SetEffect.GetSetOptions();
             if (prevItem != null)
             {
                 prevItem.UnequipItem(PlayerData!);
-                setEffect.Sub(prevItem);
+                SetEffect.Sub(prevItem);
                 
 #if DEBUG
                 DEBUG_EquipContainer -= prevItem.DEBUG_GetItemStatus();
@@ -55,7 +57,7 @@ public class EquipWrapper : StatWrapper
             if (value != null)
             {
                 value.EquipItem(PlayerData!);
-                setEffect.Add(value);
+                SetEffect.Add(value);
 #if DEBUG
                 DEBUG_EquipContainer += value.DEBUG_GetItemStatus();
 #endif
@@ -72,7 +74,7 @@ public class EquipWrapper : StatWrapper
             }
             
             OnEquipmentChanged!.Invoke(equipType, slot);
-            SetChanged(prevSetEffect, setEffect.GetSetOptions());
+            SetChanged(prevSetEffect, SetEffect.GetSetOptions());
         }
     }
 
