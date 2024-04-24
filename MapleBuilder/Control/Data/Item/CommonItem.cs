@@ -165,22 +165,11 @@ public class CommonItem : ItemBase
         MapleStatContainer upgStatus = Upgrades.ConvertUpgrades(this, ChaosAverage);
         msc += upgStatus; // 작 정보
         // 스타포스 정보
-        if (UniqueName.EndsWith("듀얼보우건"))
-        {
-            Console.WriteLine($" 보정 대상 듀얼 보우건 작 정보");
-            foreach(var pair in upgStatus) Console.WriteLine($"\t{pair.Key} : {pair.Value}");
-        }
         MapleStatContainer sfStatus = this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
         msc += sfStatus;
 
         if (SoulOption != null)
             msc[SoulOption.Value.Key] += SoulOption.Value.Value;
-
-        if (UniqueName.EndsWith("듀얼보우건"))
-        {
-            Console.WriteLine($" 보정 대상 듀얼 보우건 스타포스 정보");
-            foreach(var pair in sfStatus) Console.WriteLine($"\t{pair.Key} : {pair.Value}");
-        }
         
         return msc;
     }
