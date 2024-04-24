@@ -43,7 +43,7 @@ public class MapleHexaStatus
             MapleStatus.StatusType.DAMAGE => 0.75 * level,
             MapleStatus.StatusType.ATTACK_POWER => 5 * level,
             MapleStatus.StatusType.MAGIC_POWER => 5 * level,
-            MapleStatus.StatusType.MAIN_STAT_FLAT => classType == MapleClass.ClassType.XENON ? 48 * level : classType == MapleClass.ClassType.DEMON_AVENGER ? 2100 : 100,
+            MapleStatus.StatusType.MAIN_STAT_FLAT => (classType == MapleClass.ClassType.XENON ? 48 : classType == MapleClass.ClassType.DEMON_AVENGER ? 2100 : 100) * level,
             _ => 0,
         };
     }
