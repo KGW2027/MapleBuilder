@@ -56,7 +56,6 @@ public class WzDatabase
         }
         else
         {
-
             WzDeserializer deserializer = new WzDeserializer(cachedEquipmentPath);
             deserializer.CheckSignature(EquipmentData.GetSignature());
             while (true)
@@ -84,20 +83,41 @@ public class WzDatabase
     }
     private void InitEquipments()
     {
-        using StreamReader reader = File.OpenText("./CharacterExtractorResult.json");
-        string jsonContent = reader.ReadToEnd();
-        JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
-
-        int idx = 0;
-        Summarize.StartProgressBar();
-        foreach (var pair in json)
+        using (StreamReader reader = File.OpenText("./CharacterExtractorResult.json"))
         {
-            if(idx++ % 1000 == 0)
-                Summarize.UpdateProgressBar(idx, json.Count);
-            if (pair.Value is not JsonObject itemData || !itemData.TryGetPropertyValue("info", out _)) continue;
-            EquipmentDataList.TryAdd(pair.Key, new EquipmentData(itemData));
+            string jsonContent = reader.ReadToEnd();
+            JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
+
+            int idx = 0;
+            Summarize.StartProgressBar();
+            foreach (var pair in json)
+            {
+                if (idx++ % 1000 == 0)
+                    Summarize.UpdateProgressBar(idx, json.Count);
+                if (pair.Value is not JsonObject itemData || !itemData.TryGetPropertyValue("info", out _)) continue;
+                EquipmentDataList.TryAdd(pair.Key, new EquipmentData(itemData));
+            }
+            Summarize.FinishProgressBar();
         }
-        Summarize.FinishProgressBar();
+
+        using (StreamReader reader = File.OpenText("./ItemExtractorResult.json"))
+        {
+            string jsonContent = reader.ReadToEnd();
+            JsonObject json = JsonNode.Parse(jsonContent)!.AsObject();
+            
+            int idx = 0;
+            Summarize.StartProgressBar();
+            foreach (var pair in json)
+            {
+                if (idx++ % 1000 == 0)
+                    Summarize.UpdateProgressBar(idx, json.Count);
+                if (pair.Value is not JsonObject itemData 
+                    || !itemData.TryGetPropertyValue("info", out _)
+                    || !itemData.TryGetPropertyValue("name", out _)) continue;
+                EquipmentDataList.TryAdd(pair.Key, new EquipmentData(itemData));
+            }
+            Summarize.FinishProgressBar();
+        }
     }
 }
 
@@ -121,12 +141,13 @@ public class EquipmentData : IWzSerializable
     {
         Name = data["name"]!.ToString();
         Id = int.Parse(data["itemId"]!.ToString());
+
         SetId = -1;
         maxUpgrade = 0;
         IsBlockGoldHammer = false;
         IsSuperior = false;
         incTable = new Dictionary<MapleStatus.StatusType, int>();
-
+        
         JsonObject info = data["info"]!.AsObject();
         iconPath = info.TryGetPropertyValue("icon", out var pathNode) && pathNode != null ? pathNode.ToString() : null; 
         

@@ -24,11 +24,19 @@ public partial class EquipmentSlot : UserControl
     private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
     private static readonly Brush HOVER = new SolidColorBrush(Color.FromArgb(0xA0, 0x00, 0x00, 0x00));
     public readonly ObservableCollection<ItemSlot> ItemsSources;
+
+    private static readonly ItemSlot EMPTY = new()
+    {
+        Image = new BitmapImage(),
+        Hash = -1,
+        Text = "장착 해제"
+    };
     
     public EquipmentSlot()
     {
         InitializeComponent();
         ItemsSources = new ObservableCollection<ItemSlot>();
+        ItemsSources.Add(EMPTY);
         DisplayBox.ItemsSource = ItemsSources;
         
         ItemDatabase.Instance.CachedItemList.CollectionChanged += CachedItemListOnCollectionChanged;
