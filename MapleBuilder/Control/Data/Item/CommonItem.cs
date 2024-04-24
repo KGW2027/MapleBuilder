@@ -9,6 +9,11 @@ namespace MapleBuilder.Control.Data.Item;
 
 public class CommonItem : ItemBase
 {
+    private CommonItem()
+    {
+        Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
+        
+    }
     public CommonItem(MapleCommonItem itemBase, ItemFlag flag = 0) : base(itemBase)
     {
         if ((flag & ItemFlag.POTENTIAL) == ItemFlag.POTENTIAL)
@@ -48,13 +53,13 @@ public class CommonItem : ItemBase
     }
 
     /* 잠재능력 */
-    public readonly KeyValuePair<MapleStatus.StatusType, int>[]? Potential;
+    public KeyValuePair<MapleStatus.StatusType, int>[]? Potential;
     
     /* 스타포스 */
     public int? Starforce;
     
     /* 추가옵션 */
-    public readonly Dictionary<AddOptions.AddOptionType, int>? AddOptions;
+    public Dictionary<AddOptions.AddOptionType, int>? AddOptions;
     
     /* 소울 인챈트 */
     public string? SoulName;
@@ -150,27 +155,125 @@ public class CommonItem : ItemBase
         return msc;
     }
     
-    protected override MapleStatContainer GetItemStatus()
+    public override MapleStatContainer GetItemStatus()
     {
         MapleStatContainer msc = new MapleStatContainer();
         msc += EquipData!.GetStatus(); // 기본 정보
-        
         msc += GetAddStatus();         // 추옵 정보
         msc += GetPotentialStatus();   // 잠재 정보
 
         MapleStatContainer upgStatus = Upgrades.ConvertUpgrades(this, ChaosAverage);
         msc += upgStatus; // 작 정보
         // 스타포스 정보
+        if (UniqueName.EndsWith("듀얼보우건"))
+        {
+            Console.WriteLine($" 보정 대상 듀얼 보우건 작 정보");
+            foreach(var pair in upgStatus) Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        }
         MapleStatContainer sfStatus = this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
         msc += sfStatus;
 
         if (SoulOption != null)
             msc[SoulOption.Value.Key] += SoulOption.Value.Value;
 
-        // string s = $"[Equipment {UniqueName}] Status = {{";
-        // foreach (var pair in msc) s += $"{pair.Key}={pair.Value}, ";
-        // Console.WriteLine($"{s[..^2]}}}");
+        if (UniqueName.EndsWith("듀얼보우건"))
+        {
+            Console.WriteLine($" 보정 대상 듀얼 보우건 스타포스 정보");
+            foreach(var pair in sfStatus) Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        }
         
         return msc;
+    }
+    
+    public CommonItem CopyItem(EquipmentData overrideData, bool isPowerCalc = true)
+    {
+        var newItem = new CommonItem();
+        newItem.UniqueName = overrideData.Name;
+        newItem.DisplayName = overrideData.Name;
+        newItem.EquipType = EquipType;
+        newItem.EquipData = overrideData;
+        newItem.ItemLevel = overrideData.Level;
+        newItem.DefaultStats = overrideData.GetStatus();
+
+        // Potential Copy
+        newItem.Potential = Potential;
+        // Starforce Copy
+        newItem.Starforce = Starforce;
+        // Upgrade Copy
+        newItem.MaxUpgradeCount = MaxUpgradeCount;
+        newItem.RemainUpgradeCount = RemainUpgradeCount;
+
+        if (Upgrades != null && isPowerCalc)
+        {
+            newItem.Upgrades = new UpgradeOption.UpgradeType[Upgrades.Length];
+            int idx = 0;
+            foreach (var upg in Upgrades)
+            {
+                if (upg.ToString().Contains("MAG"))
+                {
+                    string newName = upg.ToString().Replace("MAG", "ATK");
+                    if (Enum.TryParse(typeof(UpgradeOption.UpgradeType), newName, out var newType) && newType != null)
+                    {
+                        newItem.Upgrades[idx++] = (UpgradeOption.UpgradeType) newType;
+                        continue;
+                    }
+                }
+
+                if (upg.ToString().StartsWith("SPELL_TRACE"))
+                {
+                    string last = upg.ToString().Split("_")[3];
+                    if (Enum.TryParse(typeof(UpgradeOption.UpgradeType), $"SPELL_TRACE_DEX_{last}", out var newType) &&
+                        newType != null)
+                    {
+                        newItem.Upgrades[idx++] = (UpgradeOption.UpgradeType) newType;
+                        continue;
+                    }
+                }
+
+                newItem.Upgrades[idx++] = upg;
+            }
+            
+            newItem.ChaosAverage = ChaosAverage;
+            if (newItem.ChaosAverage != null)
+            {
+                (newItem.ChaosAverage[MapleStatus.StatusType.ATTACK_POWER],
+                        newItem.ChaosAverage[MapleStatus.StatusType.MAGIC_POWER])
+                    = (newItem.ChaosAverage[MapleStatus.StatusType.MAGIC_POWER],
+                        newItem.ChaosAverage[MapleStatus.StatusType.ATTACK_POWER]);
+            }
+        }
+        else
+        {
+            newItem.Upgrades = Upgrades;
+            newItem.ChaosAverage = ChaosAverage;
+        }
+
+        // Soul Copy
+        newItem.SoulName = SoulName;
+        newItem.SoulOption = SoulOption;
+        
+        // Add Option Copy
+        if (isPowerCalc && AddOptions != null)
+        {
+            newItem.AddOptions = new Dictionary<AddOptions.AddOptionType, int>();
+            foreach (var origAddOpt in AddOptions)
+            {
+                int grade = origAddOpt.Value;
+                if (origAddOpt.Key == Option.AddOptions.AddOptionType.MAGIC)
+                {
+                    grade = Math.Max(grade, newItem.AddOptions.GetValueOrDefault(Option.AddOptions.AddOptionType.ATTACK, 0));
+                    newItem.AddOptions.TryAdd(Option.AddOptions.AddOptionType.ATTACK, 0);
+                    newItem.AddOptions[Option.AddOptions.AddOptionType.ATTACK] = Math.Max(grade, origAddOpt.Value);
+                    continue;
+                }
+
+                if (newItem.AddOptions.ContainsKey(origAddOpt.Key))
+                    newItem.AddOptions[origAddOpt.Key] = Math.Max(grade, newItem.AddOptions[origAddOpt.Key]);
+                else newItem.AddOptions.Add(origAddOpt.Key, origAddOpt.Value);
+
+            }
+        } else newItem.AddOptions = AddOptions;
+        
+        return newItem;
     }
 }

@@ -15,7 +15,7 @@ public class PetItem : ItemBase
     public MaplePetType.PetType PetType;
     public readonly MapleStatContainer InitStats;
     
-    protected override MapleStatContainer GetItemStatus()
+    public override MapleStatContainer GetItemStatus()
     {
         return InitStats;
     }

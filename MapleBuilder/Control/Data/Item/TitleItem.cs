@@ -12,7 +12,7 @@ public class TitleItem : ItemBase
 
     private readonly MapleStatContainer titleStat;
 
-    protected override MapleStatContainer GetItemStatus()
+    public override MapleStatContainer GetItemStatus()
     {
         return titleStat;
     }

@@ -5,11 +5,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
+using MapleBuilder.Control;
+using MapleBuilder.Control.Data;
+using MapleBuilder.Control.Data.Item;
 
 namespace MapleBuilder.View;
 
 public static class StaticFunctions
 {
+    private static Dictionary<int, MapleStatContainer> _powerCorrectCache = new();
+    
     public static IEnumerable<T> GetChildren<T>(this DependencyObject parent) where T : DependencyObject
     {
         if (parent == null) yield break;
@@ -34,10 +39,29 @@ public static class StaticFunctions
     {
         e.Handled = e.Text.Length < 1 || e.Text[0] < '0' || e.Text[0] > '9';
     }
+
+    private static int GetCorrectItem(CommonItem weapon, MapleStatus.StatusType atkType)
+    {
+        int hash = weapon.GetHashCode();
+        
+        if (!_powerCorrectCache.ContainsKey(hash))
+        {
+            var powerWeaponData = WzDatabase.Instance.GetPowerWeapon(weapon);
+            if (powerWeaponData == null) return 0;
+
+            var copyItem = weapon.CopyItem(powerWeaponData);
+            _powerCorrectCache.Add(hash, copyItem.GetItemStatus());
+        }
+        return (int) (_powerCorrectCache[hash][MapleStatus.StatusType.ATTACK_POWER] - weapon.GetItemStatus()[atkType]);
+    }
     
 
-    public static ulong GetPower(this MapleStatContainer container, int correctAtk, bool isGenesis)
+    public static ulong GetPower(this MapleStatContainer container)
     {
+        if (GlobalDataController.Instance.PlayerInstance == null) return 0L;
+        if(GlobalDataController.Instance.PlayerInstance.Equipment[MapleEquipType.EquipType.WEAPON, 0] is not CommonItem weapon) return 0L;
+        int correctAtk = GetCorrectItem(weapon, container.AttackFlatType);
+        bool isGenesis = weapon.UniqueName.StartsWith("제네시스");
         // Stat const
         double mainStatVar = Math.Floor(container[container.MainStatType] * (100 + container[container.MainStatType + 0x10]) / 100) + container[container.MainStatType + 0x20];
         double subStatVar = Math.Floor(container[container.SubStatType] * (100 + container[container.SubStatType + 0x10]) / 100) + container[container.SubStatType + 0x20];

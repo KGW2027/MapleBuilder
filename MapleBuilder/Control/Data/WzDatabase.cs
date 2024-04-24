@@ -5,6 +5,7 @@ using System.Text.Json.Nodes;
 using System.Windows.Media.Imaging;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
+using MapleBuilder.Control.Data.Item;
 using MapleBuilder.Control.Data.Serailize;
 using MapleBuilder.View.SubFrames;
 
@@ -119,14 +120,33 @@ public class WzDatabase
             Summarize.FinishProgressBar();
         }
     }
+
+    public EquipmentData? GetPowerWeapon(CommonItem commonItem)
+    {
+        if (commonItem.EquipData == null) return null;
+        
+        foreach (var itemData in EquipmentDataList.Values)
+        {
+            if (itemData.Level != commonItem.ItemLevel) continue;
+            if (!itemData.Name.Split(" ")[0].Equals(commonItem.EquipData.Name.Split(" ")[0])) continue;
+            if (!itemData.AfterImage.Equals("dualBow")) continue;
+
+            return itemData;
+        }
+
+        return null;
+    }
 }
 
 public class EquipmentData : IWzSerializable
 {
-    private EquipmentData(string name, int id, int setId, int level, int maxUpgrade, bool isBlockGoldHammer, bool isSuperior, bool isLucky,
+    private EquipmentData(string name, string afterImage,
+        int id, int setId, int level, int maxUpgrade, 
+        bool isBlockGoldHammer, bool isSuperior, bool isLucky,
         string? iconPath, Dictionary<MapleStatus.StatusType, int> table)
     {
         Name = name;
+        AfterImage = afterImage;
         Id = id;
         SetId = setId;
         Level = level;
@@ -141,6 +161,7 @@ public class EquipmentData : IWzSerializable
     public EquipmentData(JsonObject data)
     {
         Name = data["name"]!.ToString();
+        AfterImage = "Unknown";
         Id = int.Parse(data["itemId"]!.ToString());
 
         SetId = -1;
@@ -209,6 +230,9 @@ public class EquipmentData : IWzSerializable
                 case "jokerToSetItem":
                     IsLuckyItem = true;
                     break;
+                case "afterImage":
+                    AfterImage = pair.Value.ToString();
+                    break;
             }
         }
     }
@@ -219,12 +243,13 @@ public class EquipmentData : IWzSerializable
     private readonly int maxUpgrade;
     
     public readonly string Name;
+    public readonly string AfterImage;
+    public readonly bool IsLuckyItem;
     public readonly int Id;
     public readonly int SetId;
     public readonly int Level;
     public readonly bool IsBlockGoldHammer;
     public readonly bool IsSuperior;
-    public readonly bool IsLuckyItem;
     public int MaxUpgrade => maxUpgrade + (IsBlockGoldHammer ? 0 : 1);
     
     public BitmapImage Image
@@ -269,6 +294,7 @@ public class EquipmentData : IWzSerializable
     void IWzSerializable.Serialize(WzSerializer serializer)
     {
         serializer.SerializeString(Name);
+        serializer.SerializeString(AfterImage);
         serializer.SerializeInt(Id);
         serializer.SerializeInt(SetId);
         serializer.SerializeInt(Level);
@@ -293,6 +319,7 @@ public class EquipmentData : IWzSerializable
         int endOffset = deserializer.GetOffset() + length;
         
         string name = deserializer.ReadString()!;
+        string afterImage = deserializer.ReadString()!;
         int id = deserializer.ReadInt();
         int setId = deserializer.ReadInt();
         int level = deserializer.ReadInt();
@@ -313,6 +340,6 @@ public class EquipmentData : IWzSerializable
         }
         // Console.WriteLine("}}");
         
-        return new EquipmentData(name, id, setId, level, upgrade, goldhammer, superior, lucky, icon, status);
+        return new EquipmentData(name, afterImage, id, setId, level, upgrade, goldhammer, superior, lucky, icon, status);
     }
 }

@@ -45,17 +45,9 @@ public abstract class ItemBase
         }
     }
 
-    protected abstract MapleStatContainer GetItemStatus();
+    protected ItemBase() { }
 
-    public MapleStatContainer DEBUG_GetItemStatus()
-    {
-        bool isRelease = true;
-#if DEBUG
-        isRelease = false;
-#endif
-        if (isRelease) throw new Exception("Executed debug mode only method on release mode.");
-        return GetItemStatus();
-    }
+    public abstract MapleStatContainer GetItemStatus();
 
     public void EquipItem(PlayerData playerData)
     {
