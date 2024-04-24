@@ -8,15 +8,6 @@ namespace MapleAPI.DataType;
 public class MapleStatContainer : IEnumerable<KeyValuePair<MapleStatus.StatusType, double>>, IDisposable
 {
     #region Constructor
-    
-    public MapleStatContainer()
-    {
-        statContainer = new Dictionary<MapleStatus.StatusType, double>();
-        MainStatType = MapleStatus.StatusType.OTHER;
-        SubStatType = MapleStatus.StatusType.OTHER;
-        SubStat2Type = MapleStatus.StatusType.OTHER;
-        Level = 0;
-    }
 
     protected internal static MapleStatContainer LoadFromJson(JsonObject itemJson)
     {
@@ -42,17 +33,19 @@ public class MapleStatContainer : IEnumerable<KeyValuePair<MapleStatus.StatusTyp
     
     #endregion
     
-    private Dictionary<MapleStatus.StatusType, double> statContainer;
-    public MapleStatus.StatusType MainStatType;
-    public MapleStatus.StatusType SubStatType;
-    public MapleStatus.StatusType SubStat2Type;
-    public int Level;
+    private Dictionary<MapleStatus.StatusType, double> statContainer = new();
+    private bool isEmpty = true;
+    public MapleStatus.StatusType MainStatType = MapleStatus.StatusType.OTHER;
+    public MapleStatus.StatusType SubStatType = MapleStatus.StatusType.OTHER;
+    public MapleStatus.StatusType SubStat2Type = MapleStatus.StatusType.OTHER;
+    public int Level = 0;
     
     public double this[MapleStatus.StatusType type]
     {
         get => statContainer.GetValueOrDefault(type, 0);
         set
         {
+            isEmpty = false;
             statContainer.TryAdd(type, 0);
             if (type is MapleStatus.StatusType.IGNORE_DEF or MapleStatus.StatusType.FINAL_DAMAGE)
                 statContainer[type] = ApplyMultipleCalc(statContainer[type], value - statContainer[type]);
@@ -102,6 +95,7 @@ public class MapleStatContainer : IEnumerable<KeyValuePair<MapleStatus.StatusTyp
 
     public void Clear()
     {
+        isEmpty = true;
         statContainer.Clear();
     }
     
@@ -270,6 +264,10 @@ public class MapleStatContainer : IEnumerable<KeyValuePair<MapleStatus.StatusTyp
     }
     #endregion
 
+    public bool IsEmpty()
+    {
+        return isEmpty;
+    }
 
     public void Dispose()
     {

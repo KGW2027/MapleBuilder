@@ -123,7 +123,7 @@ public class WzDatabase
 
 public class EquipmentData : IWzSerializable
 {
-    private EquipmentData(string name, int id, int setId, int level, int maxUpgrade, bool isBlockGoldHammer, bool isSuperior,
+    private EquipmentData(string name, int id, int setId, int level, int maxUpgrade, bool isBlockGoldHammer, bool isSuperior, bool isLucky,
         string? iconPath, Dictionary<MapleStatus.StatusType, int> table)
     {
         Name = name;
@@ -133,6 +133,7 @@ public class EquipmentData : IWzSerializable
         this.maxUpgrade = maxUpgrade;
         IsBlockGoldHammer = isBlockGoldHammer;
         IsSuperior = isSuperior;
+        IsLuckyItem = isLucky;
         this.iconPath = iconPath;
         incTable = table;
     }
@@ -146,6 +147,7 @@ public class EquipmentData : IWzSerializable
         maxUpgrade = 0;
         IsBlockGoldHammer = false;
         IsSuperior = false;
+        IsLuckyItem = false;
         incTable = new Dictionary<MapleStatus.StatusType, int>();
         
         JsonObject info = data["info"]!.AsObject();
@@ -204,6 +206,9 @@ public class EquipmentData : IWzSerializable
                 case "setItemID":
                     SetId = val;
                     break;
+                case "jokerToSetItem":
+                    IsLuckyItem = true;
+                    break;
             }
         }
     }
@@ -219,6 +224,7 @@ public class EquipmentData : IWzSerializable
     public readonly int Level;
     public readonly bool IsBlockGoldHammer;
     public readonly bool IsSuperior;
+    public readonly bool IsLuckyItem;
     public int MaxUpgrade => maxUpgrade + (IsBlockGoldHammer ? 0 : 1);
     
     public BitmapImage Image
@@ -269,6 +275,7 @@ public class EquipmentData : IWzSerializable
         serializer.SerializeInt(maxUpgrade);
         serializer.SerializeByte((byte) (IsBlockGoldHammer ? 1 : 0));
         serializer.SerializeByte((byte) (IsSuperior ? 1 : 0));
+        serializer.SerializeByte((byte) (IsLuckyItem ? 1 : 0));
         serializer.SerializeString(iconPath);
         foreach (var pair in incTable)
         {
@@ -292,6 +299,7 @@ public class EquipmentData : IWzSerializable
         int upgrade = deserializer.ReadInt();
         bool goldhammer = deserializer.ReadBool();
         bool superior = deserializer.ReadBool();
+        bool lucky = deserializer.ReadBool();
         string? icon = deserializer.ReadString();
         Dictionary<MapleStatus.StatusType, int> status = new Dictionary<MapleStatus.StatusType, int>();
 
@@ -305,6 +313,6 @@ public class EquipmentData : IWzSerializable
         }
         // Console.WriteLine("}}");
         
-        return new EquipmentData(name, id, setId, level, upgrade, goldhammer, superior, icon, status);
+        return new EquipmentData(name, id, setId, level, upgrade, goldhammer, superior, lucky, icon, status);
     }
 }
