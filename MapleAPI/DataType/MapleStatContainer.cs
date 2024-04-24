@@ -60,23 +60,6 @@ public class MapleStatContainer : IEnumerable<KeyValuePair<MapleStatus.StatusTyp
         ? MapleStatus.StatusType.MAGIC_RATE
         : MapleStatus.StatusType.ATTACK_RATE;
 
-    public ulong GetPower(int correctAtk, bool isGenesis)
-    {
-        // Stat const
-        double mainStatVar = Math.Floor(this[MainStatType] * (100 + this[MainStatType + 0x10]) / 100) + this[MainStatType + 0x20];
-        double subStatVar = Math.Floor(this[SubStatType] * (100 + this[SubStatType + 0x10]) / 100) + this[SubStatType + 0x20];
-        if (SubStat2Type != MapleStatus.StatusType.OTHER)
-            subStatVar += Math.Floor(this[SubStat2Type] * (100 + this[SubStat2Type + 0x10]) / 100) + this[SubStat2Type + 0x20];
-
-        double stat = (mainStatVar * 4.0 + subStatVar) / 100;
-        double atk = Math.Floor((this[AttackFlatType] + correctAtk + 30) * (100 + this[AttackRateType]) / 100); // TODO : 30 = 여축/정축 미리 입력(스킬 기능 추가 시 제거)
-        double dam = (100 + this[MapleStatus.StatusType.DAMAGE] + this[MapleStatus.StatusType.BOSS_DAMAGE]) / 100;
-        double cdam = (135 + this[MapleStatus.StatusType.CRITICAL_DAMAGE]) / 100;
-        double fdam = isGenesis ? 1.1 : 1.0;
-
-        return (ulong) Math.Floor(stat * atk * dam * cdam * fdam);
-    }
-
     private double ClearAndGet(MapleStatus.StatusType statusType)
     {
         double value = 0;

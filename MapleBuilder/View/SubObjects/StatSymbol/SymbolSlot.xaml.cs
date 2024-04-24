@@ -77,13 +77,13 @@ public partial class SymbolSlot : UserControl
 
     private void CheckIsNumber(object sender, TextCompositionEventArgs e)
     {
-        e.Handled = !int.TryParse(e.Text, out _);
+        e.Handled = e.Text.Length == 0 || e.Text[0] > '9' || e.Text[0] < '0';
     }
 
     private void LevelChanged(object sender, TextChangedEventArgs e)
     {
-        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        if (GlobalDataController.Instance.PlayerInstance == null || !int.TryParse(LevelInput.Text, out var level)) return;
         int max = (int) Symbol <= 0x10 ? 20 : 11;
-        GlobalDataController.Instance.PlayerInstance[Symbol] = Math.Clamp(int.Parse(LevelInput.Text), 0, max);
+        GlobalDataController.Instance.PlayerInstance[Symbol] = Math.Clamp(level, 0, max);
     }
 }
