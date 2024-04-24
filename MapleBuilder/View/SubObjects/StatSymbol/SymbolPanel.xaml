@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.StatSymbol.SymbolPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:equipment="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
+             xmlns:statSymbol="clr-namespace:MapleBuilder.View.SubObjects.StatSymbol"
+             mc:Ignorable="d"
+             d:DesignHeight="390" d:DesignWidth="540" Background="Transparent">
+    <Grid>
+        
+        <Label Content="아케인 심볼" Margin="0, 8, 0, 0"/>
+        <ScrollViewer Width="524" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden"
+                      Margin="8, 40, 0, 0">
+            <StackPanel x:Name="Arcanes" Orientation="Horizontal"/>
+        </ScrollViewer>
+        <Label x:Name="ArcaneDisplay" Content="ARC + 1,320 INT + 13,200" Margin="8, 140, 0, 0"/>
+        
+        <Label Content="어센틱 심볼" Margin="0, 203, 0, 0"/>
+        <ScrollViewer Width="524" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden"
+                      Margin="8, 235, 0, 0">
+            <StackPanel x:Name="Authentics" Orientation="Horizontal"/>
+        </ScrollViewer>
+        <Label x:Name="AuthenticDisplay" Content="AUT + 660 INT + 15,000" Margin="8, 335, 0, 0"/>
+    </Grid>
+</UserControl>

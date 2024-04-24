@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.StatSymbol.SymbolSlot"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.StatSymbol"
+             mc:Ignorable="d"
+             d:DesignHeight="100" d:DesignWidth="77" Background="Transparent" MouseEnter="OnHover" MouseLeave="OnHoverEnd">
+    <Grid>
+        <Image x:Name="ItemImage" Width="69" Height="69" HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="4, 4, 0, 0"/>
+        <Border x:Name="Border" Width="77" Height="77" BorderThickness="1" BorderBrush="Black" Background="Transparent" CornerRadius="2" VerticalAlignment="Top"/>
+        <Label x:Name="HoverText" Content="츄츄 아일랜드" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Thin"
+               Visibility="Collapsed" Margin="0, 30,0 ,0"/>
+        
+        <TextBox x:Name="LevelInput" Width="35" Margin="23, 80, 0, 0" Text="0" Padding="0, 0, 0, 0" HorizontalContentAlignment="Center"
+                 PreviewTextInput="CheckIsNumber" TextChanged="LevelChanged"/>
+    </Grid>
+</UserControl>

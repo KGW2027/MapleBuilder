@@ -23,8 +23,6 @@ public partial class EquipmentSlot : UserControl
         public ItemBase? Item { get; set; }
     }
     
-    private static readonly Brush NON_HOVER = new SolidColorBrush(Color.FromArgb(0x00, 0x00, 0x00, 0x00));
-    private static readonly Brush HOVER = new SolidColorBrush(Color.FromArgb(0xA0, 0x00, 0x00, 0x00));
     public readonly ObservableCollection<ItemSlot> ItemsSources;
 
     private static readonly ItemSlot EMPTY = new()
