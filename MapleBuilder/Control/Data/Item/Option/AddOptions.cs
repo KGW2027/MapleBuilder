@@ -31,7 +31,7 @@ public static class AddOptions
         ,ALL_STAT   = HP + 6
     }
 
-    private static readonly AddOptionType[] WEAPON_OPTIONS = {
+    public static readonly AddOptionType[] WeaponOptions = {
         AddOptionType.STR, AddOptionType.DEX, AddOptionType.INT, AddOptionType.LUK,
         AddOptionType.STR_DEX, AddOptionType.STR_INT, AddOptionType.STR_LUK,
         AddOptionType.DEX_INT, AddOptionType.DEX_LUK, AddOptionType.INT_LUK,
@@ -39,7 +39,7 @@ public static class AddOptions
         AddOptionType.BOSS_DAMAGE, AddOptionType.DAMAGE, AddOptionType.ALL_STAT
     };
     
-    private static readonly AddOptionType[] ARMOR_OPTIONS = {
+    public static readonly AddOptionType[] ArmorOptions = {
         AddOptionType.STR, AddOptionType.DEX, AddOptionType.INT, AddOptionType.LUK,
         AddOptionType.STR_DEX, AddOptionType.STR_INT, AddOptionType.STR_LUK,
         AddOptionType.DEX_INT, AddOptionType.DEX_LUK, AddOptionType.INT_LUK,
@@ -221,7 +221,7 @@ public static class AddOptions
 
     public static AddOptionType[] GetAddOptionTypes(this CommonItem item)
     {
-        return item.EquipType == MapleEquipType.EquipType.WEAPON ? WEAPON_OPTIONS : ARMOR_OPTIONS;
+        return item.EquipType == MapleEquipType.EquipType.WEAPON ? WeaponOptions : ArmorOptions;
     }
 
     public static int GetAttackOption(this CommonItem item, int grade, bool isAttack = true)

@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.EditEquips.AddOptionEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment.EditEquips"
+             mc:Ignorable="d"
+             d:DesignHeight="124" d:DesignWidth="344" Background="Transparent">
+    <Grid Name="Grid">
+        <ComboBox Margin="0, 12, 0, 0" Width="87" Height="24" Tag="1"/>
+        <ComboBox Margin="0, 40, 0, 0" Width="87" Height="24" Tag="2"/>
+        <ComboBox Margin="0, 68, 0, 0" Width="87" Height="24" Tag="3"/>
+        <ComboBox Margin="0, 96, 0, 0" Width="87" Height="24" Tag="4"/>
+        
+        <Label Content="1단계(7추)" FontSize="10" FontWeight="Light" Foreground="#CCCCCC"
+               Margin="115, -8, 0, 0"/>
+        <Label Content="7단계(1추)" FontSize="10" FontWeight="Light" Foreground="#CCCCCC"
+               Margin="279, -8, 0, 0"/>
+        
+        <Slider Width="192" Margin="125, 12, 0, 0" Tag="1" Minimum="1" Maximum="7" SmallChange="1"/>
+        <Slider Width="192" Margin="125, 40, 0, 0" Tag="2" Minimum="1" Maximum="7" SmallChange="1"/>
+        <Slider Width="192" Margin="125, 68, 0, 0" Tag="3" Minimum="1" Maximum="7" SmallChange="1"/>
+        <Slider Width="192" Margin="125, 97, 0, 0" Tag="4" Minimum="1" Maximum="7" SmallChange="1"/>
+    </Grid>
+</UserControl>

@@ -10,7 +10,12 @@ public class TitleItem : ItemBase
         titleStat = itemBase.Status;
     }
 
-    private readonly MapleStatContainer titleStat;
+    private TitleItem()
+    {
+        titleStat = new MapleStatContainer();
+    }
+
+    private MapleStatContainer titleStat;
 
     public override MapleStatContainer GetItemStatus()
     {
@@ -20,5 +25,21 @@ public class TitleItem : ItemBase
     public override MapleStatContainer GetUpStatus()
     {
         return titleStat;
+    }
+
+    public override ItemBase Clone()
+    {
+        var clone = new TitleItem();
+        
+        clone.UniqueName = UniqueName;
+        clone.DisplayName = DisplayName;
+        clone.EquipType = EquipType;
+        clone.EquipData = EquipData;
+        clone.ItemLevel = ItemLevel;
+        clone.DefaultStats = new MapleStatContainer();
+        clone.DefaultStats += DefaultStats;
+        
+        clone.titleStat += titleStat;
+        return clone;
     }
 }

@@ -51,6 +51,7 @@ public abstract class ItemBase
 
     public abstract MapleStatContainer GetItemStatus();
     public abstract MapleStatContainer GetUpStatus();
+    public abstract ItemBase Clone();
 
     public void EquipItem(PlayerData playerData)
     {

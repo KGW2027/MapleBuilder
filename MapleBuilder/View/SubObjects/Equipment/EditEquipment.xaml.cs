@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Item;
+using MapleBuilder.View.SubObjects.Equipment.EditEquips;
 
 namespace MapleBuilder.View.SubObjects.Equipment;
 
@@ -10,9 +12,11 @@ public partial class EditEquipment : UserControl
     public class SaveEquipmentEvent : RoutedEventArgs
     {
         public ItemBase? NewItem;
-        protected internal SaveEquipmentEvent(RoutedEvent routedEvent, ItemBase? item) : base(routedEvent)
+        public bool CloseWindow;
+        protected internal SaveEquipmentEvent(RoutedEvent routedEvent, ItemBase? item, bool close) : base(routedEvent)
         {
             NewItem = item;
+            CloseWindow = close;
         }
     }
     
@@ -41,13 +45,43 @@ public partial class EditEquipment : UserControl
 
     private static void TargetItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (e.NewValue == null) return;
         var control = (EditEquipment) d;
-        control.defaultItem = (ItemBase?) e.NewValue;
+        if (control.defaultItem != null && e.OldValue is ItemBase oldItem)
+            control.Cancel(oldItem);
+        
+        if (e.NewValue == null) return;
+        control.defaultItem = ((ItemBase) e.NewValue).Clone();
 
         control.WeaponOnly.Visibility = control.defaultItem!.EquipType == MapleEquipType.EquipType.WEAPON
             ? Visibility.Visible
             : Visibility.Collapsed;
+
+        if (e.NewValue is CommonItem cItem)
+        {
+            control.SfvEditor.MaxStarforce = cItem.EquipData!.IsSuperior
+                ? cItem.ItemLevel switch // 슈페리얼 아이템
+                {
+                    < 95 => 3,
+                    < 108 => 5,
+                    < 118 => 8,
+                    < 128 => 10,
+                    < 138 => 12,
+                    >= 138 => 15,
+                }
+                : cItem.ItemLevel switch // 일반 아이템
+                {
+                    < 95 => 5,
+                    < 108 => 8,
+                    < 118 => 10,
+                    < 128 => 15,
+                    < 138 => 20,
+                    >= 138 => 25,
+                };
+            control.SfvEditor.Starforce = cItem.Starforce ?? 0;
+            
+            control.AddOptEditor.TargetItem = cItem;
+        }
+        
         control.Update();
     }
 
@@ -61,12 +95,12 @@ public partial class EditEquipment : UserControl
 
     private void Update()
     {
-        if (defaultItem == null) return;
+        if (defaultItem == null || TargetItem == null) return;
 
         if (defaultItem.EquipData != null) Thumbnail.Source = defaultItem.EquipData.Image;
-        ItemName.Text = defaultItem.DisplayName;
+        ItemName.Text = TargetItem.DisplayName;
 
-        var status = defaultItem.GetUpStatus();
+        var status = TargetItem.GetUpStatus();
         StrLabel.Content = $"{(int) status[MapleStatus.StatusType.STR]:N0}";
         DexLabel.Content = $"{(int) status[MapleStatus.StatusType.DEX]:N0}";
         IntLabel.Content = $"{(int) status[MapleStatus.StatusType.INT]:N0}";
@@ -82,21 +116,56 @@ public partial class EditEquipment : UserControl
     
     private void OnSaveClicked(object sender, RoutedEventArgs e)
     {
-        SaveEquipmentEvent args = new SaveEquipmentEvent(SAVED_EVENT, TargetItem)
+        SaveEquipmentEvent args = new SaveEquipmentEvent(SAVED_EVENT, TargetItem, true)
         {
             NewItem = TargetItem
         };
         RaiseEvent(args);
-        TargetItem = null;
+        defaultItem = null;
+    }
+
+    private void Cancel(ItemBase previousItem)
+    {
+        if (previousItem is CommonItem cItem)
+        {
+            CommonItem defItem = (CommonItem) defaultItem!;
+            Console.WriteLine($"아이템 변경이 Cancel되어 {cItem.DisplayName} (으)로 {defItem.DisplayName} 을(를) Override");
+
+            cItem.Starforce = defItem.Starforce; // 1
+            cItem.AddOptions = defItem.AddOptions; // 1
+            cItem.Potential = defItem.Potential; // 1
+            cItem.Upgrades = defItem.Upgrades; // 4
+            cItem.ChaosAverage = defItem.ChaosAverage;
+            cItem.MaxUpgradeCount = defItem.MaxUpgradeCount;
+            cItem.RemainUpgradeCount = defItem.RemainUpgradeCount;
+            cItem.SoulName = defItem.SoulName; // 2
+            cItem.SoulOption = defItem.SoulOption;
+        }
+
+        defaultItem = null;
+        
+        SaveEquipmentEvent args = new SaveEquipmentEvent(SAVED_EVENT, TargetItem, TargetItem != null && previousItem.ItemHash == TargetItem.ItemHash)
+        {
+            NewItem = TargetItem
+        };
+        RaiseEvent(args);
     }
 
     private void OnCancelClicked(object sender, RoutedEventArgs e)
     {
-        SaveEquipmentEvent args = new SaveEquipmentEvent(SAVED_EVENT, defaultItem)
-        {
-            NewItem = defaultItem
-        };
-        RaiseEvent(args);
+        Cancel(TargetItem!);
         defaultItem = null;
+    }
+
+    private void StarforceChanged(object sender, RoutedEventArgs e)
+    {
+        if (TargetItem is not CommonItem cItem || e is not StarforceEditor.StarforceChangedArgs args) return;
+        cItem.Starforce = args.NewStarforce;
+        Update();
+    }
+
+    private void OnAddOptionChanged(object sender, RoutedEventArgs e)
+    {
+        Update();
     }
 }

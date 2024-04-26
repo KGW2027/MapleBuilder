@@ -195,14 +195,18 @@ public partial class RenderOverview : UserControl
 
     private void OnEditSaved(object sender, RoutedEventArgs e)
     {
-        RenderFrame.SetCharacterTopVisibility(Visibility.Visible);
-        ctEquips.Visibility = Visibility.Visible;
-        ctSetScroll.Visibility = Visibility.Visible;
-
-        ctEditEquipment.Visibility = Visibility.Collapsed;
-        
-        if (GlobalDataController.Instance.PlayerInstance == null) return;
         if (e is not EditEquipment.SaveEquipmentEvent savedEvent) return;
+
+        if (savedEvent.CloseWindow)
+        {
+            RenderFrame.SetCharacterTopVisibility(Visibility.Visible);
+            ctEquips.Visibility = Visibility.Visible;
+            ctSetScroll.Visibility = Visibility.Visible;
+
+            ctEditEquipment.Visibility = Visibility.Collapsed;
+        }
+
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
         if (savedEvent.NewItem is not CommonItem commonItem) return;
 
         int max = commonItem.EquipType switch

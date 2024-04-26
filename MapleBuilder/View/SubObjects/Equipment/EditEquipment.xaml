@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
+             xmlns:editEquips="clr-namespace:MapleBuilder.View.SubObjects.Equipment.EditEquips"
              mc:Ignorable="d"
              d:DesignHeight="668" d:DesignWidth="417" Background="Transparent">
     <Grid>
@@ -21,8 +22,8 @@
         <Border Width="316" Height="32" Margin="93, 107, 0, 0" BorderBrush="White" BorderThickness="1"
                 HorizontalAlignment="Left" VerticalAlignment="Top"/>
         
-        <Border Width="302" Height="10" Margin="67, 150, 0, 0" BorderBrush="Yellow" BorderThickness="1"
-                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <editEquips:StarforceEditor HorizontalAlignment="Left" VerticalAlignment="Top" Margin="67, 150, 0, 0"
+                                    x:Name="SfvEditor" StarforceChanged="StarforceChanged"/>
         
         <Label Content="STR" FontSize="16" FontWeight="Medium" Margin="13, 176, 0, 0"/>
         <Label Content="DEX" FontSize="16" FontWeight="Medium" Margin="74, 176, 0, 0"/>
@@ -43,8 +44,8 @@
         <Label x:Name="AllLabel" Content="7 %" FontSize="12" FontWeight="Light" Margin="146, 252, 0, 0" Foreground="#17AF12"/>
         
         <Label Content="추가옵션" FontSize="16" FontWeight="Medium" Margin="13, 282, 0, 0"/>
-        <Border Margin="17, 307, 0, 0" Width="344" Height="118" VerticalAlignment="Top" HorizontalAlignment="Left"
-                BorderBrush="White" BorderThickness="1"/>
+        <editEquips:AddOptionEditor x:Name="AddOptEditor" Margin="17, 307, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                    ItemUpdated="OnAddOptionChanged"/>
         
         <Label Content="잠재능력" FontSize="16" FontWeight="Medium" Margin="13, 443, 0, 0"/>
         <Label Content="에디셔널 잠재능력" FontSize="16" FontWeight="Medium" Margin="207, 443, 0, 0"/>

@@ -190,6 +190,53 @@ public class CommonItem : ItemBase
         return msc;
     }
 
+    public override ItemBase Clone()
+    {
+        var clone = new CommonItem
+        {
+            UniqueName = UniqueName,
+            DisplayName = DisplayName,
+            EquipType = EquipType,
+            EquipData = EquipData,
+            ItemLevel = ItemLevel,
+            DefaultStats = new MapleStatContainer()
+        };
+        clone.DefaultStats += DefaultStats;
+
+        if (Potential != null)
+        {
+            clone.Potential = new KeyValuePair<MapleStatus.StatusType, int>[Potential.Length];
+            for (int idx = 0; idx < Potential.Length; idx++)
+                clone.Potential[idx] = KeyValuePair.Create(Potential[idx].Key, Potential[idx].Value);
+        }
+
+        if (Starforce != null) clone.Starforce = Starforce;
+
+        if (AddOptions != null)
+        {
+            clone.AddOptions = new Dictionary<AddOptions.AddOptionType, int>();
+            foreach (var pair in AddOptions) clone.AddOptions.TryAdd(pair.Key, pair.Value);
+        }
+
+        if (SoulOption != null)
+        {
+            clone.SoulName = SoulName;
+            clone.SoulOption = KeyValuePair.Create(SoulOption.Value.Key, SoulOption.Value.Value);
+        }
+
+        if (Upgrades != null && ChaosAverage != null)
+        {
+            clone.MaxUpgradeCount = MaxUpgradeCount;
+            clone.RemainUpgradeCount = RemainUpgradeCount;
+            clone.Upgrades = new UpgradeOption.UpgradeType[Upgrades.Length];
+            for (int idx = 0; idx < Upgrades.Length; idx++) clone.Upgrades[idx] = Upgrades[idx];
+            clone.ChaosAverage = new Dictionary<MapleStatus.StatusType, double>();
+            foreach (var pair in ChaosAverage) clone.ChaosAverage.TryAdd(pair.Key, pair.Value);
+        }
+
+        return clone;
+    }
+
     public CommonItem CopyItem(EquipmentData overrideData, bool isPowerCalc = true)
     {
         var newItem = new CommonItem();
