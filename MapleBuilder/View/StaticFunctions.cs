@@ -13,7 +13,7 @@ namespace MapleBuilder.View;
 
 public static class StaticFunctions
 {
-    private static Dictionary<int, MapleStatContainer> _powerCorrectCache = new();
+    private static Dictionary<Tuple<string, int>, MapleStatContainer> _powerCorrectCache = new();
     
     public static IEnumerable<T> GetChildren<T>(this DependencyObject parent) where T : DependencyObject
     {
@@ -42,17 +42,18 @@ public static class StaticFunctions
 
     private static int GetCorrectItem(CommonItem weapon, MapleStatus.StatusType atkType)
     {
-        int hash = weapon.GetHashCode();
+        int atkValue = (int) weapon.GetItemStatus()[atkType];
+        Tuple<string, int> tuple = Tuple.Create(weapon.UniqueName, atkValue);
         
-        if (!_powerCorrectCache.ContainsKey(hash))
+        if (!_powerCorrectCache.ContainsKey(tuple))
         {
             var powerWeaponData = WzDatabase.Instance.GetPowerWeapon(weapon);
             if (powerWeaponData == null) return 0;
 
             var copyItem = weapon.CopyItem(powerWeaponData);
-            _powerCorrectCache.Add(hash, copyItem.GetItemStatus());
+            _powerCorrectCache.Add(tuple, copyItem.GetItemStatus());
         }
-        return (int) (_powerCorrectCache[hash][MapleStatus.StatusType.ATTACK_POWER] - weapon.GetItemStatus()[atkType]);
+        return (int) (_powerCorrectCache[tuple][MapleStatus.StatusType.ATTACK_POWER] - atkValue);
     }
     
 

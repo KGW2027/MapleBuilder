@@ -27,6 +27,12 @@ public class PetEquipWrapper : StatWrapper
         }
     }
 
+    protected internal void Refresh()
+    {
+        foreach(var item in petItems)
+            item?.EquipItem(GlobalDataController.Instance.PlayerInstance!);
+    }
+
     protected override void CallStatusChanged(MapleStatus.StatusType statusType, double prev, double next)
     {
         

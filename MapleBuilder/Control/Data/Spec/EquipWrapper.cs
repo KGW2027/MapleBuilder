@@ -71,6 +71,23 @@ public class EquipWrapper : StatWrapper
         }
     }
 
+    public void Refresh()
+    {
+        PlayerData![PlayerData.StatSources.EQUIPMENT].Clear();
+        foreach (var equip in commonEquips.Values)
+            equip?.EquipItem(PlayerData);
+
+        foreach (var ring in rings)
+            ring?.EquipItem(PlayerData);
+
+        foreach (var pendant in pendants)
+            pendant?.EquipItem(PlayerData);
+
+        PlayerData![PlayerData.StatSources.EQUIPMENT] += SetEffect.GetSetOptions();
+        
+        PlayerData.PetEquip.Refresh();
+    }
+
     private void SetChanged(MapleStatContainer prevSetEffect, MapleStatContainer currSetEffect)
     {
         PlayerData![PlayerData.StatSources.EQUIPMENT] += (currSetEffect - prevSetEffect);

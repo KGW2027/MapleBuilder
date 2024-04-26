@@ -108,8 +108,9 @@ public partial class RenderOverview : UserControl
             {
                 foreach (object o in e.NewItems)
                 {
-                    ItemBase itembase = (ItemBase) o;
-                    var button = NewButton(itembase.DisplayName, itembase.ItemHash);
+                    if (o is not CommonItem itemBase || itemBase.EquipType == MapleEquipType.EquipType.MEDAL ||
+                        itemBase.EquipType == MapleEquipType.EquipType.BADGE) continue;
+                    var button = NewButton(itemBase.DisplayName, itemBase.ItemHash);
                     button.Click += EditItem;
                     ItemButtonStackPanel.Children.Add(button);
                 }
@@ -151,9 +152,16 @@ public partial class RenderOverview : UserControl
             foreach (var set in setOptions.Split("|"))
             {
                 string[] split = set.Split(":");
-                SetEffectDisplay setDisplay = new SetEffectDisplay();
-                setDisplay.SetName = split[0];
-                setDisplay.SetCount = split[1];
+                if (split.Length < 2)
+                {
+                    Console.WriteLine($"Set Item Error : {set}");
+                    continue;
+                }
+                SetEffectDisplay setDisplay = new SetEffectDisplay
+                {
+                    SetName = split[0],
+                    SetCount = split[1]
+                };
                 ctSetPanel.Children.Add(setDisplay);
             }
 
@@ -174,7 +182,7 @@ public partial class RenderOverview : UserControl
     private void EditItem(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button) return;
-        if(button.Tag.ToString() == null || !ItemDatabase.TryFindItemFromHash(button.Tag.ToString()!, out var targetItem) || targetItem == null) return;
+        if (button.Tag.ToString() == null || !ItemDatabase.TryFindItemFromHash(button.Tag.ToString()!, out var targetItem) || targetItem == null) return;
         
         RenderFrame.SetCharacterTopVisibility(Visibility.Collapsed);
         ctEquips.Visibility = Visibility.Collapsed;
@@ -187,14 +195,29 @@ public partial class RenderOverview : UserControl
 
     private void OnEditSaved(object sender, RoutedEventArgs e)
     {
-        if (GlobalDataController.Instance.PlayerInstance == null) return;
-        if (e is not EditEquipment.SaveEquipmentEvent savedEvent) return;
-        if (savedEvent.NewItem is not CommonItem commonItem) return;
-        
         RenderFrame.SetCharacterTopVisibility(Visibility.Visible);
         ctEquips.Visibility = Visibility.Visible;
         ctSetScroll.Visibility = Visibility.Visible;
 
         ctEditEquipment.Visibility = Visibility.Collapsed;
+        
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        if (e is not EditEquipment.SaveEquipmentEvent savedEvent) return;
+        if (savedEvent.NewItem is not CommonItem commonItem) return;
+
+        int max = commonItem.EquipType switch
+        {
+            MapleEquipType.EquipType.RING => 3,
+            MapleEquipType.EquipType.PENDANT => 1,
+            _ => 0
+        };
+        
+        for (int idx = 0; idx <= max; idx++)
+        {
+            var equipItem = GlobalDataController.Instance.PlayerInstance.Equipment[commonItem.EquipType, idx];
+            if (equipItem == null || equipItem.ItemHash != commonItem.ItemHash) continue;
+            GlobalDataController.Instance.PlayerInstance.Equipment.Refresh();
+            break;
+        }
     }
 }

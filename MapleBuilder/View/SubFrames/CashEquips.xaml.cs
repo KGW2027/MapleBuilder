@@ -70,7 +70,9 @@ public partial class CashEquips : UserControl
         string before = ((ComboBox) sender).Text;
         string next = e.AddedItems[0]!.ToString()!;
 
+        GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.OTHER] ??= new MapleStatContainer();
+        
         if (setOptions.TryGetValue(before, out var prev) && setOptions.TryGetValue(next, out var now))
-            GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.EQUIPMENT] += (now - prev);
+            GlobalDataController.Instance.PlayerInstance[PlayerData.StatSources.OTHER] += (now - prev);
     }
 }

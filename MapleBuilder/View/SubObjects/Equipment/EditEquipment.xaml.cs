@@ -41,11 +41,11 @@ public partial class EditEquipment : UserControl
 
     private static void TargetItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
+        if (e.NewValue == null) return;
         var control = (EditEquipment) d;
         control.defaultItem = (ItemBase?) e.NewValue;
-        if (control.defaultItem == null) return;
 
-        control.WeaponOnly.Visibility = control.defaultItem.EquipType == MapleEquipType.EquipType.WEAPON
+        control.WeaponOnly.Visibility = control.defaultItem!.EquipType == MapleEquipType.EquipType.WEAPON
             ? Visibility.Visible
             : Visibility.Collapsed;
         control.Update();
@@ -87,6 +87,7 @@ public partial class EditEquipment : UserControl
             NewItem = TargetItem
         };
         RaiseEvent(args);
+        TargetItem = null;
     }
 
     private void OnCancelClicked(object sender, RoutedEventArgs e)
@@ -96,5 +97,6 @@ public partial class EditEquipment : UserControl
             NewItem = defaultItem
         };
         RaiseEvent(args);
+        defaultItem = null;
     }
 }
