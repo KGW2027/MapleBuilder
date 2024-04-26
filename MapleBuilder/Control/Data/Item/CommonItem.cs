@@ -21,6 +21,8 @@ public class CommonItem : ItemBase
             Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
             if (itemBase.Potential != null)
             {
+                TopGrade = itemBase.Potential.PotentialGrade;
+                BottomGrade = itemBase.Potential.AdditionalGrade;
                 for (int idx = 0; idx < itemBase.Potential!.Potentials.Length; idx++)
                     Potential[idx] = itemBase.Potential!.Potentials[idx];
                 for (int idx = 0; idx < itemBase.Potential!.Additionals.Length; idx++)
@@ -53,6 +55,8 @@ public class CommonItem : ItemBase
     }
 
     /* 잠재능력 */
+    public MaplePotentialGrade.GradeType TopGrade;
+    public MaplePotentialGrade.GradeType BottomGrade;
     public KeyValuePair<MapleStatus.StatusType, int>[]? Potential;
     
     /* 스타포스 */
@@ -249,6 +253,8 @@ public class CommonItem : ItemBase
 
         // Potential Copy
         newItem.Potential = Potential;
+        newItem.TopGrade = TopGrade;
+        newItem.BottomGrade = BottomGrade;
         // Starforce Copy
         newItem.Starforce = Starforce;
         // Upgrade Copy

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
@@ -48,9 +49,13 @@ public partial class EditEquipment : UserControl
         var control = (EditEquipment) d;
         if (control.defaultItem != null && e.OldValue is ItemBase oldItem)
             control.Cancel(oldItem);
-        
-        if (e.NewValue == null) return;
-        control.defaultItem = ((ItemBase) e.NewValue).Clone();
+
+        if (e.NewValue is not ItemBase newItem)
+        {
+            Console.WriteLine("new value is not itembase");
+            return;
+        }
+        control.defaultItem = newItem.Clone();
 
         control.WeaponOnly.Visibility = control.defaultItem!.EquipType == MapleEquipType.EquipType.WEAPON
             ? Visibility.Visible
@@ -80,6 +85,8 @@ public partial class EditEquipment : UserControl
             control.SfvEditor.Starforce = cItem.Starforce ?? 0;
             
             control.AddOptEditor.TargetItem = cItem;
+            control.PotentialEditor.TargetItem = cItem;
+            control.AdditionalEditor.TargetItem = cItem;
         }
         
         control.Update();
@@ -122,13 +129,13 @@ public partial class EditEquipment : UserControl
         };
         RaiseEvent(args);
         defaultItem = null;
+        TargetItem = null;
     }
 
     private void Cancel(ItemBase previousItem)
     {
-        if (previousItem is CommonItem cItem)
+        if (previousItem is CommonItem cItem && defaultItem is CommonItem defItem)
         {
-            CommonItem defItem = (CommonItem) defaultItem!;
             Console.WriteLine($"아이템 변경이 Cancel되어 {cItem.DisplayName} (으)로 {defItem.DisplayName} 을(를) Override");
 
             cItem.Starforce = defItem.Starforce; // 1
@@ -140,9 +147,8 @@ public partial class EditEquipment : UserControl
             cItem.RemainUpgradeCount = defItem.RemainUpgradeCount;
             cItem.SoulName = defItem.SoulName; // 2
             cItem.SoulOption = defItem.SoulOption;
+            defaultItem = null;
         }
-
-        defaultItem = null;
         
         SaveEquipmentEvent args = new SaveEquipmentEvent(SAVED_EVENT, TargetItem, TargetItem != null && previousItem.ItemHash == TargetItem.ItemHash)
         {
@@ -154,7 +160,7 @@ public partial class EditEquipment : UserControl
     private void OnCancelClicked(object sender, RoutedEventArgs e)
     {
         Cancel(TargetItem!);
-        defaultItem = null;
+        TargetItem = null;
     }
 
     private void StarforceChanged(object sender, RoutedEventArgs e)

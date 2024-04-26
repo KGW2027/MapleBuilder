@@ -50,11 +50,8 @@
         <Label Content="잠재능력" FontSize="16" FontWeight="Medium" Margin="13, 443, 0, 0"/>
         <Label Content="에디셔널 잠재능력" FontSize="16" FontWeight="Medium" Margin="207, 443, 0, 0"/>
         
-        <Border Margin="17, 469, 0, 0" Width="162" Height="104" VerticalAlignment="Top" HorizontalAlignment="Left"
-                BorderBrush="White" BorderThickness="1"/>
-        <Border Margin="211, 469, 0, 0" Width="162" Height="104" VerticalAlignment="Top" HorizontalAlignment="Left"
-                BorderBrush="White" BorderThickness="1"/>
-        
+        <editEquips:PotentialEditor x:Name="PotentialEditor" Margin="17, 469, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" IsAdditional="False"/>
+        <editEquips:PotentialEditor x:Name="AdditionalEditor" Margin="211, 469, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left" IsAdditional="True"/>
         
         <Grid x:Name="WeaponOnly" Margin="232, 229, 0, 0">
                 <Label Content="데미지" FontSize="16" FontWeight="Medium" Margin="0, 0, 0, 0"/>
