@@ -4,6 +4,9 @@ namespace MapleAPI.DataType;
 
 public class MapleItemPotential
 {
+    public MaplePotentialGrade.GradeType PotentialGrade = MaplePotentialGrade.GradeType.NONE;
+    public MaplePotentialGrade.GradeType AdditionalGrade = MaplePotentialGrade.GradeType.NONE;
+    
     public KeyValuePair<MapleStatus.StatusType, int>[] Potentials { get; private set; } = {
         KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 
         KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1), 

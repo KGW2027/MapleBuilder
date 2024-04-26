@@ -44,8 +44,12 @@ public class MapleCommonItem : MapleItemBase
         StarForce = int.TryParse(data["starforce"]!.ToString(), out int val) ? val : 0;
         StarforceOption = MapleStatContainer.LoadFromJson(data["item_starforce_option"]!.AsObject());
 
-        Potential = new MapleItemPotential();
-        
+        Potential = new MapleItemPotential
+        {
+            PotentialGrade = MaplePotentialGrade.GetPotentialGrade(data["potential_option_grade"]),
+            AdditionalGrade = MaplePotentialGrade.GetPotentialGrade(data["additional_potential_option_grade"])
+        };
+
         for (int idx = 1; idx <= 3; idx++)
         {
             string index = $"potential_option_{idx}";
