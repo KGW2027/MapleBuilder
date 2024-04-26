@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 
@@ -47,20 +46,6 @@ public partial class HyperStatSlot : UserControl
     {
         get => (MapleStatus.StatusType) GetValue(StatProperty);
         set => SetValue(StatProperty, value);
-    }
-
-    private void CheckTextIsNumber(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = e.Text.Length < 1 || e.Text[0] < '0' || e.Text[0] > '9';
-    }
-
-    private static readonly RoutedEvent LEVEL_CHANGED_EVENT = EventManager.RegisterRoutedEvent("LevelChanged",
-        RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(HyperStatSlot));
-    
-    public event RoutedEventHandler LevelChanged
-    {
-        add => AddHandler(LEVEL_CHANGED_EVENT, value);
-        remove => RemoveHandler(LEVEL_CHANGED_EVENT, value);
     }
     
     #endregion

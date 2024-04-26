@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.EditEquipment"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
+             mc:Ignorable="d"
+             d:DesignHeight="668" d:DesignWidth="417" Background="Transparent">
+    <Grid>
+        <Label Content="장비 수정" Margin="8, 8, 0, 0"/>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="24"
+                Margin="265, 34, 0, 0" Content="저장" Click="OnSaveClicked"/>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="24"
+                Margin="341, 34, 0, 0" Content="취소" Click="OnCancelClicked"/>
+        
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="77" Height="77"
+                Margin="8, 62, 0, 0" BorderBrush="Black" BorderThickness="1" CornerRadius="2" Background="#313131"/>
+        <Image x:Name="Thumbnail" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20, 74, 0, 0"/>
+        <TextBox x:Name="ItemName" Width="316" Height="43" FontSize="20" Text="아케인셰이드 메이지글러브 +8 (수정가능)" FontWeight="Medium"
+                 VerticalContentAlignment="Center" Margin="93, 62, 0, 0"/>
+        <Border Width="316" Height="32" Margin="93, 107, 0, 0" BorderBrush="White" BorderThickness="1"
+                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
+        <Border Width="302" Height="10" Margin="67, 150, 0, 0" BorderBrush="Yellow" BorderThickness="1"
+                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        
+        <Label Content="STR" FontSize="16" FontWeight="Medium" Margin="13, 176, 0, 0"/>
+        <Label Content="DEX" FontSize="16" FontWeight="Medium" Margin="74, 176, 0, 0"/>
+        <Label Content="INT" FontSize="16" FontWeight="Medium" Margin="136, 176, 0, 0"/>
+        <Label Content="LUK" FontSize="16" FontWeight="Medium" Margin="193, 176, 0, 0"/>
+        <Label Content="최대 HP" FontSize="16" FontWeight="Medium" Margin="255, 176, 0, 0"/>
+        <Label Content="최대 MP" FontSize="16" FontWeight="Medium" Margin="339, 176, 0, 0"/>
+        <Label Content="공격력/마력" FontSize="16" FontWeight="Medium" Margin="13, 229, 0, 0"/>
+        <Label Content="올스텟" FontSize="16" FontWeight="Medium" Margin="135, 229, 0, 0"/>
+        
+        <Label x:Name="StrLabel" Content="999" FontSize="12" FontWeight="Light" Margin="17, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="DexLabel" Content="999" FontSize="12" FontWeight="Light" Margin="79, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="IntLabel" Content="999" FontSize="12" FontWeight="Light" Margin="138, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="LukLabel" Content="999" FontSize="12" FontWeight="Light" Margin="197, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="HpLabel" Content="9,999" FontSize="12" FontWeight="Light" Margin="266, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="MpLabel" Content="9,999" FontSize="12" FontWeight="Light" Margin="351, 199, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="AtkLabel" Content="999 / 999" FontSize="12" FontWeight="Light" Margin="28, 252, 0, 0" Foreground="#17AF12"/>
+        <Label x:Name="AllLabel" Content="7 %" FontSize="12" FontWeight="Light" Margin="146, 252, 0, 0" Foreground="#17AF12"/>
+        
+        <Label Content="추가옵션" FontSize="16" FontWeight="Medium" Margin="13, 282, 0, 0"/>
+        <Border Margin="17, 307, 0, 0" Width="344" Height="118" VerticalAlignment="Top" HorizontalAlignment="Left"
+                BorderBrush="White" BorderThickness="1"/>
+        
+        <Label Content="잠재능력" FontSize="16" FontWeight="Medium" Margin="13, 443, 0, 0"/>
+        <Label Content="에디셔널 잠재능력" FontSize="16" FontWeight="Medium" Margin="207, 443, 0, 0"/>
+        
+        <Border Margin="17, 469, 0, 0" Width="162" Height="104" VerticalAlignment="Top" HorizontalAlignment="Left"
+                BorderBrush="White" BorderThickness="1"/>
+        <Border Margin="211, 469, 0, 0" Width="162" Height="104" VerticalAlignment="Top" HorizontalAlignment="Left"
+                BorderBrush="White" BorderThickness="1"/>
+        
+        
+        <Grid x:Name="WeaponOnly" Margin="232, 229, 0, 0">
+                <Label Content="데미지" FontSize="16" FontWeight="Medium" Margin="0, 0, 0, 0"/>
+                <Label Content="보스 데미지" FontSize="16" FontWeight="Medium" Margin="89, 0, 0, 0"/>
+                <Label x:Name="DmgLabel" Content="7 %" FontSize="12" FontWeight="Light" Margin="11, 23, 0, 0" Foreground="#17AF12"/>
+                <Label x:Name="BdmgLabel" Content="14 %" FontSize="12" FontWeight="Light" Margin="113, 23, 0, 0" Foreground="#17AF12"/>
+                <Label Content="소울 효과" FontSize="16" FontWeight="Medium" Margin="-219, 357, 0, 0"/>
+                <Border Margin="-215, 383, 0, 0" Width="356" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left"
+                        BorderBrush="White" BorderThickness="1"/>
+        </Grid>
+        
+        
+    </Grid>
+</UserControl>

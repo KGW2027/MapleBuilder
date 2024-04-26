@@ -22,6 +22,7 @@ public abstract class ItemBase
     
     public string UniqueName;
     public string DisplayName;
+    public string ItemHash;
     public MapleEquipType.EquipType EquipType;
     public MapleStatContainer DefaultStats;
     public int ItemLevel;
@@ -33,6 +34,7 @@ public abstract class ItemBase
         UniqueName = DisplayName = itemBase.Name;
         EquipType = itemBase.EquipType;
         WzDatabase.Instance.EquipmentDataList.TryGetValue(UniqueName, out EquipData);
+        ItemHash = itemBase.Hash;
         if (EquipData != null)
         {
             ItemLevel = EquipData.Level;
@@ -48,6 +50,7 @@ public abstract class ItemBase
     protected ItemBase() { }
 
     public abstract MapleStatContainer GetItemStatus();
+    public abstract MapleStatContainer GetUpStatus();
 
     public void EquipItem(PlayerData playerData)
     {

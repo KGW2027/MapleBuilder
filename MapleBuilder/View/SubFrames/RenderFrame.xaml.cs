@@ -7,6 +7,12 @@ namespace MapleBuilder.View.SubFrames;
 
 public partial class RenderFrame : UserControl
 {
+
+    public static void SetCharacterTopVisibility(Visibility visibility)
+    {
+        if (selfInstance is not {IsInitialized: true}) return;
+        selfInstance.ctCharacterTop.Visibility = visibility;
+    }
     
     public RenderFrame()
     {

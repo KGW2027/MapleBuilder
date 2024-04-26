@@ -109,7 +109,7 @@ public partial class RenderOverview : UserControl
                 foreach (object o in e.NewItems)
                 {
                     ItemBase itembase = (ItemBase) o;
-                    var button = NewButton(itembase.DisplayName, itembase.GetHashCode().ToString());
+                    var button = NewButton(itembase.DisplayName, itembase.ItemHash);
                     button.Click += EditItem;
                     ItemButtonStackPanel.Children.Add(button);
                 }
@@ -121,7 +121,7 @@ public partial class RenderOverview : UserControl
             foreach (var oldItem in e.OldItems)
             {
                 ItemBase itembase = (ItemBase) oldItem;
-                oldItemHashes.Add(itembase.GetHashCode().ToString());
+                oldItemHashes.Add(itembase.ItemHash);
             }
 
             List<UIElement> deleteQueue = new List<UIElement>();
@@ -173,7 +173,28 @@ public partial class RenderOverview : UserControl
     
     private void EditItem(object sender, RoutedEventArgs e)
     {
+        if (sender is not Button button) return;
+        if(button.Tag.ToString() == null || !ItemDatabase.TryFindItemFromHash(button.Tag.ToString()!, out var targetItem) || targetItem == null) return;
         
+        RenderFrame.SetCharacterTopVisibility(Visibility.Collapsed);
+        ctEquips.Visibility = Visibility.Collapsed;
+        ctSetScroll.Visibility = Visibility.Collapsed;
+        
+        ctEditEquipment.TargetItem = targetItem;
+        ctEditEquipment.Visibility = Visibility.Visible;
     }
     #endregion
+
+    private void OnEditSaved(object sender, RoutedEventArgs e)
+    {
+        if (GlobalDataController.Instance.PlayerInstance == null) return;
+        if (e is not EditEquipment.SaveEquipmentEvent savedEvent) return;
+        if (savedEvent.NewItem is not CommonItem commonItem) return;
+        
+        RenderFrame.SetCharacterTopVisibility(Visibility.Visible);
+        ctEquips.Visibility = Visibility.Visible;
+        ctSetScroll.Visibility = Visibility.Visible;
+
+        ctEditEquipment.Visibility = Visibility.Collapsed;
+    }
 }

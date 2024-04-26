@@ -16,4 +16,9 @@ public class TitleItem : ItemBase
     {
         return titleStat;
     }
+
+    public override MapleStatContainer GetUpStatus()
+    {
+        return titleStat;
+    }
 }

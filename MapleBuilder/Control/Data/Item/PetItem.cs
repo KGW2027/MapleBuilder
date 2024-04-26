@@ -19,4 +19,9 @@ public class PetItem : ItemBase
     {
         return InitStats;
     }
+
+    public override MapleStatContainer GetUpStatus()
+    {
+        return InitStats;
+    }
 }

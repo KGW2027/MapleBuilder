@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using MapleAPI.DataType.Item;
 using MapleBuilder.Control.Data.Item;
 
@@ -34,6 +35,14 @@ public class ItemDatabase
         parsedItem.DisplayName += $" (by {author})";
         CachedItemList.Add(parsedItem);
         outItem = parsedItem;
+        return true;
+    }
+
+    public static bool TryFindItemFromHash(string hash, out ItemBase? outItem)
+    {
+        outItem = null;
+        if (!Instance.cachedHashes.Contains(hash)) return false;
+        outItem = Instance.CachedItemList.FirstOrDefault(i => i.ItemHash.Equals(hash));
         return true;
     }
 

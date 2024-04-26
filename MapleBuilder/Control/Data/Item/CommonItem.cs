@@ -173,7 +173,23 @@ public class CommonItem : ItemBase
         
         return msc;
     }
-    
+
+    public override MapleStatContainer GetUpStatus()
+    {
+        MapleStatContainer msc = new MapleStatContainer();
+        msc += EquipData!.GetStatus(); // 기본 정보
+        msc += GetAddStatus();         // 추옵 정보
+
+        MapleStatContainer upgStatus = Upgrades.ConvertUpgrades(this, ChaosAverage);
+        msc += upgStatus; // 작 정보
+        
+        // 스타포스 정보
+        MapleStatContainer sfStatus = this.ParseStarforceOption(upgStatus[MapleStatus.StatusType.ATTACK_POWER], upgStatus[MapleStatus.StatusType.MAGIC_POWER]);
+        msc += sfStatus;
+        
+        return msc;
+    }
+
     public CommonItem CopyItem(EquipmentData overrideData, bool isPowerCalc = true)
     {
         var newItem = new CommonItem();

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:subObjects="clr-namespace:MapleBuilder.View.SubObjects"
+             xmlns:equipment="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
              mc:Ignorable="d"
              d:DesignHeight="664" d:DesignWidth="968" Background="Transparent">
     <Grid>
@@ -11,12 +12,14 @@
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="417" Height="668" HorizontalAlignment="Left"/>
         
         <!-- 장비 오버뷰 -->
-        <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" CanContentScroll="True"
+        <ScrollViewer x:Name="ctSetScroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" CanContentScroll="True"
                       HorizontalAlignment="Left" VerticalAlignment="Top" Width="417" Height="28" Margin="0, 151, 0, 0">
             <StackPanel x:Name="ctSetPanel" Orientation="Horizontal"/>
         </ScrollViewer>
         <subObjects:Equipments x:Name="ctEquips" Margin="8, 178, 0, 0" Width="401" Height="482" HorizontalAlignment="Left" VerticalAlignment="Top"/>
         
+        <equipment:EditEquipment x:Name="ctEditEquipment" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed"
+                                 SavedEvent="OnEditSaved"/>
         
         <!-- 장비 목록 -->
         <Border Background="#313131" BorderBrush="#707070" BorderThickness="1" Width="547" Height="668" HorizontalAlignment="Left" Margin="421, 0, 0, 0"/>
