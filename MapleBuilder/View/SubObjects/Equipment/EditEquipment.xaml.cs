@@ -87,6 +87,7 @@ public partial class EditEquipment : UserControl
             control.AddOptEditor.TargetItem = cItem;
             control.PotentialEditor.TargetItem = cItem;
             control.AdditionalEditor.TargetItem = cItem;
+            control.SoulEditor.TargetItem = cItem;
         }
         
         control.Update();
@@ -136,11 +137,11 @@ public partial class EditEquipment : UserControl
     {
         if (previousItem is CommonItem cItem && defaultItem is CommonItem defItem)
         {
-            Console.WriteLine($"아이템 변경이 Cancel되어 {cItem.DisplayName} (으)로 {defItem.DisplayName} 을(를) Override");
-
             cItem.Starforce = defItem.Starforce; // 1
             cItem.AddOptions = defItem.AddOptions; // 1
-            cItem.Potential = defItem.Potential; // 1
+            cItem.Potential = defItem.Potential; // 3
+            cItem.TopGrade = defItem.TopGrade;
+            cItem.BottomGrade = defItem.BottomGrade;
             cItem.Upgrades = defItem.Upgrades; // 4
             cItem.ChaosAverage = defItem.ChaosAverage;
             cItem.MaxUpgradeCount = defItem.MaxUpgradeCount;

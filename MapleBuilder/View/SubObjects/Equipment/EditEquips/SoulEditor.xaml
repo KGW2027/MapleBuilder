@@ -1,0 +1,17 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.EditEquips.SoulEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment.EditEquips"
+             mc:Ignorable="d"
+             d:DesignHeight="24" d:DesignWidth="356" Background="Transparent">
+    <Grid>
+        <ComboBox x:Name="Prefixes" Width="72" Height="24" Text="위대한"
+                  SelectionChanged="OnSoulPrefixChanged"/>
+        <ComboBox x:Name="Bosses" Width="113" Height="24" Margin="76, 0, 0, 0" Text="캡틴블랙슬라임" HorizontalContentAlignment="Left" Padding="8, 0, 0, 0"
+                  SelectionChanged="OnSoulBossChanged"/>
+        <ComboBox x:Name="Options" Width="163" Height="24" Margin="193, 0, 0, 0" Text="보스 공격시 데미지 +12%" Padding="8, 0, 0, 0"
+                  SelectionChanged="OnOptionChanged"/>
+    </Grid>
+</UserControl>

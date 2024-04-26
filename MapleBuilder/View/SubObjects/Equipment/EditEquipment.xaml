@@ -59,8 +59,7 @@
                 <Label x:Name="DmgLabel" Content="7 %" FontSize="12" FontWeight="Light" Margin="11, 23, 0, 0" Foreground="#17AF12"/>
                 <Label x:Name="BdmgLabel" Content="14 %" FontSize="12" FontWeight="Light" Margin="113, 23, 0, 0" Foreground="#17AF12"/>
                 <Label Content="소울 효과" FontSize="16" FontWeight="Medium" Margin="-219, 357, 0, 0"/>
-                <Border Margin="-215, 383, 0, 0" Width="356" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left"
-                        BorderBrush="White" BorderThickness="1"/>
+                <editEquips:SoulEditor x:Name="SoulEditor" Margin="-215, 383, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         </Grid>
         
         
