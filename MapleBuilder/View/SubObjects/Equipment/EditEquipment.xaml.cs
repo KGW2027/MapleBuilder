@@ -63,31 +63,63 @@ public partial class EditEquipment : UserControl
 
         if (e.NewValue is CommonItem cItem)
         {
-            control.SfvEditor.MaxStarforce = cItem.EquipData!.IsSuperior
-                ? cItem.ItemLevel switch // 슈페리얼 아이템
-                {
-                    < 95 => 3,
-                    < 108 => 5,
-                    < 118 => 8,
-                    < 128 => 10,
-                    < 138 => 12,
-                    >= 138 => 15,
-                }
-                : cItem.ItemLevel switch // 일반 아이템
-                {
-                    < 95 => 5,
-                    < 108 => 8,
-                    < 118 => 10,
-                    < 128 => 15,
-                    < 138 => 20,
-                    >= 138 => 25,
-                };
-            control.SfvEditor.Starforce = cItem.Starforce ?? 0;
-            
-            control.AddOptEditor.TargetItem = cItem;
-            control.PotentialEditor.TargetItem = cItem;
-            control.AdditionalEditor.TargetItem = cItem;
-            control.SoulEditor.TargetItem = cItem;
+            if (cItem.Starforce != null)
+            {
+                control.SfvEditor.MaxStarforce = cItem.EquipData!.IsSuperior
+                    ? cItem.ItemLevel switch // 슈페리얼 아이템
+                    {
+                        < 95 => 3,
+                        < 108 => 5,
+                        < 118 => 8,
+                        < 128 => 10,
+                        < 138 => 12,
+                        >= 138 => 15,
+                    }
+                    : cItem.ItemLevel switch // 일반 아이템
+                    {
+                        < 95 => 5,
+                        < 108 => 8,
+                        < 118 => 10,
+                        < 128 => 15,
+                        < 138 => 20,
+                        >= 138 => 25,
+                    };
+                control.SfvEditor.Starforce = cItem.Starforce ?? 0;
+                control.SfvEditor.Visibility = Visibility.Visible;
+            } 
+            else control.SfvEditor.Visibility = Visibility.Collapsed;
+
+            if (cItem.AddOptions != null)
+            {
+                control.AddOptEditor.TargetItem = cItem;
+                control.AddOptEditor.Visibility = Visibility.Visible;
+            }
+            else control.AddOptEditor.Visibility = Visibility.Collapsed;
+
+            if (cItem.Potential != null)
+            {
+                control.PotentialEditor.TargetItem = cItem;
+                control.AdditionalEditor.TargetItem = cItem;
+                control.PotentialEditor.Visibility = Visibility.Visible;
+                control.AdditionalEditor.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                control.PotentialEditor.Visibility = Visibility.Collapsed;
+                control.AdditionalEditor.Visibility = Visibility.Collapsed;
+            }
+
+            if (cItem.Upgrades != null)
+            {
+                control.UpgradePreview.TargetItem = cItem;
+                control.UpgradePreview.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                control.UpgradePreview.Visibility = Visibility.Collapsed;
+            }
+
+            if (cItem.SoulOption != null) control.SoulEditor.TargetItem = cItem;
         }
         
         control.Update();
@@ -174,5 +206,12 @@ public partial class EditEquipment : UserControl
     private void OnAddOptionChanged(object sender, RoutedEventArgs e)
     {
         Update();
+    }
+
+    private void OpenUpgradeEditor(object sender, RoutedEventArgs e)
+    {
+        UpgradeEditor.Visibility = UpgradeEditor.Visibility == Visibility.Collapsed
+            ? Visibility.Visible
+            : Visibility.Collapsed;
     }
 }

@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.EditEquips.UpgradeSlot"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment.EditEquips"
+             mc:Ignorable="d"
+             d:DesignHeight="32" d:DesignWidth="32" Background="Transparent">
+    <Grid>
+        <Image Width="28" Height="28" VerticalAlignment="Center" HorizontalAlignment="Center"
+               x:Name="UpgradeImage"/>
+        <Border Width="32" Height="32" BorderBrush="#CCCCCC" BorderThickness="1" Background="#9B222222"/>
+        <Label Content="ATK11" FontSize="12" FontWeight="Light" VerticalContentAlignment="Center" HorizontalAlignment="Center"
+               Margin="0, 5, 0, 0" x:Name="UpgradeLabel"/>
+        
+        <Border x:Name="TooltipManager" Width="32" Height="32" Background="Transparent" ToolTip="TooltipTest" IsHitTestVisible="True" ToolTipService.ShowOnDisabled="True"/>
+        
+    </Grid>
+</UserControl>

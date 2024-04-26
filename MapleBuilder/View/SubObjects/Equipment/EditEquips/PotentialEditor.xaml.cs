@@ -16,6 +16,7 @@ public partial class PotentialEditor : UserControl
     private const string EmptyString = "옵션 없음 (또는 잡옵)";
     private List<PotentialOptions.Details> topOptions;
     private List<PotentialOptions.Details> subOptions;
+    private bool isUpdating;
 
     public PotentialEditor()
     {
@@ -47,6 +48,7 @@ public partial class PotentialEditor : UserControl
 
     private void Update()
     {
+        isUpdating = true;
         MaplePotentialGrade.GradeType gradeType =
             MaplePotentialGrade.GetPotentialGrade(GradeBox.SelectedItem.ToString());
         topOptions.Clear();
@@ -59,8 +61,13 @@ public partial class PotentialEditor : UserControl
             box.SelectedItem = EmptyString;
         }
 
-        if (TargetItem == null || TargetItem.Potential == null && gradeType == MaplePotentialGrade.GradeType.NONE ) return;
+        if (TargetItem == null || (TargetItem.Potential == null && gradeType == MaplePotentialGrade.GradeType.NONE))
+        {
+            isUpdating = false;
+            return;
+        }
         GradeBox.SelectedItem = MaplePotentialGrade.GetPotentialGradeString(IsAdditional ? TargetItem.BottomGrade : TargetItem.TopGrade);
+        gradeType = MaplePotentialGrade.GetPotentialGrade(GradeBox.SelectedItem.ToString());
         
         // 옵션 목록 불러오기 & 콤보 박스에 옵션 입력하기
         foreach (var detail in PotentialOptions.Options)
@@ -99,6 +106,7 @@ public partial class PotentialEditor : UserControl
                 break;
             }
         }
+        isUpdating = false;
         
     }
 
@@ -164,6 +172,7 @@ public partial class PotentialEditor : UserControl
 
     private void OnGradeUpdated(object sender, SelectionChangedEventArgs e)
     {
+        if (isUpdating) return;
         if (TargetItem == null || e.AddedItems[0] is not string newGrade) return;
         MaplePotentialGrade.GradeType newType = MaplePotentialGrade.GetPotentialGrade(newGrade);
         if (IsAdditional) TargetItem.BottomGrade = newType;
@@ -174,6 +183,7 @@ public partial class PotentialEditor : UserControl
 
     private void OnSelectedOptionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (isUpdating) return;
         if (TargetItem == null || e.AddedItems.Count < 1 || e.AddedItems[0] is not string newOption || sender is not ComboBox box || !int.TryParse(box.Tag.ToString(), out int boxTag)) return;
 
         // Find StatusType

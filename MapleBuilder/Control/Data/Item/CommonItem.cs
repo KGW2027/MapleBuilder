@@ -209,6 +209,8 @@ public class CommonItem : ItemBase
 
         if (Potential != null)
         {
+            clone.TopGrade = TopGrade;
+            clone.BottomGrade = BottomGrade;
             clone.Potential = new KeyValuePair<MapleStatus.StatusType, int>[Potential.Length];
             for (int idx = 0; idx < Potential.Length; idx++)
                 clone.Potential[idx] = KeyValuePair.Create(Potential[idx].Key, Potential[idx].Value);

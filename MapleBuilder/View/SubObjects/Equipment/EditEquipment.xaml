@@ -19,8 +19,8 @@
         <Image x:Name="Thumbnail" Width="50" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20, 74, 0, 0"/>
         <TextBox x:Name="ItemName" Width="316" Height="43" FontSize="20" Text="아케인셰이드 메이지글러브 +8 (수정가능)" FontWeight="Medium"
                  VerticalContentAlignment="Center" Margin="93, 62, 0, 0"/>
-        <Border Width="316" Height="32" Margin="93, 107, 0, 0" BorderBrush="White" BorderThickness="1"
-                HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <editEquips:UpgradePreviewer Margin="93, 107, 0, 0" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                     OpenUpgradeEditor="OpenUpgradeEditor" x:Name="UpgradePreview"/>
         
         <editEquips:StarforceEditor HorizontalAlignment="Left" VerticalAlignment="Top" Margin="67, 150, 0, 0"
                                     x:Name="SfvEditor" StarforceChanged="StarforceChanged"/>
@@ -62,6 +62,8 @@
                 <editEquips:SoulEditor x:Name="SoulEditor" Margin="-215, 383, 0, 0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
         </Grid>
         
+        <editEquips:UpgradeEditor Margin="421, 0, 0, 0" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                  x:Name="UpgradeEditor"/>
         
     </Grid>
 </UserControl>
