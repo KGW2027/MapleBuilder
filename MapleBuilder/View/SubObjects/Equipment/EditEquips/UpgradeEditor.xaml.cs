@@ -224,6 +224,7 @@ public partial class UpgradeEditor : UserControl
     private void Update()
     {
         if (TargetItem == null) return;
+        CurStatus.Content = $"현재 작 상태 ({cachedRemains} / {TargetItem.MaxUpgradeCount})";
 
         // Selfs
         CurUpgrades.Children.Clear();
@@ -313,7 +314,9 @@ public partial class UpgradeEditor : UserControl
             foreach (var slider in ChaosEditor.GetChildren<Slider>())
             {
                 if (!Enum.TryParse(slider.Tag.ToString(), out MapleStatus.StatusType statType)) continue;
-                slot.ChaosAverage.TryAdd(statType, slider.Value);
+                double sliderValue = slider.Value;
+                if (isChaosAmazing) sliderValue = sliderValue == 5.0 ? 6.0 : sliderValue == 50.0 ? 60.0 : sliderValue; 
+                slot.ChaosAverage.TryAdd(statType, sliderValue);
             }
         }
         // 혼줌 능력치 추가
@@ -326,7 +329,8 @@ public partial class UpgradeEditor : UserControl
                 foreach (var pair in cachedChaosAvg)
                 {
                     double value = pair.Value * chaosCnt + dict.GetValueOrDefault(pair.Key, 0);
-                    dict.Add(pair.Key, value);
+                    dict.TryAdd(pair.Key, 0);
+                    dict[pair.Key] = value;
                 }
             }
             foreach (var pair in dict) dict[pair.Key] /= chaosCnt + 1;
@@ -372,7 +376,8 @@ public partial class UpgradeEditor : UserControl
             foreach (var pair in cachedChaosAvg)
             {
                 double value = chaosCnt == 1 ? 0 : pair.Value * chaosCnt - slot.ChaosAverage!.GetValueOrDefault(pair.Key, 0);
-                dict.Add(pair.Key, value);
+                dict.TryAdd(pair.Key, 0);
+                dict[pair.Key] = value;
             }
 
             if (chaosCnt > 1)

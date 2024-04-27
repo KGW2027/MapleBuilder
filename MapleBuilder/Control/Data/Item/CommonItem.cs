@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MapleAPI.DataType;
 using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
@@ -14,10 +15,32 @@ public class CommonItem : ItemBase
         Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
         
     }
+
+    private ItemFlag CheckEventRing(MapleCommonItem cItem, ItemFlag flag)
+    {
+        if (cItem.EquipType != MapleEquipType.EquipType.RING || EquipData == null) return flag;
+
+        int[] noSfv = {
+            // SS     벤젼스     결속    코스모스  카오스    오닉스    테네      글로리   어웨이크   딥다크    플레임   어비스
+            1113231, 1114300, 1114302, 1114303, 1114306, 1114231, 1114307, 1114316, 1114318, 1114312, 1114324, 1114327
+        };
+        if ((flag & ItemFlag.STARFORCE) == ItemFlag.STARFORCE && noSfv.Contains(EquipData.Id))
+        {
+            flag -= ItemFlag.STARFORCE;
+
+            if ((flag & ItemFlag.UPGRADE) == ItemFlag.UPGRADE && EquipData.MaxUpgrade == 1)
+                flag -= ItemFlag.UPGRADE;
+        }
+        
+        return flag;
+    }
+    
     public CommonItem(MapleCommonItem itemBase, ItemFlag flag = 0) : base(itemBase)
     {
-        SpecialSkillLevel = itemBase.SpecialRingLevel;
+        SpecialSkillLevel = itemBase.SpecialRingLevel; 
         if (SpecialSkillLevel > 0) flag = 0;
+        flag = CheckEventRing(itemBase, flag);
+        
         if ((flag & ItemFlag.POTENTIAL) == ItemFlag.POTENTIAL)
         {
             Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];

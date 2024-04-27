@@ -182,6 +182,7 @@ public partial class EditEquipment : UserControl
             cItem.RemainUpgradeCount = defItem.RemainUpgradeCount;
             cItem.SoulName = defItem.SoulName; // 2
             cItem.SoulOption = defItem.SoulOption;
+            cItem.DisplayName = defItem.DisplayName;
             defaultItem = null;
         }
         
@@ -219,5 +220,11 @@ public partial class EditEquipment : UserControl
     {
         UpgradePreview.Update();
         UpgradeEditor.Visibility = Visibility.Collapsed;
+    }
+
+    private void OnItemNameChanged(object sender, TextChangedEventArgs e)
+    {
+        if (sender is not TextBox text || TargetItem == null) return;
+        TargetItem.DisplayName = text.Text;
     }
 }

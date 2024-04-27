@@ -84,20 +84,20 @@ public partial class RenderOverview : UserControl
 
         EquipWrapper.OnEquipmentChanged += OnEquipmentChanged;
         ItemDatabase.Instance.CachedItemList.CollectionChanged += CachedItemListOnCollectionChanged;
+        editingItem = null;
     }
 
-    private Button NewButton(string name, string hash)
+    private ItemButtonDisplay? editingItem;
+
+    private ItemButtonDisplay NewButton(CommonItem item)
     {
-        return new Button
+        var display = new ItemButtonDisplay
         {
-            Tag = hash,
-            Style = BUTTON_STYLE,
-            Content = name,
-            HorizontalContentAlignment = HorizontalAlignment.Left,
-            Width = 537,
-            Height = 32,
-            Padding = new Thickness(12, 0, 0, 0)
+            TargetItem = item,
+            Margin = new Thickness(0, 2, 0, 0)
         };
+        display.MouseLeftButtonDown += EditItem;
+        return display;
     }
 
     private void CachedItemListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -110,8 +110,8 @@ public partial class RenderOverview : UserControl
                 {
                     if (o is not CommonItem itemBase || itemBase.EquipType == MapleEquipType.EquipType.MEDAL ||
                         itemBase.EquipType == MapleEquipType.EquipType.BADGE) continue;
-                    var button = NewButton(itemBase.DisplayName, itemBase.ItemHash);
-                    button.Click += EditItem;
+                    // var button = NewButton(itemBase.DisplayName, itemBase.ItemHash);
+                    var button = NewButton(itemBase);
                     ItemButtonStackPanel.Children.Add(button);
                 }
             }
@@ -181,8 +181,9 @@ public partial class RenderOverview : UserControl
     
     private void EditItem(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button button) return;
+        if (sender is not ItemButtonDisplay button) return;
         if (button.Tag.ToString() == null || !ItemDatabase.TryFindItemFromHash(button.Tag.ToString()!, out var targetItem) || targetItem == null) return;
+        editingItem = button;
         
         RenderFrame.SetCharacterTopVisibility(Visibility.Collapsed);
         ctEquips.Visibility = Visibility.Collapsed;
@@ -209,6 +210,13 @@ public partial class RenderOverview : UserControl
         if (GlobalDataController.Instance.PlayerInstance == null) return;
         if (savedEvent.NewItem is not CommonItem commonItem) return;
 
+        if (editingItem != null)
+        {
+            editingItem.TargetItem = null;
+            editingItem.TargetItem = commonItem;
+            editingItem = null;
+        }
+        
         int max = commonItem.EquipType switch
         {
             MapleEquipType.EquipType.RING => 3,

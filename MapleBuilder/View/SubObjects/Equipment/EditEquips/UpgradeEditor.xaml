@@ -13,7 +13,7 @@
         <Button Width="68" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="473, 31, 0, 0" Content="취소"
                 Click="CancelClick"/>
         
-        <Label Content="현재 작 상태" Margin="16, 92, 0, 0"/>
+        <Label Content="현재 작 상태" Margin="16, 92, 0, 0" x:Name="CurStatus"/>
         <ScrollViewer Width="200" Height="526" VerticalScrollBarVisibility="Hidden" VerticalAlignment="Top" HorizontalAlignment="Left"
                       Margin="16, 120, 0, 0" Background="#404040">
             <StackPanel x:Name="CurUpgrades" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -36,38 +36,37 @@
             <Label Content="혼돈의 주문서 설정" Margin="-4, -24"/>    
             <CheckBox Content="놀라운" Margin="160, -18, 0, 0" Checked="CheckedChaosIsAmazing" Unchecked="CheckedChaosIsAmazing"/>
             
-            <Label Content="STR +6" Tag="STR"/>
-            
+            <Label Content="STR +0" Tag="STR"/>
             <Slider Width="100" Tag="STR" Margin="0, 28, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
             
-            <Label Content="DEX +6" Tag="DEX" Margin="0, 46, 0, 0"/>
+            <Label Content="DEX +0" Tag="DEX" Margin="0, 46, 0, 0"/>
             <Slider Width="100" Tag="DEX" Margin="0, 74, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
             
-            <Label Content="INT +6" Tag="INT" Margin="0, 92, 0, 0"/>
+            <Label Content="INT +0" Tag="INT" Margin="0, 92, 0, 0"/>
             <Slider Width="100" Tag="INT" Margin="0, 120, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
             
-            <Label Content="LUK +6" Tag="LUK" Margin="0, 138, 0, 0"/>
+            <Label Content="LUK +0" Tag="LUK" Margin="0, 138, 0, 0"/>
             <Slider Width="100" Tag="LUK" Margin="0, 166, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
             
-            <Label Content="HP +60" Tag="HP" Margin="140, 0, 0, 0"/>
+            <Label Content="HP +0" Tag="HP" Margin="140, 0, 0, 0"/>
             <Slider Width="100" Tag="HP" Margin="140, 28, 0, 0"
-                    Minimum="0" Maximum="50" SmallChange="10"/>
+                    Minimum="0" Maximum="50" SmallChange="10" Value="0"/>
             
-            <Label Content="MP +60" Tag="MP" Margin="140, 46, 0, 0"/>
+            <Label Content="MP +0" Tag="MP" Margin="140, 46, 0, 0"/>
             <Slider Width="100" Tag="MP" Margin="140, 74, 0, 0"
-                    Minimum="0" Maximum="50" SmallChange="10"/>
+                    Minimum="0" Maximum="50" SmallChange="10" Value="0"/>
             
-            <Label Content="공격력 +6" Tag="ATTACK_POWER" Margin="140, 92, 0, 0"/>
+            <Label Content="공격력 +0" Tag="ATTACK_POWER" Margin="140, 92, 0, 0"/>
             <Slider Width="100" Tag="ATTACK_POWER" Margin="140, 120, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
             
-            <Label Content="마력 +6" Tag="MAGIC_POWER" Margin="140, 138, 0, 0"/>
+            <Label Content="마력 +0" Tag="MAGIC_POWER" Margin="140, 138, 0, 0"/>
             <Slider Width="100" Tag="MAGIC_POWER" Margin="140, 166, 0, 0"
-                    Minimum="0" Maximum="5" SmallChange="1"/>
+                    Minimum="0" Maximum="5" SmallChange="1" Value="0"/>
         </Grid>
     </Grid>
 </UserControl>
