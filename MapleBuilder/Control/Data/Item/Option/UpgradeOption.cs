@@ -129,12 +129,12 @@ public static class UpgradeOption
         ,HEART_MAG               = 0x152
     }
 
-    private static bool IsWeapon(this MapleEquipType.EquipType equipType)
+    internal static bool IsWeapon(this MapleEquipType.EquipType equipType)
     {
         return equipType is MapleEquipType.EquipType.WEAPON or MapleEquipType.EquipType.SUB_WEAPON;
     }
 
-    private static bool IsArmor(this MapleEquipType.EquipType equipType)
+    internal static bool IsArmor(this MapleEquipType.EquipType equipType)
     {
         return equipType is MapleEquipType.EquipType.HELMET
             or MapleEquipType.EquipType.TOP or MapleEquipType.EquipType.BOTTOM or MapleEquipType.EquipType.TOP_BOTTOM
@@ -142,7 +142,7 @@ public static class UpgradeOption
             or MapleEquipType.EquipType.GLOVE;
     }
 
-    private static bool IsAccessory(this MapleEquipType.EquipType equipType)
+    internal static bool IsAccessory(this MapleEquipType.EquipType equipType)
     {
         return equipType is MapleEquipType.EquipType.EYE or MapleEquipType.EquipType.FACE
             or MapleEquipType.EquipType.EARRING or MapleEquipType.EquipType.RING

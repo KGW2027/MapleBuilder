@@ -1,9 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using MapleBuilder.Control.Data.Item;
+using MapleBuilder.Control.Data.Item.Option;
 
 namespace MapleBuilder.View.SubObjects.Equipment.EditEquips;
 
@@ -68,18 +70,21 @@ public partial class UpgradePreviewer : UserControl
             BorderBrush = Brushes.White,
             BorderThickness = new Thickness(1),
             HorizontalAlignment = HorizontalAlignment.Left,
-            Child = plus
+            Child = plus,
+            Background = Brushes.Transparent
         };
+        border.MouseLeftButtonDown += OnEditorOpenButtonClicked;
         Previewer.Children.Add(border);
     }
     
-    private void Update()
+    internal void Update()
     {
         if (TargetItem?.Upgrades == null) return;
         
         ClearPreviewer();
         foreach (var upg in TargetItem.Upgrades)
         {
+            // if (upg == UpgradeOption.UpgradeType.NONE) continue;
             UpgradeSlot slot = new UpgradeSlot
             {
                 ChaosAverage = TargetItem.ChaosAverage,
@@ -93,10 +98,7 @@ public partial class UpgradePreviewer : UserControl
     
     private void OnEditorOpenButtonClicked(object sender, MouseButtonEventArgs e)
     {
-        var newEvent = new RoutedEventArgs(OpenUpgradeEditorEvent)
-        {
-            Handled = true
-        };
+        var newEvent = new RoutedEventArgs(OpenUpgradeEditorEvent);
         RaiseEvent(newEvent);
     }
 }

@@ -112,10 +112,12 @@ public partial class EditEquipment : UserControl
             if (cItem.Upgrades != null)
             {
                 control.UpgradePreview.TargetItem = cItem;
+                control.UpgradeEditor.TargetItem = cItem;
                 control.UpgradePreview.Visibility = Visibility.Visible;
             }
             else
             {
+                control.UpgradeEditor.Visibility = Visibility.Collapsed;
                 control.UpgradePreview.Visibility = Visibility.Collapsed;
             }
 
@@ -210,8 +212,12 @@ public partial class EditEquipment : UserControl
 
     private void OpenUpgradeEditor(object sender, RoutedEventArgs e)
     {
-        UpgradeEditor.Visibility = UpgradeEditor.Visibility == Visibility.Collapsed
-            ? Visibility.Visible
-            : Visibility.Collapsed;
+        UpgradeEditor.Visibility = Visibility.Visible;
+    }
+
+    private void CloseUpgradeEditor(object sender, RoutedEventArgs e)
+    {
+        UpgradePreview.Update();
+        UpgradeEditor.Visibility = Visibility.Collapsed;
     }
 }

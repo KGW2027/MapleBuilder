@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
              xmlns:editEquips="clr-namespace:MapleBuilder.View.SubObjects.Equipment.EditEquips"
              mc:Ignorable="d"
-             d:DesignHeight="668" d:DesignWidth="417" Background="Transparent">
+             d:DesignHeight="668" d:DesignWidth="974" Background="Transparent">
     <Grid>
         <Label Content="장비 수정" Margin="8, 8, 0, 0"/>
         <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="68" Height="24"
@@ -63,7 +63,7 @@
         </Grid>
         
         <editEquips:UpgradeEditor Margin="421, 0, 0, 0" Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                  x:Name="UpgradeEditor"/>
+                                  x:Name="UpgradeEditor" OnSaveOrCancelled="CloseUpgradeEditor"/>
         
     </Grid>
 </UserControl>

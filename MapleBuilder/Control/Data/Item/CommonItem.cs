@@ -16,6 +16,8 @@ public class CommonItem : ItemBase
     }
     public CommonItem(MapleCommonItem itemBase, ItemFlag flag = 0) : base(itemBase)
     {
+        SpecialSkillLevel = itemBase.SpecialRingLevel;
+        if (SpecialSkillLevel > 0) flag = 0;
         if ((flag & ItemFlag.POTENTIAL) == ItemFlag.POTENTIAL)
         {
             Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
@@ -74,6 +76,9 @@ public class CommonItem : ItemBase
     public int? MaxUpgradeCount;
     public UpgradeOption.UpgradeType[]? Upgrades;
     public Dictionary<MapleStatus.StatusType, double>? ChaosAverage;
+    
+    /* 시드링 */
+    public int SpecialSkillLevel;
 
     private MapleStatContainer GetAddStatus()
     {

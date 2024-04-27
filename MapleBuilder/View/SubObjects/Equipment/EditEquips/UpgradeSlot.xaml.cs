@@ -47,7 +47,8 @@ public partial class UpgradeSlot : UserControl
 
     private void Update()
     {
-        if (UpgradeType == UpgradeOption.UpgradeType.NONE) return;
+        if (UpgradeType == UpgradeOption.UpgradeType.NONE)
+            return;
 
         string itemText = "";
         switch (UpgradeType)
@@ -149,7 +150,7 @@ public partial class UpgradeSlot : UserControl
             case UpgradeOption.UpgradeType.ACCESSORY_70_ATK_2:
             case UpgradeOption.UpgradeType.ACCESSORY_70_MAG_1:
             case UpgradeOption.UpgradeType.ACCESSORY_70_MAG_2:
-                itemText = "투구 방어력 주문서 60%.png";
+                itemText = "투구 방어력 주문서 60%";
                 break;
             case UpgradeOption.UpgradeType.HEART_ATK:
                 itemText = "카르마 스페셜 하트 공격력 주문서 100%";
@@ -166,6 +167,7 @@ public partial class UpgradeSlot : UserControl
         switch (UpgradeType)
         {
             case UpgradeOption.UpgradeType.NONE:
+                UpgradeLabel.Content = "";
                 break;
             case UpgradeOption.UpgradeType.SPELL_TRACE_STR_100:
             case UpgradeOption.UpgradeType.SPELL_TRACE_DEX_100:
@@ -280,8 +282,6 @@ public partial class UpgradeSlot : UserControl
 
         switch (UpgradeType)
         {
-            case UpgradeOption.UpgradeType.NONE:
-                break;
             case UpgradeOption.UpgradeType.SPELL_TRACE_STR_100:
             case UpgradeOption.UpgradeType.SPELL_TRACE_DEX_100:
             case UpgradeOption.UpgradeType.SPELL_TRACE_INT_100:
@@ -372,7 +372,7 @@ public partial class UpgradeSlot : UserControl
             case UpgradeOption.UpgradeType.MAGICAL_MAG_10:
             case UpgradeOption.UpgradeType.MAGICAL_MAG_11:
             case UpgradeOption.UpgradeType.MAGICAL_ATK_11:
-                TooltipManager.ToolTip = $"매지컬 N손무기 {atkType} 스크롤 ({atkType} +{atkValue})";
+                TooltipManager.ToolTip = $"매지컬 {atkType} 스크롤 ({atkType} +{atkValue})";
                 break;
             case UpgradeOption.UpgradeType.HEART_ATK:
             case UpgradeOption.UpgradeType.HEART_MAG:
@@ -386,9 +386,13 @@ public partial class UpgradeSlot : UserControl
                 {
                     string key = pair.Key == MapleStatus.StatusType.ATTACK_POWER ? "공격력" :
                         pair.Key == MapleStatus.StatusType.MAGIC_POWER ? "마력" : pair.Key.ToString();
-                    if(pair.Value > 0.0) tooltip += $"{key} +{pair.Value:F1}, ";
+                    if (pair.Value > 0.0) tooltip += $"{key} +{pair.Value:F1}, ";
                 }
+
                 TooltipManager.ToolTip = tooltip[..^2];
+                break;
+            default:
+                TooltipManager.ToolTip = "빈 슬롯";
                 break;
         }
     }
