@@ -43,7 +43,8 @@ public class ItemDatabase
     {
         outItem = null;
         if (equipData == null) return false;
-        if (!cachedHashes.Add(equipData.DataHash)) return false;
+        equipData.HashGen();
+        cachedHashes.Add(equipData.DataHash);
         CommonItem parsedItem = new CommonItem(equipData);
         parsedItem.DisplayName += " (추가됨)";
         CachedItemList.Add(parsedItem);

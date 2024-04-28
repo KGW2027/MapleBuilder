@@ -13,9 +13,5 @@
         <Button Width="56" Height="24" Margin="1220, 4, 0, 0" Content="적용" VerticalAlignment="Top"
                 Name="ctAPIApplyButton" Click="ApplyApiKey"/>
         <TextBox Name="ctInputAPI" Width="427" Height="24" Margin="789, 4, 0, 0"/>
-        
-        <Button x:Name="ctDebugStatusTrace" Width="80" Height="24" Content="STATUE TRACE" HorizontalAlignment="Left" VerticalAlignment="Top" 
-                Margin="320, 0, 0, 0" Visibility="Visible"
-                Click="OnDebugStatusTrace"/>
     </Grid>
 </UserControl>

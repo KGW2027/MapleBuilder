@@ -13,7 +13,6 @@ public class CommonItem : ItemBase
     private CommonItem()
     {
         Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
-        
     }
 
     private ItemFlag CheckEventRing(MapleCommonItem cItem, ItemFlag flag)
@@ -342,23 +341,24 @@ public class CommonItem : ItemBase
 
     public CommonItem CopyItem(EquipmentData overrideData, bool isPowerCalc = true)
     {
-        var newItem = new CommonItem();
-        newItem.UniqueName = overrideData.Name;
-        newItem.DisplayName = overrideData.Name;
-        newItem.EquipType = EquipType;
-        newItem.EquipData = overrideData;
-        newItem.ItemLevel = overrideData.Level;
-        newItem.DefaultStats = overrideData.GetStatus();
-
-        // Potential Copy
-        newItem.Potential = Potential;
-        newItem.TopGrade = TopGrade;
-        newItem.BottomGrade = BottomGrade;
-        // Starforce Copy
-        newItem.Starforce = Starforce;
-        // Upgrade Copy
-        newItem.MaxUpgradeCount = MaxUpgradeCount;
-        newItem.RemainUpgradeCount = RemainUpgradeCount;
+        var newItem = new CommonItem
+        {
+            UniqueName = overrideData.Name,
+            DisplayName = overrideData.Name,
+            EquipType = EquipType,
+            EquipData = overrideData,
+            ItemLevel = overrideData.Level,
+            DefaultStats = overrideData.GetStatus(),
+            // Potential Copy
+            Potential = Potential,
+            TopGrade = TopGrade,
+            BottomGrade = BottomGrade,
+            // Starforce Copy
+            Starforce = Starforce,
+            // Upgrade Copy
+            MaxUpgradeCount = MaxUpgradeCount,
+            RemainUpgradeCount = RemainUpgradeCount
+        };
 
         if (Upgrades != null && isPowerCalc)
         {
@@ -393,6 +393,8 @@ public class CommonItem : ItemBase
             newItem.ChaosAverage = ChaosAverage;
             if (newItem.ChaosAverage != null)
             {
+                newItem.ChaosAverage.TryAdd(MapleStatus.StatusType.ATTACK_POWER, 0);
+                newItem.ChaosAverage.TryAdd(MapleStatus.StatusType.MAGIC_POWER, 0);
                 (newItem.ChaosAverage[MapleStatus.StatusType.ATTACK_POWER],
                         newItem.ChaosAverage[MapleStatus.StatusType.MAGIC_POWER])
                     = (newItem.ChaosAverage[MapleStatus.StatusType.MAGIC_POWER],

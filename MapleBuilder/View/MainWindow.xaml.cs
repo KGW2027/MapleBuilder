@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using MapleBuilder.Control;
@@ -18,7 +19,7 @@ namespace MapleBuilder.View
             SetWindowTitle();
             new Thread(() =>
             {
-                // ResourceManager.GetItemIcon("카오스 벨룸의 헬름"); // Pre load Iconlist
+                if (!File.Exists("./ItemExtractorResult.json")) return;
                 WzDatabase.Instance.ToString();
             }).Start();
         }

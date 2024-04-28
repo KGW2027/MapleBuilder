@@ -58,11 +58,6 @@ public partial class TitleBar : UserControl
                 }
             });
         };
-        
-        #if DEBUG
-            Console.WriteLine("DEBUG BUTTON VISIBLE");
-            ctDebugStatusTrace.Visibility = Visibility.Visible;
-        #endif
     }
 
     private void ApplyApiKey(object sender, RoutedEventArgs e)
@@ -102,14 +97,4 @@ public partial class TitleBar : UserControl
     {
         ctWzPathButton.Visibility = Visibility.Collapsed;
     }
-
-    #if DEBUG
-    private void OnDebugStatusTrace(object sender, RoutedEventArgs e)
-    {
-        // if (GlobalDataController.Instance.PlayerInstance == null) return;
-        // GlobalDataController.Instance.PlayerInstance.DEBUG_statContainers();
-        // EquipWrapper.DEBUG_PrintDebugStatus();
-
-    }
-    #endif
 }

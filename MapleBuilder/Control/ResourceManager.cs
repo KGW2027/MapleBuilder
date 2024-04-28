@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json.Nodes;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using MapleAPI;
 using MapleAPI.DataType;
 using MapleAPI.Web;
 using MapleAPI.WzLoader;
+using MapleBuilder.Control.Data;
 using MapleBuilder.Control.Data.Item;
 using MapleBuilder.View;
 using MapleBuilder.View.SubFrames;
@@ -33,6 +35,15 @@ public static class ResourceManager
             .Extract() // Total about 106MB
             ;
         
+        new Thread(() =>
+        {
+            // Lazy wait for load WzDatabase
+            while (!File.Exists("./ItemExtractorResult.json"))
+            {
+                Thread.Sleep(100);
+            }
+            var update = WzDatabase.Instance;
+        }).Start();
         return true;
     }
 

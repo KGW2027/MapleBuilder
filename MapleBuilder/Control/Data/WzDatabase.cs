@@ -74,10 +74,6 @@ public class WzDatabase
                 }
                 catch (Exception ex)
                 {
-#if DEBUG
-                    Console.WriteLine(
-                        $"Equipment Data Deserialize sequence end. Total {EquipmentDataList.Count:N0} Items.. :: {ex.Message} :: {ex.GetType()}");
-#endif
                     break;
                 }
             }
@@ -265,9 +261,14 @@ public class EquipmentData : IWzSerializable
         get
         {
             if (hash != null) return hash;
-            hash = $"{DateTime.Now}::{GetHashCode():X}";
+            HashGen();
             return hash;
         }
+    }
+
+    public void HashGen()
+    {
+        hash = $"{DateTime.Now}::{GetHashCode():X}";
     }
 
     public int MaxUpgrade => maxUpgrade + (IsBlockGoldHammer ? 0 : 1);
