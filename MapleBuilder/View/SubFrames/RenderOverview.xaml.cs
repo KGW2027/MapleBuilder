@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
-using MapleAPI.DataType.Item;
 using MapleAPI.Enum;
 using MapleBuilder.Control;
 using MapleBuilder.Control.Data;
