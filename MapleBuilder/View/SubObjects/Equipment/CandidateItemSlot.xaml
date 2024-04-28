@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="MapleBuilder.View.SubObjects.Equipment.CandidateItemSlot"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MapleBuilder.View.SubObjects.Equipment"
+             mc:Ignorable="d"
+             d:DesignHeight="77" d:DesignWidth="77" Background="Transparent" MouseEnter="OnMouseEnter" MouseLeave="OnMouseLeave">
+    <Grid>
+        <Border Width="77" Height="77" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="2"/>
+        <Image Width="62" Height="62" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="ImageThumbnail"/>
+        <Border Width="75" Height="75" Background="#C0000000" CornerRadius="2" x:Name="HoverBorder"/>
+        <TextBlock Text="아이템의 이름" FontSize="12" FontWeight="Thin" VerticalAlignment="Top" Margin="0, 4, 0, 0"
+                   Width="69" Height="69" x:Name="HoverLabel" Foreground="White" TextWrapping="Wrap"
+                   FontFamily="{StaticResource Pretendard}"/>
+        
+    </Grid>
+</UserControl>

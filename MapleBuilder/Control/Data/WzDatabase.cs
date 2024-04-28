@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Nodes;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using MapleAPI.DataType;
 using MapleAPI.Enum;
 using MapleBuilder.Control.Data.Item;
@@ -129,7 +131,7 @@ public class WzDatabase
         {
             if (itemData.Level != commonItem.ItemLevel) continue;
             if (!itemData.Name.Split(" ")[0].Equals(commonItem.EquipData.Name.Split(" ")[0])) continue;
-            if (!itemData.AfterImage.Equals("dualBow")) continue;
+            if (string.IsNullOrEmpty(itemData.AfterImage) || !itemData.AfterImage.Equals("dualBow")) continue;
 
             return itemData;
         }
@@ -140,13 +142,14 @@ public class WzDatabase
 
 public class EquipmentData : IWzSerializable
 {
-    private EquipmentData(string name, string afterImage,
+    private EquipmentData(string name, string afterImage, string islot,
         int id, int setId, int level, int maxUpgrade, 
         bool isBlockGoldHammer, bool isSuperior, bool isLucky,
         string? iconPath, Dictionary<MapleStatus.StatusType, int> table)
     {
         Name = name;
         AfterImage = afterImage;
+        ISlot = islot;
         Id = id;
         SetId = setId;
         Level = level;
@@ -154,14 +157,13 @@ public class EquipmentData : IWzSerializable
         IsBlockGoldHammer = isBlockGoldHammer;
         IsSuperior = isSuperior;
         IsLuckyItem = isLucky;
-        this.iconPath = iconPath;
+        IconPath = iconPath;
         incTable = table;
     }
     
     public EquipmentData(JsonObject data)
     {
         Name = data["name"]!.ToString();
-        AfterImage = "Unknown";
         Id = int.Parse(data["itemId"]!.ToString());
 
         SetId = -1;
@@ -172,7 +174,7 @@ public class EquipmentData : IWzSerializable
         incTable = new Dictionary<MapleStatus.StatusType, int>();
         
         JsonObject info = data["info"]!.AsObject();
-        iconPath = info.TryGetPropertyValue("icon", out var pathNode) && pathNode != null ? pathNode.ToString() : null; 
+        IconPath = info.TryGetPropertyValue("icon", out var pathNode) && pathNode != null ? pathNode.ToString() : null; 
         
         foreach (var pair in info)
         {
@@ -224,6 +226,9 @@ public class EquipmentData : IWzSerializable
                 case "blockGoldHammer":
                     IsBlockGoldHammer = true;
                     break;
+                case "islot":
+                    ISlot = pair.Value!.ToString();
+                    break;
                 case "setItemID":
                     SetId = val;
                     break;
@@ -238,18 +243,31 @@ public class EquipmentData : IWzSerializable
     }
 
     private readonly Dictionary<MapleStatus.StatusType, int> incTable;
-    private string? iconPath;
     private BitmapImage? thumbnail;
     private readonly int maxUpgrade;
+    private string? hash;
     
     public readonly string Name;
+    public string? IconPath;
     public readonly string AfterImage;
+    public readonly string ISlot;
     public readonly bool IsLuckyItem;
     public readonly int Id;
     public readonly int SetId;
     public readonly int Level;
     public readonly bool IsBlockGoldHammer;
     public readonly bool IsSuperior;
+
+    public string DataHash
+    {
+        get
+        {
+            if (hash != null) return hash;
+            hash = $"{DateTime.Now}::{GetHashCode():X}";
+            return hash;
+        }
+    }
+
     public int MaxUpgrade => maxUpgrade + (IsBlockGoldHammer ? 0 : 1);
     
     public BitmapImage Image
@@ -258,8 +276,8 @@ public class EquipmentData : IWzSerializable
         {
             if (thumbnail != null) return thumbnail;
             thumbnail = new BitmapImage();
-            if (iconPath == null) return thumbnail;
-            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, iconPath);
+            if (IconPath == null) return thumbnail;
+            string fullPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, IconPath);
             if (!File.Exists(fullPath)) return thumbnail;
             thumbnail.BeginInit();
             thumbnail.UriSource = new Uri(fullPath);
@@ -295,6 +313,7 @@ public class EquipmentData : IWzSerializable
     {
         serializer.SerializeString(Name);
         serializer.SerializeString(AfterImage);
+        serializer.SerializeString(ISlot);
         serializer.SerializeInt(Id);
         serializer.SerializeInt(SetId);
         serializer.SerializeInt(Level);
@@ -302,7 +321,7 @@ public class EquipmentData : IWzSerializable
         serializer.SerializeByte((byte) (IsBlockGoldHammer ? 1 : 0));
         serializer.SerializeByte((byte) (IsSuperior ? 1 : 0));
         serializer.SerializeByte((byte) (IsLuckyItem ? 1 : 0));
-        serializer.SerializeString(iconPath);
+        serializer.SerializeString(IconPath);
         foreach (var pair in incTable)
         {
             if (pair.Key == MapleStatus.StatusType.OTHER) continue;
@@ -319,7 +338,8 @@ public class EquipmentData : IWzSerializable
         int endOffset = deserializer.GetOffset() + length;
         
         string name = deserializer.ReadString()!;
-        string afterImage = deserializer.ReadString()!;
+        string aftImage = deserializer.ReadString()!;
+        string islot = deserializer.ReadString()!;
         int id = deserializer.ReadInt();
         int setId = deserializer.ReadInt();
         int level = deserializer.ReadInt();
@@ -330,16 +350,13 @@ public class EquipmentData : IWzSerializable
         string? icon = deserializer.ReadString();
         Dictionary<MapleStatus.StatusType, int> status = new Dictionary<MapleStatus.StatusType, int>();
 
-        // Console.Write($"Read {start}-{endOffset} ({length}) :: {{Name: {name}, Id: {id}, SetId: {setId}, Level: {level}, Upgrade: {upgrade}, goldHammer: {goldhammer}, iconPath: {icon}, statusSize : {{");
         while (deserializer.GetOffset() < endOffset)
         {
             MapleStatus.StatusType key = (MapleStatus.StatusType) deserializer.ReadByte();
             int value = deserializer.ReadInt();
             status.TryAdd(key, value);
-            // Console.Write($"{key}={value},");
         }
-        // Console.WriteLine("}}");
         
-        return new EquipmentData(name, afterImage, id, setId, level, upgrade, goldhammer, superior, lucky, icon, status);
+        return new EquipmentData(name, aftImage, islot, id, setId, level, upgrade, goldhammer, superior, lucky, icon, status);
     }
 }

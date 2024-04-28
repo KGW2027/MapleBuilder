@@ -49,6 +49,7 @@ public partial class SoulEditor : UserControl
     {
         if (TargetItem?.SoulName == null) return;
         string[] split = TargetItem.SoulName.Split(" ", 2);
+        if (split.Length < 2) return;
         
         // 보스 소울 찾기
         bool bossFound = false;

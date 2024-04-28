@@ -47,6 +47,39 @@ public abstract class ItemBase
         }
     }
 
+    protected ItemBase(EquipmentData data)
+    {
+        UniqueName = DisplayName = data.Name;
+        EquipType = data.ISlot switch
+        {
+            "Af" => MapleEquipType.EquipType.FACE,
+            "Ay" => MapleEquipType.EquipType.EYE,
+            "Ae" => MapleEquipType.EquipType.EARRING,
+            "Pe" => MapleEquipType.EquipType.PENDANT,
+            "Be" => MapleEquipType.EquipType.BELT,
+            "Me" => MapleEquipType.EquipType.MEDAL,
+            "Sh" => MapleEquipType.EquipType.SHOULDER,
+            "Po" => MapleEquipType.EquipType.POCKET,
+            "Ba" => MapleEquipType.EquipType.BADGE,
+            "Cp" => MapleEquipType.EquipType.HELMET,
+            "Sr" => MapleEquipType.EquipType.CAPE,
+            "Ma" => MapleEquipType.EquipType.TOP,
+            "Gv" => MapleEquipType.EquipType.GLOVE,
+            "MaPn" => MapleEquipType.EquipType.TOP_BOTTOM,
+            "Pn" => MapleEquipType.EquipType.BOTTOM,
+            "Ri" => MapleEquipType.EquipType.RING,
+            "So" => MapleEquipType.EquipType.BOOT,
+            "Wp" => MapleEquipType.EquipType.WEAPON,
+            "WpSi" => MapleEquipType.EquipType.WEAPON,
+            "Si" => data.IconPath!.Contains("Accessory") ? MapleEquipType.EquipType.EMBLEM : MapleEquipType.EquipType.SUB_WEAPON,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+        EquipData = data;
+        ItemHash = data.DataHash;
+        ItemLevel = data.Level;
+        DefaultStats = data.GetStatus();
+    }
+
     protected ItemBase() { }
 
     public abstract MapleStatContainer GetItemStatus();

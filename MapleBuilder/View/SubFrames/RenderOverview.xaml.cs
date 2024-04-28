@@ -16,8 +16,6 @@ namespace MapleBuilder.View.SubFrames;
 
 public partial class RenderOverview : UserControl
 {
-    private static readonly Style? BUTTON_STYLE = (Style?)Application.Current.Resources[typeof(Button)];
-
     private EquipmentSlot? this[MapleEquipType.EquipType type, int slot]
     {
         get
@@ -110,7 +108,6 @@ public partial class RenderOverview : UserControl
                 {
                     if (o is not CommonItem itemBase || itemBase.EquipType == MapleEquipType.EquipType.MEDAL ||
                         itemBase.EquipType == MapleEquipType.EquipType.BADGE) continue;
-                    // var button = NewButton(itemBase.DisplayName, itemBase.ItemHash);
                     var button = NewButton(itemBase);
                     ItemButtonStackPanel.Children.Add(button);
                 }
@@ -154,7 +151,6 @@ public partial class RenderOverview : UserControl
                 string[] split = set.Split(":");
                 if (split.Length < 2)
                 {
-                    Console.WriteLine($"Set Item Error : {set}");
                     continue;
                 }
                 SetEffectDisplay setDisplay = new SetEffectDisplay
@@ -171,12 +167,34 @@ public partial class RenderOverview : UserControl
     #region Event Handler
     private void OnSearchText(object sender, TextChangedEventArgs e)
     {
-        
+        if (sender is not TextBox textBox) return;
+
+        string search = textBox.Text;
+        if (string.IsNullOrEmpty(search))
+        {
+            foreach (var panel in ItemButtonStackPanel.Children)
+            {
+                if (panel is not ItemButtonDisplay btn) continue;
+                btn.Visibility = Visibility.Visible;
+            }
+
+            return;
+        }
+
+        foreach (var panel in ItemButtonStackPanel.Children)
+        {
+            if (panel is not ItemButtonDisplay btn || btn.TargetItem == null) continue;
+            btn.Visibility = btn.TargetItem.DisplayName.Contains(search) ? Visibility.Visible : Visibility.Collapsed;
+        }
     }
 
     private void CreateNewItem(object sender, RoutedEventArgs e)
     {
+        RenderFrame.SetCharacterTopVisibility(Visibility.Collapsed);
+        ctEquips.Visibility = Visibility.Collapsed;
+        ctSetScroll.Visibility = Visibility.Collapsed;
         
+        CreateItemPanel.Visibility = Visibility.Visible;
     }
     
     private void EditItem(object sender, RoutedEventArgs e)
@@ -231,5 +249,16 @@ public partial class RenderOverview : UserControl
             GlobalDataController.Instance.PlayerInstance.Equipment.Refresh();
             break;
         }
+    }
+
+    private void OnSelectByNewItem(object sender, RoutedEventArgs e)
+    {
+        if (e is not NewItemSelect.NewItemEvent args) return;
+
+        if(args.ItemData != null) ItemDatabase.Instance.RegisterItem(args.ItemData, out _);
+        RenderFrame.SetCharacterTopVisibility(Visibility.Visible);
+        ctEquips.Visibility = Visibility.Visible;
+        ctSetScroll.Visibility = Visibility.Visible;
+        CreateItemPanel.Visibility = Visibility.Collapsed;
     }
 }

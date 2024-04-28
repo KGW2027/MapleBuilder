@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using MapleAPI.Enum;
@@ -23,7 +24,6 @@ public partial class AddOptionEditor : UserControl
         foreach (var box in Grid.GetChildren<ComboBox>())
         {
             comboBoxes[idx++] = box;
-            box.SelectionChanged += OnComboBoxSelectionChanged;
         }
 
         sliders = new Slider[4];
@@ -31,7 +31,6 @@ public partial class AddOptionEditor : UserControl
         foreach (var slider in Grid.GetChildren<Slider>())
         {
             sliders[idx++] = slider;
-            slider.ValueChanged += OnSliderValueChanged;
         }
 
         Reset();
@@ -43,6 +42,7 @@ public partial class AddOptionEditor : UserControl
         {
             comboBoxes[idx].Items.Clear();
             comboBoxes[idx].Items.Add("없음");
+            comboBoxes[idx].SelectedItem = "없음";
             sliders[idx].Minimum = sliders[idx].Maximum = sliders[idx].Value = 1.0;
         }
     }

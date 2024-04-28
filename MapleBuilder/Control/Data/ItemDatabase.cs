@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using MapleAPI.DataType.Item;
 using MapleBuilder.Control.Data.Item;
@@ -38,10 +39,26 @@ public class ItemDatabase
         return true;
     }
 
+    public bool RegisterItem(EquipmentData? equipData, out ItemBase? outItem)
+    {
+        outItem = null;
+        if (equipData == null) return false;
+        if (!cachedHashes.Add(equipData.DataHash)) return false;
+        CommonItem parsedItem = new CommonItem(equipData);
+        parsedItem.DisplayName += " (추가됨)";
+        CachedItemList.Add(parsedItem);
+        outItem = parsedItem;
+        return true;
+    }
+
     public static bool TryFindItemFromHash(string hash, out ItemBase? outItem)
     {
         outItem = null;
-        if (!Instance.cachedHashes.Contains(hash)) return false;
+        if (!Instance.cachedHashes.Contains(hash))
+        {
+            Debug.WriteLine($"Failed to find Instance.cachedHashes from ");
+            return false;
+        }
         outItem = Instance.CachedItemList.FirstOrDefault(i => i.ItemHash.Equals(hash));
         return true;
     }

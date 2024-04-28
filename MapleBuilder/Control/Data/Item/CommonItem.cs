@@ -34,6 +34,75 @@ public class CommonItem : ItemBase
         
         return flag;
     }
+
+    public CommonItem(EquipmentData data) : base(data)
+    {
+        // 시드링 스킬 레벨
+        SpecialSkillLevel = 0;
+        if (EquipType == MapleEquipType.EquipType.RING &&
+            (int) DefaultStats[MapleStatus.StatusType.ATTACK_POWER] == 4 &&
+            (int) DefaultStats[MapleStatus.StatusType.MAGIC_POWER] == 4)
+        {
+            SpecialSkillLevel = 1;
+        }
+
+        if (SpecialSkillLevel > 0) return;
+        
+        // 잠재 부여 가능 여부 검사
+        MapleEquipType.EquipType[] expectPot =
+        {
+            MapleEquipType.EquipType.POCKET, MapleEquipType.EquipType.EMBLEM, MapleEquipType.EquipType.MEDAL
+        };
+        if (!expectPot.Contains(EquipType))
+        {
+            TopGrade = MaplePotentialGrade.GradeType.NONE;
+            BottomGrade = MaplePotentialGrade.GradeType.NONE;
+            Potential = new KeyValuePair<MapleStatus.StatusType, int>[6];
+        }
+        
+        // 업횟 가능 여부 검사
+        if (data.MaxUpgrade > 1)
+        {
+            MaxUpgradeCount = RemainUpgradeCount = data.MaxUpgrade;
+            Upgrades = new UpgradeOption.UpgradeType[data.MaxUpgrade];
+            ChaosAverage = new Dictionary<MapleStatus.StatusType, double>();
+        }
+        
+        // 스타포스 가능 여부 검사
+        int[] noSfv = {
+            // SS     벤젼스     결속    코스모스  카오스    오닉스    테네      글로리   어웨이크   딥다크    플레임   어비스
+            1113231, 1114300, 1114302, 1114303, 1114306, 1114231, 1114307, 1114316, 1114318, 1114312, 1114324, 1114327
+        };
+        MapleEquipType.EquipType[] expectSfv =
+        {
+            MapleEquipType.EquipType.POCKET, MapleEquipType.EquipType.EMBLEM, MapleEquipType.EquipType.MEDAL
+        };
+        if (!expectSfv.Contains(EquipType)
+            && (EquipType != MapleEquipType.EquipType.RING || !noSfv.Contains(data.Id))
+            && (EquipType != MapleEquipType.EquipType.SUB_WEAPON || data.AfterImage.Equals("swordOL") || data.IconPath!.Contains("Shield"))
+           )
+        {
+            Starforce = 0;
+        }
+        
+        // 추가옵션 가능 여부 검사
+        MapleEquipType.EquipType[] expectAddOpt =
+        {
+            MapleEquipType.EquipType.EMBLEM, MapleEquipType.EquipType.SUB_WEAPON, MapleEquipType.EquipType.BADGE,
+            MapleEquipType.EquipType.MEDAL, MapleEquipType.EquipType.HEART, MapleEquipType.EquipType.RING,
+        };
+        if (!expectAddOpt.Contains(EquipType))
+        {
+            AddOptions = new Dictionary<AddOptions.AddOptionType, int>();
+        }
+        
+        // 소울 가능 여부 검사
+        if (EquipType == MapleEquipType.EquipType.WEAPON)
+        {
+            SoulName = "없음";
+            SoulOption = KeyValuePair.Create(MapleStatus.StatusType.OTHER, -1);
+        }
+    }
     
     public CommonItem(MapleCommonItem itemBase, ItemFlag flag = 0) : base(itemBase)
     {
