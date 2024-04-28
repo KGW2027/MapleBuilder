@@ -42,7 +42,10 @@ public static class ResourceManager
     {
         bool apiKeySuccess = API.SetApiKey(apiKey);
         if (apiKeySuccess)
+        {
             Summarize.EnableNicknameInput();
+            ConfigManager.Instance.Bind("ApiKey", apiKey);
+        }
         return apiKeySuccess;
     }
 

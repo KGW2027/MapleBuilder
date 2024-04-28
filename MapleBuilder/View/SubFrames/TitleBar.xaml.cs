@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MapleBuilder.Control;
-using MapleBuilder.Control.Data.Spec;
+using MapleBuilder.Control.Data;
 using Microsoft.Win32;
 
 namespace MapleBuilder.View.SubFrames;
@@ -38,6 +38,26 @@ public partial class TitleBar : UserControl
         
         if(File.Exists("./CharacterExtractorResult.json") && File.Exists("./ItemExtractorResult.json") && File.Exists("SkillExtractorResult.json"))
             CompleteSetWzPath();
+
+        WzDatabase.OnWzDataLoadCompleted += _ =>
+        {
+            if (ConfigManager.Instance["ApiKey"] == null) return;
+            Dispatcher.BeginInvoke(() =>
+            {
+                string cachedKey = ConfigManager.Instance["ApiKey"]!.ToString()!;
+                bool result = ResourceManager.SetApiKey(cachedKey);
+                if (result)
+                {
+                    ctInputAPI.Text = "저장된 키로 적용됨";
+                    ctInputAPI.IsReadOnly = true;
+                    ctInputAPI.Focusable = false;
+                    Thickness margin = ctInputAPI.Margin;
+                    ctInputAPI.Margin = margin;
+                    ctInputAPI.Width += 58;
+                    ctAPIApplyButton.Visibility = Visibility.Collapsed;
+                }
+            });
+        };
         
         #if DEBUG
             Console.WriteLine("DEBUG BUTTON VISIBLE");
@@ -86,9 +106,10 @@ public partial class TitleBar : UserControl
     #if DEBUG
     private void OnDebugStatusTrace(object sender, RoutedEventArgs e)
     {
-        if (GlobalDataController.Instance.PlayerInstance == null) return;
-        GlobalDataController.Instance.PlayerInstance.DEBUG_statContainers();
-        EquipWrapper.DEBUG_PrintDebugStatus();
+        // if (GlobalDataController.Instance.PlayerInstance == null) return;
+        // GlobalDataController.Instance.PlayerInstance.DEBUG_statContainers();
+        // EquipWrapper.DEBUG_PrintDebugStatus();
+
     }
     #endif
 }

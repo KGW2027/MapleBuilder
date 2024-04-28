@@ -12,7 +12,7 @@
         <Label Content="API Key" FontWeight="Medium" FontSize="20" Foreground="White" Margin="711, 0, 0, 0" VerticalAlignment="Top"/>
         <Button Width="56" Height="24" Margin="1220, 4, 0, 0" Content="적용" VerticalAlignment="Top"
                 Name="ctAPIApplyButton" Click="ApplyApiKey"/>
-        <TextBox Name="ctInputAPI" Width="427" Height="24" Margin="789, 4, 0, 0" Text="test_23aba4ff11b0e6045a5f09a6783fd18c056336038c4050e8f2be0d673cf4f54f3f02512275930a9a5db8507a4dcaced2"/>
+        <TextBox Name="ctInputAPI" Width="427" Height="24" Margin="789, 4, 0, 0"/>
         
         <Button x:Name="ctDebugStatusTrace" Width="80" Height="24" Content="STATUE TRACE" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Margin="320, 0, 0, 0" Visibility="Visible"
