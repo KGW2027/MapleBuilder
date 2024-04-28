@@ -7,7 +7,7 @@
         <UseWPF>true</UseWPF>
         <Version>1.0.0</Version>
         <Authors>GooseGoop</Authors>
-        <InformationalVersion>alpha-dev-0.1</InformationalVersion>
+        <InformationalVersion>beta-0.2</InformationalVersion>
     </PropertyGroup>
 
     <ItemGroup>

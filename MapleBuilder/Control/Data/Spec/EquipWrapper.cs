@@ -6,6 +6,9 @@ using MapleBuilder.Control.Data.Item;
 
 namespace MapleBuilder.Control.Data.Spec;
 
+#pragma warning disable CS8602
+#pragma warning disable CS8604
+
 public class EquipWrapper : StatWrapper
 {
     public delegate void EquipmentChanged(MapleEquipType.EquipType type, int slot);
@@ -19,8 +22,6 @@ public class EquipWrapper : StatWrapper
         rings = new ItemBase?[] { null, null, null, null };
         pendants = new ItemBase?[] {null, null};
     }
-
-    private static MapleStatContainer DEBUG_EquipContainer = new MapleStatContainer();
 
     private readonly Dictionary<MapleEquipType.EquipType, ItemBase?> commonEquips;
     private readonly ItemBase?[] rings;

@@ -17,8 +17,8 @@ public partial class EquipmentSlot : UserControl
 {
     public class ItemSlot
     {
-        public string Text { get; set; }
-        public BitmapImage Image { get; set; }
+        public string? Text { get; set; }
+        public BitmapImage? Image { get; set; }
         public int Hash { get; set; }
         public ItemBase? Item { get; set; }
     }

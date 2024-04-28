@@ -7,6 +7,8 @@ using MapleBuilder.Control.Data;
 
 namespace MapleBuilder.View.SubFrames;
 
+#pragma warning disable CS8604
+
 public partial class CashEquips : UserControl
 {
     private Dictionary<string, MapleStatContainer> setOptions;

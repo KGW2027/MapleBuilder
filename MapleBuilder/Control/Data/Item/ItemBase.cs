@@ -80,7 +80,9 @@ public abstract class ItemBase
         DefaultStats = data.GetStatus();
     }
 
+#pragma warning disable CS8618
     protected ItemBase() { }
+#pragma warning restore CS8618
 
     public abstract MapleStatContainer GetItemStatus();
     public abstract MapleStatContainer GetUpStatus();

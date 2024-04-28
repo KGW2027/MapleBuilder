@@ -172,6 +172,8 @@ public class EquipmentData : IWzSerializable
         IsSuperior = false;
         IsLuckyItem = false;
         incTable = new Dictionary<MapleStatus.StatusType, int>();
+        AfterImage = "";
+        ISlot = "";
         
         JsonObject info = data["info"]!.AsObject();
         IconPath = info.TryGetPropertyValue("icon", out var pathNode) && pathNode != null ? pathNode.ToString() : null; 
